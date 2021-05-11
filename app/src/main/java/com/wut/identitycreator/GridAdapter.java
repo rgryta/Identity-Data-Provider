@@ -2,6 +2,7 @@ package com.wut.identitycreator;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.graphics.PointF;
 import android.os.Build;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,6 +14,7 @@ import androidx.annotation.RequiresApi;
 import androidx.constraintlayout.widget.ConstraintLayout;
 
 import java.util.ArrayList;
+import java.util.List;
 
 @RequiresApi(api = Build.VERSION_CODES.O)
 public class GridAdapter extends BaseAdapter {
@@ -22,9 +24,12 @@ public class GridAdapter extends BaseAdapter {
     int sWidth;
 
     RadioButton[] rbs = new RadioButton[9];
+    PointF[] radioPoints = new PointF[9];
 
     ArrayList<Integer> passwd = new ArrayList<>();
     ArrayList<Integer> inPasswd = new ArrayList<>();
+
+    int pointSize=0;
 
     public GridAdapter(Context applicationContext, int width) {
         context = applicationContext;
@@ -50,13 +55,8 @@ public class GridAdapter extends BaseAdapter {
         return 0;
     }
 
-    public void checkItem(int position){
-        RadioButton btn = (RadioButton)getItem(position);
-         btn.setChecked(true);
-    }
-
-    public boolean clearItems(){
-
+    public boolean verifyResult(){
+        //check input passwd correctness
         boolean correct = true;
         if (inPasswd.size()==passwd.size()) {
             for (int i = 0; i<inPasswd.size(); i++) {
@@ -68,6 +68,24 @@ public class GridAdapter extends BaseAdapter {
         }
         else correct=false;
         inPasswd.clear();
+
+        return correct;
+    }
+
+    public List<PointF> getSelected(int statusHeight){
+        if (pointSize==0) pointSize = Math.floorDiv(rbs[0].getWidth(),2);
+        List<PointF> points = new ArrayList<>();
+        for (int i : inPasswd){
+            int[] pos = new int[2];
+            rbs[i].getLocationOnScreen(pos);
+
+            points.add(new PointF(pos[0]+pointSize,pos[1]+pointSize-statusHeight));
+        }
+        return points;
+    }
+
+    public void clearItems(){
+        //reset radiobuttons
         for (int i = 0; i<getCount(); i++) {
             final RadioButton btn = (RadioButton) getItem(i);
             btn.setChecked(false);
@@ -80,9 +98,8 @@ public class GridAdapter extends BaseAdapter {
                     btn.setOnClickListener(null);
                 }
             });
-        }
 
-        return correct;
+        }
     }
 
     @SuppressLint({"ViewHolder", "InflateParams"})
@@ -102,15 +119,6 @@ public class GridAdapter extends BaseAdapter {
                 rbs[pointer].setOnClickListener(null);
             }
         });
-
-
-        //Position of radiobutton
-        //int[] position = new int[2];
-        //rbs[pointer].getLocationOnScreen(position);
-        //int wd=rbs[pointer].getWidth()+position[0];
-        //int hi=rbs[pointer].getHeight()+position[1];
-        //("X: "+position[0] + " : " + wd);
-        //("Y: "+position[1] + " : " + hi);
 
         return view;
     }

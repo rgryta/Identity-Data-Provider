@@ -10,10 +10,14 @@ import android.view.View;
 
 import androidx.annotation.Nullable;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class PathView extends View {
 
     private Paint paint = new Paint();
-    private PointF pointA, pointB;
+
+    private List<PointF> pointFS = new ArrayList<PointF>();
 
     public PathView(Context context) {
         super(context);
@@ -34,19 +38,32 @@ public class PathView extends View {
     @Override
     public void onDraw(Canvas canvas){
         paint.setColor(Color.argb(168,128,128,255));
-        paint.setStrokeWidth(40);
+        paint.setStrokeWidth(50);
 
-        canvas.drawLine(pointA.x,pointA.y,pointB.x,pointB.y,paint);
+        if (pointFS.size()>1) canvas.drawLines(getLines(),paint);
+        //canvas.drawLine(pointA.x,pointA.y,pointB.x,pointB.y,paint);
 
         super.onDraw(canvas);
     }
 
-    public void setPointA(PointF pointA) {
-        this.pointA = pointA;
+    public void resetPoints(List<PointF> pointFS){
+        this.pointFS.clear();
+        this.pointFS.addAll(pointFS);
     }
 
-    public void setPointB(PointF pointB){
-        this.pointB = pointB;
+    public void clearPoints(){
+        pointFS.clear();
+    }
+
+    private float[] getLines(){
+        float[] pos = new float[(pointFS.size()-1)*4];
+        for (int i=0;i<pointFS.size()-1;i++){
+            pos[i*4]=pointFS.get(i).x;
+            pos[i*4+1]=pointFS.get(i).y;
+            pos[i*4+2]=pointFS.get(i+1).x;
+            pos[i*4+3]=pointFS.get(i+1).y;
+        }
+        return pos;
     }
 
     public void draw(){
