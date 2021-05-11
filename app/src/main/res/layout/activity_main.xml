@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/main_activity"
+<RelativeLayout android:id="@+id/main_activity"
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
 
@@ -11,10 +10,23 @@
 
     tools:context=".MainActivity">
 
-    <GridView
-        android:id="@+id/radioGrid"
+
+    <RelativeLayout
+        android:id="@+id/submain_activity"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <GridView
+            android:id="@+id/radioGrid"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:numColumns="3"/>
+    </RelativeLayout>
+
+    <com.wut.identitycreator.PathView
+        android:id="@+id/passPath"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:numColumns="3"/>
+        />
 
 </RelativeLayout>

@@ -8,6 +8,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.PixelFormat;
 import android.graphics.Point;
+import android.graphics.PointF;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -29,11 +30,15 @@ public class MainActivity extends Activity {
 
     GridView radioGrid;
 
+    PointF pointA = new PointF(10,10);
+    PointF pointB = new PointF(10,100);
+    PathView mPathView;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        View view = findViewById(R.id.main_activity);
+        View view = findViewById(R.id.submain_activity);
 
 
 
@@ -59,6 +64,11 @@ public class MainActivity extends Activity {
         GridAdapter customAdapter = new GridAdapter(getApplicationContext(),Math.floorDiv(sSide,3));
 
         radioGrid.setAdapter(customAdapter);
+
+        mPathView = (PathView)findViewById(R.id.passPath);
+        mPathView.setPointA(pointA);
+        mPathView.setPointB(pointB);
+
     }
 
     @Override
@@ -78,6 +88,13 @@ public class MainActivity extends Activity {
         System.out.println(ev.getToolMajor());
         System.out.println(ev.getToolMinor());
         */
+
+
+        mPathView = (PathView)findViewById(R.id.passPath);
+        mPathView.setPointA(pointA);
+        pointB = new PointF(ev.getX(),ev.getY());
+        mPathView.setPointB(pointB);
+        mPathView.draw();
 
         if ((ev.getAction()==MotionEvent.ACTION_DOWN)||(ev.getAction()==MotionEvent.ACTION_MOVE)){
             ev.setAction(MotionEvent.ACTION_DOWN);
@@ -100,6 +117,8 @@ public class MainActivity extends Activity {
         }
         return true;
     }
+
+
 
 }
 
