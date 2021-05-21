@@ -1,3 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">IdentityCreator</string>
+    <string name="info_string">Warsaw University of Technology <br /><br />
+        User modeling and identification based on touch and gyro analysis <br />
+        Purpose of this project is to verify if it is possible to authenticate current smartphone holder based on the behavioral characteristics of touch input.<br /><br />
+        Instructions:<br />
+        1. Data acquisition is performed in two ways. Basic tests where you will be asked to recreate predefined patterns multiple times and personalised tests where you will be able to create a new pattern, maybe one you are most comfortable with.<br />
+        2. Pattern is a 3x3 grid of points which simulates a screen unlocking system.<br />
+        3. On the next page you\'ll be greeted with a calibration screen. Calibration is needed in order to set up the pattern grid in the most comfortable position for the user.<br />
+        4. You will be able to recalibrate the screen, but after such action, you\'ll be asked to perform the basic tests once again.<br />
+        5. (Optional) You will also be asked to let a different user use your phone in order to perform the same tasks. This will significantly help with the research.<br />
+        6. Correct pattern is displayed as a string of numbers starting from 1 and ending at 9, counting from left to right and from top to bottom. For example straight line from top left to top right will be displayed as 1-2-3.<br />
+        7. You can revisit this page using INFO button.<br />
+        <br /><br />
+        Thank you for your contribution to the project. <br />
+        by Radosław Gryta
+    </string>
 </resources>

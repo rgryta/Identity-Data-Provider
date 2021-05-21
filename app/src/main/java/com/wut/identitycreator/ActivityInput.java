@@ -1,40 +1,24 @@
 package com.wut.identitycreator;
 
 import androidx.annotation.RequiresApi;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.DialogFragment;
 
 import android.app.Activity;
-import android.app.AlertDialog;
-import android.content.Context;
-import android.content.DialogInterface;
-import android.content.Intent;
-import android.graphics.PixelFormat;
 import android.graphics.Point;
 import android.graphics.PointF;
-import android.graphics.Rect;
-import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
-import android.provider.Settings;
-import android.util.DisplayMetrics;
 import android.view.Display;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.ViewGroup;
-import android.view.ViewTreeObserver;
-import android.view.Window;
-import android.view.WindowManager;
-import android.widget.AdapterView;
 import android.widget.GridView;
-import android.widget.RelativeLayout;
 
 import java.util.List;
 
+
 @RequiresApi(api = Build.VERSION_CODES.O)
-public class MainActivity extends Activity {
+public class ActivityInput extends Activity {
 
     GridView radioGrid;
 
@@ -44,15 +28,12 @@ public class MainActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        LoadingDialog dialog = new LoadingDialog(this);
+        //Block screen with loading dialog
+        DialogLoading dialog = new DialogLoading(this);
         dialog.startDialog();
 
-
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.view_grid);
         View view = findViewById(R.id.submain_activity);
-
-
-
 
 
         Display display = getWindowManager().getDefaultDisplay();
@@ -61,14 +42,12 @@ public class MainActivity extends Activity {
         int width = size.x;
         int height = size.y;
 
-
         height -= width;
         int hOff = Math.floorDiv(height,2);
         int sOff = Math.floorDiv(width,10); //square offset
         int sSide = width-2*sOff;
 
         view.setPadding(sOff,hOff+sOff,sOff,0);
-
 
         // Create an object of CustomAdapter and set Adapter to GirdView
         radioGrid = findViewById(R.id.radioGrid); // init GridView
@@ -78,7 +57,8 @@ public class MainActivity extends Activity {
 
         mPathView = (PathView)findViewById(R.id.passPath);
 
-
+        //unblock screen after 2 seconds (initialization - getting x/y values for the grid points
+        //there doesn't seem to eb
         Handler handler = new Handler(Looper.getMainLooper());
         handler.postDelayed(new Runnable() {
             @Override
