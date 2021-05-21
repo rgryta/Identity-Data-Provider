@@ -1,8 +1,10 @@
-package com.wut.identitycreator;
+package com.wut.identitycreator.activities;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
+
+import com.wut.identitycreator.*;
 
 public class ActivityCalibrate extends AppCompatActivity {
 

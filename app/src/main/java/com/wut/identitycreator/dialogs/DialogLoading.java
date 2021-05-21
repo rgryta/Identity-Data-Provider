@@ -1,20 +1,22 @@
-package com.wut.identitycreator;
+package com.wut.identitycreator.dialogs;
 
 
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.view.LayoutInflater;
 
+import com.wut.identitycreator.*;
+
 public class DialogLoading {
 
     private Activity activity;
     private AlertDialog dialog;
 
-    DialogLoading(Activity activity){
+    public DialogLoading(Activity activity){
         this.activity=activity;
     }
 
-    void startDialog(){
+    public void startDialog(){
         AlertDialog.Builder builder = new AlertDialog.Builder(activity);
 
         LayoutInflater inflater = activity.getLayoutInflater();
@@ -25,7 +27,7 @@ public class DialogLoading {
         dialog.show();
     }
 
-    void dismissDialog(){
+    public void dismissDialog(){
         dialog.dismiss();
     }
 }

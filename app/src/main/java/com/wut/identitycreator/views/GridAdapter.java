@@ -1,4 +1,4 @@
-package com.wut.identitycreator;
+package com.wut.identitycreator.views;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
@@ -15,6 +15,8 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import com.wut.identitycreator.*;
 
 @RequiresApi(api = Build.VERSION_CODES.O)
 public class GridAdapter extends BaseAdapter {

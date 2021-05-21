@@ -1,4 +1,4 @@
-package com.wut.identitycreator;
+package com.wut.identitycreator.activities;
 
 import androidx.annotation.RequiresApi;
 
@@ -13,8 +13,13 @@ import android.view.Display;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.GridView;
-
 import java.util.List;
+
+import com.wut.identitycreator.dialogs.DialogLoading;
+import com.wut.identitycreator.views.GridAdapter;
+import com.wut.identitycreator.views.PathView;
+
+import com.wut.identitycreator.*;
 
 
 @RequiresApi(api = Build.VERSION_CODES.O)
