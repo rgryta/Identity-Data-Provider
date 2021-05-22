@@ -3,6 +3,7 @@ package com.wut.identitycreator.activities;
 import androidx.annotation.RequiresApi;
 
 import android.app.Activity;
+import android.database.Cursor;
 import android.graphics.Point;
 import android.graphics.PointF;
 import android.os.Build;
@@ -13,8 +14,14 @@ import android.view.Display;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.GridView;
+import android.widget.Toast;
+
+import java.io.IOException;
+import java.util.Currency;
 import java.util.List;
 
+import com.wut.identitycreator.data.DataDBHelper;
+import com.wut.identitycreator.data.DataDBSchema;
 import com.wut.identitycreator.dialogs.DialogLoading;
 import com.wut.identitycreator.views.ViewGridAdapter;
 import com.wut.identitycreator.views.ViewDrawPath;
@@ -29,6 +36,8 @@ public class ActivityInput extends Activity {
 
     ViewDrawPath mViewDrawPath;
 
+    DataDBHelper dbHelper;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -36,6 +45,28 @@ public class ActivityInput extends Activity {
         //Block screen with loading dialog
         DialogLoading dialog = new DialogLoading(this);
         dialog.startDialog();
+
+        try {
+            dbHelper = new DataDBHelper(getApplicationContext());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+
+        Cursor cursor = dbHelper.db.query(DataDBSchema.User.TABLE_NAME,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null);
+        String name = null;
+        while (cursor.moveToNext()){
+            name = cursor.getString(0);
+        }
+
+        Toast.makeText(getBaseContext(),name,
+                Toast.LENGTH_SHORT).show();
 
         setContentView(R.layout.view_grid);
         View view = findViewById(R.id.submain_activity);

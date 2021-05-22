@@ -12,7 +12,7 @@ public class DataDBHelper extends SQLiteOpenHelper {
 
     public static final String DB_NAME = "identity_data.db";
 
-    private SQLiteDatabase db;
+    public SQLiteDatabase db;
 
     public DataDBHelper(Context context) throws IOException {
         super(context, DB_NAME , null, 1);
@@ -63,5 +63,4 @@ public class DataDBHelper extends SQLiteOpenHelper {
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
 
     }
-
 }

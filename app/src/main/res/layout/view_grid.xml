@@ -8,7 +8,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
 
-    tools:context=".ActivityInput">
+    tools:context=".activities.ActivityInput">
 
 
     <RelativeLayout
@@ -23,7 +23,7 @@
             android:numColumns="3"/>
     </RelativeLayout>
 
-    <com.wut.identitycreator.PathView
+    <com.wut.identitycreator.views.ViewDrawPath
         android:id="@+id/passPath"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
