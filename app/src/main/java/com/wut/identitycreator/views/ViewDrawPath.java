@@ -13,25 +13,25 @@ import androidx.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class PathView extends View {
+public class ViewDrawPath extends View {
 
     private Paint paint = new Paint();
 
     private List<PointF> pointFS = new ArrayList<PointF>();
 
-    public PathView(Context context) {
+    public ViewDrawPath(Context context) {
         super(context);
     }
 
-    public PathView(Context context, @Nullable AttributeSet attrs) {
+    public ViewDrawPath(Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
     }
 
-    public PathView(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
+    public ViewDrawPath(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
     }
 
-    public PathView(Context context, @Nullable AttributeSet attrs, int defStyleAttr, int defStyleRes) {
+    public ViewDrawPath(Context context, @Nullable AttributeSet attrs, int defStyleAttr, int defStyleRes) {
         super(context, attrs, defStyleAttr, defStyleRes);
     }
 

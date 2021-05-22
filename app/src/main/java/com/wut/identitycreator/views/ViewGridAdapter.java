@@ -19,7 +19,7 @@ import java.util.List;
 import com.wut.identitycreator.*;
 
 @RequiresApi(api = Build.VERSION_CODES.O)
-public class GridAdapter extends BaseAdapter {
+public class ViewGridAdapter extends BaseAdapter {
 
     Context context;
     LayoutInflater inflter;
@@ -33,7 +33,7 @@ public class GridAdapter extends BaseAdapter {
 
     int pointSize=0;
 
-    public GridAdapter(Context applicationContext, int width) {
+    public ViewGridAdapter(Context applicationContext, int width) {
         context = applicationContext;
         sWidth = width;
         inflter = (LayoutInflater.from(applicationContext));

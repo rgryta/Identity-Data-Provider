@@ -16,8 +16,8 @@ import android.widget.GridView;
 import java.util.List;
 
 import com.wut.identitycreator.dialogs.DialogLoading;
-import com.wut.identitycreator.views.GridAdapter;
-import com.wut.identitycreator.views.PathView;
+import com.wut.identitycreator.views.ViewGridAdapter;
+import com.wut.identitycreator.views.ViewDrawPath;
 
 import com.wut.identitycreator.*;
 
@@ -27,7 +27,7 @@ public class ActivityInput extends Activity {
 
     GridView radioGrid;
 
-    PathView mPathView;
+    ViewDrawPath mViewDrawPath;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,11 +56,11 @@ public class ActivityInput extends Activity {
 
         // Create an object of CustomAdapter and set Adapter to GirdView
         radioGrid = findViewById(R.id.radioGrid); // init GridView
-        GridAdapter customAdapter = new GridAdapter(getApplicationContext(),Math.floorDiv(sSide,3));
+        ViewGridAdapter customAdapter = new ViewGridAdapter(getApplicationContext(),Math.floorDiv(sSide,3));
 
         radioGrid.setAdapter(customAdapter);
 
-        mPathView = (PathView)findViewById(R.id.passPath);
+        mViewDrawPath = (ViewDrawPath)findViewById(R.id.passPath);
 
         //unblock screen after 2 seconds (initialization - getting x/y values for the grid points
         //there doesn't seem to eb
@@ -93,7 +93,7 @@ public class ActivityInput extends Activity {
         System.out.println(ev.getToolMinor());
         */
 
-        final GridAdapter adapter = (GridAdapter)radioGrid.getAdapter();
+        final ViewGridAdapter adapter = (ViewGridAdapter)radioGrid.getAdapter();
 
         //for each action execute press action
         if ((ev.getAction()==MotionEvent.ACTION_DOWN)||(ev.getAction()==MotionEvent.ACTION_MOVE)){
@@ -102,8 +102,8 @@ public class ActivityInput extends Activity {
             List<PointF> points = adapter.getSelected(statusHeight);
             points.add(new PointF(ev.getX(),ev.getY()-statusHeight));
 
-            mPathView.resetPoints(points);
-            mPathView.draw();
+            mViewDrawPath.resetPoints(points);
+            mViewDrawPath.draw();
 
             ev.setAction(MotionEvent.ACTION_DOWN);
             super.dispatchTouchEvent(ev);
@@ -112,8 +112,8 @@ public class ActivityInput extends Activity {
         }
         //when lifting finger - check passcode for validity and reset the buttons
         else if (ev.getAction()==MotionEvent.ACTION_UP){
-            mPathView.clearPoints();
-            mPathView.draw();
+            mViewDrawPath.clearPoints();
+            mViewDrawPath.draw();
 
             boolean res = adapter.verifyResult();
             System.out.println("Resultat: "+res);
