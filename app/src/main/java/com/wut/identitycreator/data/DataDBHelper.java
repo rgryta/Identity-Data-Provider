@@ -1,31 +1,16 @@
 package com.wut.identitycreator.data;
 
+import android.content.ContentValues;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
 import java.io.IOException;
-import java.util.HashMap;
 
 public class DataDBHelper extends SQLiteOpenHelper {
 
 
     public static final String DB_NAME = "identity_data.db";
-
-    private static final String CONFIG_TABLE_NAME = "CONFIG";
-    private static final String CONFIG_COLUMN_PARAM_NAME = "PARAM_NAME";
-    private static final String CONFIG_COLUMN_PARAM_VALUE = "PARAM_VALUE" ;
-
-    private static final String CALIB_TABLE_NAME = "CALIB";
-    private static final String CALIB_COLUMN_ID = "ID";
-    private static final String CALIB_COLUMN_OPTION = "OPTION";
-
-    private static final String USERS_TABLE_NAME = "USERS";
-    private static final String USERS_COLUMN_ID = "ID";
-
-    private static final String PATTERN_TABLE_NAME = "PATTERN";
-    private static final String PATTERN_COLUMN_ID = "ID";
-    private static final String PATTERN_COLUMN_SEQUENCE = "SEQUENCE";
 
     private SQLiteDatabase db;
 
@@ -38,31 +23,39 @@ public class DataDBHelper extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase db) {
 
         //parameters are for currently selected: calibration option, user and pattern
-        db.execSQL(
-                "create table if not exists " + CONFIG_TABLE_NAME + " (" +
-                        CONFIG_COLUMN_PARAM_NAME + " TEXT PRIMARY KEY NOT NULL" + ", "+
-                        CONFIG_COLUMN_PARAM_VALUE + " INTEGER NOT NULL" +
-                        ");"
-        );
-        db.execSQL(
-                "create table if not exists " + CALIB_TABLE_NAME + " (" +
-                        CALIB_COLUMN_ID + " INTEGER PRIMARY KEY NOT NULL" + ", "+
-                        CALIB_COLUMN_OPTION + " INTEGER NOT NULL" +
-                        ");"
-        );
+        db.execSQL(DataDBSchema.Config.SQL_CREATE_CONFIG);
+        db.execSQL(DataDBSchema.Calibration.SQL_CREATE_CALIB);
+        db.execSQL(DataDBSchema.User.SQL_CREATE_USERS);
+        db.execSQL(DataDBSchema.Pattern.SQL_CREATE_PATTERN);
+        db.execSQL(DataDBSchema.DataEntry.SQL_CREATE_DATA_ENTRY);
 
-        db.execSQL(
-                "create table if not exists " + USERS_TABLE_NAME + " (" +
-                        USERS_COLUMN_ID + " INTEGER PRIMARY KEY NOT NULL" +
-                        ");"
-        );
+        ContentValues values;
 
-        db.execSQL(
-                "create table if not exists " + PATTERN_TABLE_NAME + " (" +
-                        PATTERN_COLUMN_ID + " INTEGER PRIMARY KEY NOT NULL" + ", "+
-                        PATTERN_COLUMN_SEQUENCE + " TEXT NOT NULL" +
-                        ");"
-        );
+        //Default parameters
+        values = new ContentValues();
+        values.put(DataDBSchema.Config.COLUMN_NAME_PARAM_NAME, "CALIB");
+        values.put(DataDBSchema.Config.COLUMN_NAME_PARAM_VALUE, "-1"); //Has to be overwritten by user
+        db.insert(DataDBSchema.Config.TABLE_NAME, null, values);
+
+        values = new ContentValues();
+        values.put(DataDBSchema.Config.COLUMN_NAME_PARAM_NAME, "USER");
+        values.put(DataDBSchema.Config.COLUMN_NAME_PARAM_VALUE, "DEFAULT");
+        db.insert(DataDBSchema.Config.TABLE_NAME, null, values);
+
+        values = new ContentValues();
+        values.put(DataDBSchema.Config.COLUMN_NAME_PARAM_NAME, "PATTERN");
+        values.put(DataDBSchema.Config.COLUMN_NAME_PARAM_VALUE, "1-4-7-8-9-6-3");
+        db.insert(DataDBSchema.Config.TABLE_NAME, null, values);
+
+        //Default user
+        values = new ContentValues();
+        values.put(DataDBSchema.User.COLUMN_NAME_USER, "DEFAULT");
+        db.insert(DataDBSchema.User.TABLE_NAME, null, values);
+
+        //Default pattern
+        values = new ContentValues();
+        values.put(DataDBSchema.Pattern.COLUMN_NAME_SEQUENCE, "1-4-7-8-9-6-3");
+        db.insert(DataDBSchema.Pattern.TABLE_NAME, null, values);
 
     }
 
