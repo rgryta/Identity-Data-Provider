@@ -3,6 +3,7 @@ package com.wut.identitycreator.views;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.PointF;
+import android.graphics.Rect;
 import android.os.Build;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -22,21 +23,21 @@ import com.wut.identitycreator.*;
 public class ViewGridAdapter extends BaseAdapter {
 
     Context context;
-    LayoutInflater inflter;
+    LayoutInflater inflater;
     int sWidth;
 
     RadioButton[] rbs = new RadioButton[9];
     PointF[] radioPoints = new PointF[9];
 
-    ArrayList<Integer> passwd = new ArrayList<>();
-    ArrayList<Integer> inPasswd = new ArrayList<>();
+    ArrayList<Integer> passwd = new ArrayList<>(); //correct
+    ArrayList<Integer> inPasswd = new ArrayList<>(); //input
 
     int pointSize=0;
 
     public ViewGridAdapter(Context applicationContext, int width) {
         context = applicationContext;
         sWidth = width;
-        inflter = (LayoutInflater.from(applicationContext));
+        inflater = (LayoutInflater.from(applicationContext));
 
         passwd.add(0);
         passwd.add(2);
@@ -59,46 +60,32 @@ public class ViewGridAdapter extends BaseAdapter {
 
     public boolean verifyResult(){
         //check input passwd correctness
-        boolean correct = true;
-        if (inPasswd.size()==passwd.size()) {
-            for (int i = 0; i<inPasswd.size(); i++) {
-                if (inPasswd.get(i)!=passwd.get(i)){
-                    correct=false;
-                    break;
-                }
-            }
-        }
-        else correct=false;
+        boolean result = inPasswd.equals(passwd);
         inPasswd.clear();
-
-        return correct;
+        return result;
     }
 
-    public List<PointF> getSelected(int statusHeight){
+    public List<PointF> getSelected(float top){
         if (pointSize==0) pointSize = Math.floorDiv(rbs[0].getWidth(),2);
         List<PointF> points = new ArrayList<>();
         for (int i : inPasswd){
-            int[] pos = new int[2];
-            rbs[i].getLocationOnScreen(pos);
+            Rect rect = new Rect();
+            rbs[i].getGlobalVisibleRect(rect);
 
-            points.add(new PointF(pos[0]+pointSize,pos[1]+pointSize-statusHeight));
+            points.add(new PointF(rect.centerX(),rect.centerY()-top));
         }
         return points;
     }
 
     public void clearItems(){
-        //reset radiobuttons
         for (int i = 0; i<getCount(); i++) {
             final RadioButton btn = (RadioButton) getItem(i);
             btn.setChecked(false);
 
             final int finalI = i;
-            btn.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    inPasswd.add(finalI);
-                    btn.setOnClickListener(null);
-                }
+            btn.setOnClickListener(v -> {
+                inPasswd.add(finalI);
+                btn.setOnClickListener(null);
             });
 
         }
@@ -107,19 +94,16 @@ public class ViewGridAdapter extends BaseAdapter {
     @SuppressLint({"ViewHolder", "InflateParams"})
     @Override
     public View getView(final int pointer, View view, ViewGroup viewGroup) {
-        view = inflter.inflate(R.layout.activity_grid, null); // inflate the layout
+        view = inflater.inflate(R.layout.view_grid, null); // inflate the layout
 
         ConstraintLayout vw = view.findViewById(R.id.gridID);
         vw.setMinHeight(sWidth);
         vw.setMaxHeight(sWidth);
 
         rbs[pointer] = view.findViewById(R.id.radioGrid);
-        rbs[pointer].setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                inPasswd.add(pointer);
-                rbs[pointer].setOnClickListener(null);
-            }
+        rbs[pointer].setOnClickListener(v -> {
+            inPasswd.add(pointer);
+            rbs[pointer].setOnClickListener(null);
         });
 
         return view;

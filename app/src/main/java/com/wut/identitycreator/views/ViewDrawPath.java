@@ -31,17 +31,12 @@ public class ViewDrawPath extends View {
         super(context, attrs, defStyleAttr);
     }
 
-    public ViewDrawPath(Context context, @Nullable AttributeSet attrs, int defStyleAttr, int defStyleRes) {
-        super(context, attrs, defStyleAttr, defStyleRes);
-    }
-
     @Override
     public void onDraw(Canvas canvas){
         paint.setColor(Color.argb(168,128,128,255));
         paint.setStrokeWidth(50);
 
         if (pointFS.size()>1) canvas.drawLines(getLines(),paint);
-        //canvas.drawLine(pointA.x,pointA.y,pointB.x,pointB.y,paint);
 
         super.onDraw(canvas);
     }
@@ -58,10 +53,10 @@ public class ViewDrawPath extends View {
     private float[] getLines(){
         float[] pos = new float[(pointFS.size()-1)*4];
         for (int i=0;i<pointFS.size()-1;i++){
-            pos[i*4]=pointFS.get(i).x;
-            pos[i*4+1]=pointFS.get(i).y;
-            pos[i*4+2]=pointFS.get(i+1).x;
-            pos[i*4+3]=pointFS.get(i+1).y;
+            pos[i*4]=pointFS.get(i).x;;
+            pos[i*4+1]=pointFS.get(i).y;//-40;
+            pos[i*4+2]=pointFS.get(i+1).x;;
+            pos[i*4+3]=pointFS.get(i+1).y;//-40;
         }
         return pos;
     }

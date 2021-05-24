@@ -6,6 +6,7 @@ import android.app.Activity;
 import android.database.Cursor;
 import android.graphics.Point;
 import android.graphics.PointF;
+import android.graphics.Rect;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
@@ -13,11 +14,12 @@ import android.os.Looper;
 import android.view.Display;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.GridView;
 import android.widget.Toast;
 
 import java.io.IOException;
-import java.util.Currency;
 import java.util.List;
 
 import com.wut.identitycreator.data.DataDBHelper;
@@ -38,6 +40,9 @@ public class ActivityInput extends Activity {
 
     DataDBHelper dbHelper;
 
+    //mode = input OR calib
+    String mode;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -45,6 +50,8 @@ public class ActivityInput extends Activity {
         //Block screen with loading dialog
         DialogLoading dialog = new DialogLoading(this);
         dialog.startDialog();
+
+        mode = "INPUT";
 
         try {
             dbHelper = new DataDBHelper(getApplicationContext());
@@ -68,9 +75,10 @@ public class ActivityInput extends Activity {
         Toast.makeText(getBaseContext(),name,
                 Toast.LENGTH_SHORT).show();
 
-        setContentView(R.layout.view_grid);
-        View view = findViewById(R.id.submain_activity);
+        setContentView(R.layout.activity_input);
 
+        // Input area calibration
+        View view = findViewById(R.id.submain_activity);
 
         Display display = getWindowManager().getDefaultDisplay();
         Point size = new Point();
@@ -85,6 +93,7 @@ public class ActivityInput extends Activity {
 
         view.setPadding(sOff,hOff+sOff,sOff,0);
 
+
         // Create an object of CustomAdapter and set Adapter to GirdView
         radioGrid = findViewById(R.id.radioGrid); // init GridView
         ViewGridAdapter customAdapter = new ViewGridAdapter(getApplicationContext(),Math.floorDiv(sSide,3));
@@ -96,12 +105,7 @@ public class ActivityInput extends Activity {
         //unblock screen after 2 seconds (initialization - getting x/y values for the grid points
         //there doesn't seem to eb
         Handler handler = new Handler(Looper.getMainLooper());
-        handler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                dialog.dismissDialog();
-            }
-        }, 2000);
+        handler.postDelayed(() -> dialog.dismissDialog(), 2000);
 
     }
 
@@ -127,21 +131,38 @@ public class ActivityInput extends Activity {
         final ViewGridAdapter adapter = (ViewGridAdapter)radioGrid.getAdapter();
 
         //for each action execute press action
-        if ((ev.getAction()==MotionEvent.ACTION_DOWN)||(ev.getAction()==MotionEvent.ACTION_MOVE)){
 
-            int statusHeight = getStatusHeight();
-            List<PointF> points = adapter.getSelected(statusHeight);
-            points.add(new PointF(ev.getX(),ev.getY()-statusHeight));
+        Rect rect = new Rect();
+        View v = findViewById(R.id.passPath);
+        v.getDrawingRect(rect);
+
+        if (mode.equals("INPUT")){
+            return handleInput(adapter,ev,v.getTop()+getStatusHeight());
+        }
+        else if (mode.equals("CALIB")){
+
+        }
+
+
+        return true;
+    }
+
+    private boolean handleInput(ViewGridAdapter adapter, MotionEvent ev, float top){
+        if ((ev.getAction()==MotionEvent.ACTION_DOWN)||(ev.getAction()==MotionEvent.ACTION_MOVE)){
+            ev.setAction(MotionEvent.ACTION_DOWN);
+            super.dispatchTouchEvent(ev);
+            ev.setAction(MotionEvent.ACTION_UP);
+            boolean res = super.dispatchTouchEvent(ev);
+
+            List<PointF> points = adapter.getSelected(top);
+            points.add(new PointF(ev.getX(),ev.getY()-top));
 
             mViewDrawPath.resetPoints(points);
             mViewDrawPath.draw();
 
-            ev.setAction(MotionEvent.ACTION_DOWN);
-            super.dispatchTouchEvent(ev);
-            ev.setAction(MotionEvent.ACTION_UP);
-            return super.dispatchTouchEvent(ev);
+            return res;
         }
-        //when lifting finger - check passcode for validity and reset the buttons
+        // When lifting finger - check passcode for validity and reset the buttons
         else if (ev.getAction()==MotionEvent.ACTION_UP){
             mViewDrawPath.clearPoints();
             mViewDrawPath.draw();
@@ -150,14 +171,7 @@ public class ActivityInput extends Activity {
             System.out.println("Resultat: "+res);
 
             final Handler handler = new Handler(Looper.getMainLooper());
-            handler.postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    adapter.clearItems();
-                }
-            }, 5);
-
-
+            handler.postDelayed(() -> adapter.clearItems(), 5);
         }
         return true;
     }
