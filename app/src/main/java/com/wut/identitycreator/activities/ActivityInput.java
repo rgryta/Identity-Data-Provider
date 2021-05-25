@@ -51,7 +51,6 @@ public class ActivityInput extends Activity {
         DialogLoading dialog = new DialogLoading(this);
         dialog.startDialog();
 
-        mode = "INPUT";
 
         try {
             dbHelper = new DataDBHelper(getApplicationContext());
@@ -59,21 +58,16 @@ public class ActivityInput extends Activity {
             e.printStackTrace();
         }
 
-
-        Cursor cursor = dbHelper.db.query(DataDBSchema.User.TABLE_NAME,
+        Cursor cursor = dbHelper.db.query(DataDBSchema.Config.TABLE_NAME,
                 null,
-                null,
+                DataDBSchema.Config.COLUMN_NAME_PARAM_NAME+"=\"CALIB\"",
                 null,
                 null,
                 null,
                 null);
-        String name = null;
-        while (cursor.moveToNext()){
-            name = cursor.getString(0);
-        }
-
-        Toast.makeText(getBaseContext(),name,
-                Toast.LENGTH_SHORT).show();
+        cursor.moveToNext();
+        if (cursor.getString(1).equals("-1")) mode="CALIB";
+        else mode="INPUT";
 
         setContentView(R.layout.activity_input);
 
@@ -114,8 +108,8 @@ public class ActivityInput extends Activity {
     public boolean dispatchTouchEvent (MotionEvent ev){
 
         System.out.println("----------");
-        System.out.println(ev.getX());
-        System.out.println(ev.getY());
+        //System.out.println(ev.getX());
+        //System.out.println(ev.getY());
 
         //Not usable
         /*
@@ -128,18 +122,31 @@ public class ActivityInput extends Activity {
         System.out.println(ev.getToolMinor());
         */
 
-        final ViewGridAdapter adapter = (ViewGridAdapter)radioGrid.getAdapter();
-
-        //for each action execute press action
-
-        Rect rect = new Rect();
-        View v = findViewById(R.id.passPath);
-        v.getDrawingRect(rect);
 
         if (mode.equals("INPUT")){
+            View v = findViewById(R.id.passPath);
+
+            Rect rect = new Rect();
+            v.getDrawingRect(rect);
+
+            final ViewGridAdapter adapter = (ViewGridAdapter)radioGrid.getAdapter();
             return handleInput(adapter,ev,v.getTop()+getStatusHeight());
         }
         else if (mode.equals("CALIB")){
+            View v = findViewById(R.id.submain_activity);
+
+            View v2 = findViewById(R.id.radioGrid);
+            Rect rect = new Rect();
+            v2.getDrawingRect(rect);
+
+            int topPadding = (int)ev.getY()-(v.getTop()+getStatusHeight()+rect.width()/2);
+
+            if (topPadding>v.getHeight()-rect.width()/2){
+                topPadding = v.getHeight()-rect.width()/2;
+            }
+            else if (topPadding<0) topPadding=0;
+
+            v.setPadding(v.getPaddingLeft(),topPadding,v.getPaddingRight(),0);
 
         }
 
