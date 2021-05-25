@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.RadioButton;
+import android.widget.Toast;
 
 import androidx.annotation.RequiresApi;
 import androidx.constraintlayout.widget.ConstraintLayout;
@@ -27,12 +28,9 @@ public class ViewGridAdapter extends BaseAdapter {
     int sWidth;
 
     RadioButton[] rbs = new RadioButton[9];
-    PointF[] radioPoints = new PointF[9];
 
     ArrayList<Integer> passwd = new ArrayList<>(); //correct
     ArrayList<Integer> inPasswd = new ArrayList<>(); //input
-
-    int pointSize=0;
 
     public ViewGridAdapter(Context applicationContext, int width) {
         context = applicationContext;
@@ -40,8 +38,10 @@ public class ViewGridAdapter extends BaseAdapter {
         inflater = (LayoutInflater.from(applicationContext));
 
         passwd.add(0);
+        passwd.add(1);
         passwd.add(2);
-        passwd.add(7);
+        passwd.add(4);
+        passwd.add(6);
     }
     @Override
     public int getCount() {
@@ -66,7 +66,6 @@ public class ViewGridAdapter extends BaseAdapter {
     }
 
     public List<PointF> getSelected(float top){
-        if (pointSize==0) pointSize = Math.floorDiv(rbs[0].getWidth(),2);
         List<PointF> points = new ArrayList<>();
         for (int i : inPasswd){
             Rect rect = new Rect();
@@ -84,6 +83,10 @@ public class ViewGridAdapter extends BaseAdapter {
 
             final int finalI = i;
             btn.setOnClickListener(v -> {
+                if (inPasswd.size()>0) {
+                    intermediateToggles(finalI);
+                }
+
                 inPasswd.add(finalI);
                 btn.setOnClickListener(null);
             });
@@ -102,6 +105,10 @@ public class ViewGridAdapter extends BaseAdapter {
 
         rbs[pointer] = view.findViewById(R.id.radioGrid);
         rbs[pointer].setOnClickListener(v -> {
+            if (inPasswd.size()>0) {
+                intermediateToggles(pointer);
+            }
+
             inPasswd.add(pointer);
             rbs[pointer].setOnClickListener(null);
         });
@@ -109,4 +116,84 @@ public class ViewGridAdapter extends BaseAdapter {
         return view;
     }
 
+    private void intermediateToggles(int pointer){
+        switch (pointer) {
+        case 0:
+            if ((inPasswd.get(inPasswd.size() - 1) == 2) && (!inPasswd.contains(new Integer(1)))) {
+                rbs[1].toggle();
+                rbs[1].callOnClick();
+            } else if ((inPasswd.get(inPasswd.size() - 1) == 6) && (!inPasswd.contains(new Integer(3)))) {
+                rbs[3].toggle();
+                rbs[3].callOnClick();
+            } else if ((inPasswd.get(inPasswd.size() - 1) == 8) && (!inPasswd.contains(new Integer(4)))) {
+                rbs[4].toggle();
+                rbs[4].callOnClick();
+            }
+            break;
+        case 1:
+            System.out.println("TUT: Jestem");
+            System.out.println("TUT: "+inPasswd.get(inPasswd.size() - 1));
+            if ((inPasswd.get(inPasswd.size() - 1) == 7) && (!inPasswd.contains(new Integer(4)))) {
+                rbs[4].toggle();
+                rbs[4].callOnClick();
+            }
+            break;
+        case 2:
+            if ((inPasswd.get(inPasswd.size() - 1) == 0) && (!inPasswd.contains(new Integer(1)))) {
+                rbs[1].toggle();
+                rbs[1].callOnClick();
+            } else if ((inPasswd.get(inPasswd.size() - 1) == 8) && (!inPasswd.contains(new Integer(5)))) {
+                rbs[5].toggle();
+                rbs[5].callOnClick();
+            } else if ((inPasswd.get(inPasswd.size() - 1) == 7) && (!inPasswd.contains(new Integer(4)))) {
+                rbs[4].toggle();
+                rbs[4].callOnClick();
+            }
+            break;
+        case 3:
+            if ((inPasswd.get(inPasswd.size() - 1) == 5) && (!inPasswd.contains(new Integer(4)))) {
+                rbs[4].toggle();
+                rbs[4].callOnClick();
+            }
+            break;
+        case 5:
+            if ((inPasswd.get(inPasswd.size() - 1) == 3) && (!inPasswd.contains(new Integer(4)))) {
+                rbs[4].toggle();
+                rbs[4].callOnClick();
+            }
+            break;
+        case 6:
+            if ((inPasswd.get(inPasswd.size() - 1) == 8) && (!inPasswd.contains(new Integer(7)))) {
+                rbs[7].toggle();
+                rbs[7].callOnClick();
+            } else if ((inPasswd.get(inPasswd.size() - 1) == 0) && (!inPasswd.contains(new Integer(3)))) {
+                rbs[3].toggle();
+                rbs[3].callOnClick();
+            } else if ((inPasswd.get(inPasswd.size() - 1) == 2) && (!inPasswd.contains(new Integer(4)))) {
+                rbs[4].toggle();
+                rbs[4].callOnClick();
+            }
+            break;
+        case 7:
+            if ((inPasswd.get(inPasswd.size() - 1) == 1) && (!inPasswd.contains(new Integer(4)))) {
+                rbs[4].toggle();
+                rbs[4].callOnClick();
+            }
+            break;
+        case 8:
+            if ((inPasswd.get(inPasswd.size() - 1) == 6) && (!inPasswd.contains(new Integer(7)))) {
+                rbs[7].toggle();
+                rbs[7].callOnClick();
+            } else if ((inPasswd.get(inPasswd.size() - 1) == 2) && (!inPasswd.contains(new Integer(5)))) {
+                rbs[5].toggle();
+                rbs[5].callOnClick();
+            } else if ((inPasswd.get(inPasswd.size() - 1) == 0) && (!inPasswd.contains(new Integer(4)))) {
+                rbs[4].toggle();
+                rbs[4].callOnClick();
+            }
+            break;
+        default:
+    }
+
+    }
 }
