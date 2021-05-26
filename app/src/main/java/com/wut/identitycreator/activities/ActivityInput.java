@@ -22,6 +22,7 @@ import android.widget.Toast;
 import java.io.IOException;
 import java.util.List;
 
+import com.wut.identitycreator.data.DataDBHandler;
 import com.wut.identitycreator.data.DataDBHelper;
 import com.wut.identitycreator.data.DataDBSchema;
 import com.wut.identitycreator.dialogs.DialogLoading;
@@ -38,14 +39,18 @@ public class ActivityInput extends Activity {
 
     ViewDrawPath mViewDrawPath;
 
-    DataDBHelper dbHelper;
+    DataDBHandler dbHandler;
 
     //mode = input OR calib
     String mode;
 
+    private ViewGridAdapter adapter;
+    private int sSide;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_input);
 
         //Block screen with loading dialog
         DialogLoading dialog = new DialogLoading(this);
@@ -53,23 +58,10 @@ public class ActivityInput extends Activity {
 
 
         try {
-            dbHelper = new DataDBHelper(getApplicationContext());
+            dbHandler = new DataDBHandler(getApplicationContext());
         } catch (IOException e) {
             e.printStackTrace();
         }
-
-        Cursor cursor = dbHelper.db.query(DataDBSchema.Config.TABLE_NAME,
-                null,
-                DataDBSchema.Config.COLUMN_NAME_PARAM_NAME+"=\"CALIB\"",
-                null,
-                null,
-                null,
-                null);
-        cursor.moveToNext();
-        if (cursor.getString(1).equals("-1")) mode="CALIB";
-        else mode="INPUT";
-
-        setContentView(R.layout.activity_input);
 
         // Input area calibration
         View view = findViewById(R.id.submain_activity);
@@ -78,21 +70,30 @@ public class ActivityInput extends Activity {
         Point size = new Point();
         display.getSize(size);
         int width = size.x;
-        int height = size.y;
 
-        height -= width;
-        int hOff = Math.floorDiv(height,2);
         int sOff = Math.floorDiv(width,10); //square offset
-        int sSide = width-2*sOff;
+        sSide = width-2*sOff;
 
-        view.setPadding(sOff,hOff+sOff,sOff,0);
+        if (dbHandler.settings.get("CALIB").equals("-1")) {
+            mode="CALIB";
+
+            int height = size.y;
+            height -= width;
+            int hOff = Math.floorDiv(height,2);
+            view.setPadding(sOff,hOff+sOff,sOff,0);
+        }
+        else {
+            mode="INPUT";
+            view.setPadding(sOff, Integer.parseInt(dbHandler.settings.get("CALIB")),sOff,0);
+        }
+        mode="INPUT";
 
 
         // Create an object of CustomAdapter and set Adapter to GirdView
         radioGrid = findViewById(R.id.radioGrid); // init GridView
-        ViewGridAdapter customAdapter = new ViewGridAdapter(getApplicationContext(),Math.floorDiv(sSide,3));
+        adapter = new ViewGridAdapter(getApplicationContext(),Math.floorDiv(sSide,3));
 
-        radioGrid.setAdapter(customAdapter);
+        radioGrid.setAdapter(adapter);
 
         mViewDrawPath = (ViewDrawPath)findViewById(R.id.passPath);
 
@@ -129,20 +130,24 @@ public class ActivityInput extends Activity {
             Rect rect = new Rect();
             v.getDrawingRect(rect);
 
-            final ViewGridAdapter adapter = (ViewGridAdapter)radioGrid.getAdapter();
-            return handleInput(adapter,ev,v.getTop()+getStatusHeight());
+            return handleInput(ev,v.getTop()+getStatusHeight());
         }
         else if (mode.equals("CALIB")){
+
             View v = findViewById(R.id.submain_activity);
 
+            //if ((ev.getY()>(v.getTop()+getStatusHeight())) && (ev.getY()<(v.getTop()+getStatusHeight()+v.getHeight()))) System.out.println("JESTEM");
             View v2 = findViewById(R.id.radioGrid);
             Rect rect = new Rect();
             v2.getDrawingRect(rect);
 
             int topPadding = (int)ev.getY()-(v.getTop()+getStatusHeight()+rect.width()/2);
 
-            if (topPadding>v.getHeight()-rect.width()/2){
-                topPadding = v.getHeight()-rect.width()/2;
+            System.out.println(topPadding);
+            System.out.println(v.getHeight());
+            System.out.println(rect.width()/2);
+            if (topPadding>v.getHeight()-rect.width()){
+                topPadding = v.getHeight()-rect.width();
             }
             else if (topPadding<0) topPadding=0;
 
@@ -154,7 +159,7 @@ public class ActivityInput extends Activity {
         return true;
     }
 
-    private boolean handleInput(ViewGridAdapter adapter, MotionEvent ev, float top){
+    private boolean handleInput(MotionEvent ev, float top){
         if ((ev.getAction()==MotionEvent.ACTION_DOWN)||(ev.getAction()==MotionEvent.ACTION_MOVE)){
             ev.setAction(MotionEvent.ACTION_DOWN);
             super.dispatchTouchEvent(ev);
@@ -175,10 +180,10 @@ public class ActivityInput extends Activity {
             mViewDrawPath.draw();
 
             boolean res = adapter.verifyResult();
-            System.out.println("Resultat: "+res);
+            System.out.println("Rezultat: "+res);
 
-            final Handler handler = new Handler(Looper.getMainLooper());
-            handler.postDelayed(() -> adapter.clearItems(), 5);
+            adapter = new ViewGridAdapter(getApplicationContext(),Math.floorDiv(sSide,3));
+            radioGrid.setAdapter(adapter);
         }
         return true;
     }

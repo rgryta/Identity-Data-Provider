@@ -22,10 +22,11 @@
 
         <TextView
             android:id="@+id/radioId"
+
             android:layout_height="wrap_content"
             android:layout_width="wrap_content"
-            android:layout_centerInParent="true"
-            android:text="x"/>
+
+            android:layout_centerInParent="true"/>
 
 
         <RadioButton
@@ -33,6 +34,8 @@
 
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+
+            android:layout_centerInParent="true"
 
             android:scaleX="1.5"
             android:scaleY="1.5"/>

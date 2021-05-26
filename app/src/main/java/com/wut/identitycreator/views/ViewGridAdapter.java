@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.RadioButton;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.RequiresApi;
@@ -28,6 +29,7 @@ public class ViewGridAdapter extends BaseAdapter {
     int sWidth;
 
     RadioButton[] rbs = new RadioButton[9];
+    TextView[] textId = new TextView[9];
 
     ArrayList<Integer> passwd = new ArrayList<>(); //correct
     ArrayList<Integer> inPasswd = new ArrayList<>(); //input
@@ -37,7 +39,7 @@ public class ViewGridAdapter extends BaseAdapter {
         sWidth = width;
         inflater = (LayoutInflater.from(applicationContext));
 
-        passwd.add(0);
+        //passwd.add(0);
         passwd.add(1);
         passwd.add(2);
         passwd.add(4);
@@ -76,24 +78,6 @@ public class ViewGridAdapter extends BaseAdapter {
         return points;
     }
 
-    public void clearItems(){
-        for (int i = 0; i<getCount(); i++) {
-            final RadioButton btn = (RadioButton) getItem(i);
-            btn.setChecked(false);
-
-            final int finalI = i;
-            btn.setOnClickListener(v -> {
-                if (inPasswd.size()>0) {
-                    intermediateToggles(finalI);
-                }
-
-                inPasswd.add(finalI);
-                btn.setOnClickListener(null);
-            });
-
-        }
-    }
-
     @SuppressLint({"ViewHolder", "InflateParams"})
     @Override
     public View getView(final int pointer, View view, ViewGroup viewGroup) {
@@ -102,6 +86,12 @@ public class ViewGridAdapter extends BaseAdapter {
         ConstraintLayout vw = view.findViewById(R.id.gridID);
         vw.setMinHeight(sWidth);
         vw.setMaxHeight(sWidth);
+
+
+        textId[pointer] = view.findViewById(R.id.radioId);
+        int idx = passwd.indexOf(new Integer(pointer));
+        if (idx==-1) textId[pointer].setText("X");
+        else textId[pointer].setText(String.valueOf(idx+1));
 
         rbs[pointer] = view.findViewById(R.id.radioGrid);
         rbs[pointer].setOnClickListener(v -> {
