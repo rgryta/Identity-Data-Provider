@@ -87,10 +87,9 @@ public class ViewGridAdapter extends BaseAdapter {
         vw.setMinHeight(sWidth);
         vw.setMaxHeight(sWidth);
 
-
         textId[pointer] = view.findViewById(R.id.radioId);
         int idx = passwd.indexOf(new Integer(pointer));
-        if (idx==-1) textId[pointer].setText("X");
+        if (idx==-1) textId[pointer].setText("");
         else textId[pointer].setText(String.valueOf(idx+1));
 
         rbs[pointer] = view.findViewById(R.id.radioGrid);

@@ -37,6 +37,9 @@
 
             android:layout_centerInParent="true"
 
+            android:background="@android:color/transparent"
+            android:soundEffectsEnabled="false"
+
             android:scaleX="1.5"
             android:scaleY="1.5"/>
     </RelativeLayout>

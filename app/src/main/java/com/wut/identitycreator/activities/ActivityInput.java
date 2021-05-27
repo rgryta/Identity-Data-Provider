@@ -86,8 +86,6 @@ public class ActivityInput extends Activity {
             mode="INPUT";
             view.setPadding(sOff, Integer.parseInt(dbHandler.settings.get("CALIB")),sOff,0);
         }
-        mode="INPUT";
-
 
         // Create an object of CustomAdapter and set Adapter to GirdView
         radioGrid = findViewById(R.id.radioGrid); // init GridView
