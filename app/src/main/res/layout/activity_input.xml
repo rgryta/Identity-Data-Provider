@@ -11,7 +11,7 @@
 
     tools:context=".activities.ActivityInput">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <RelativeLayout
         android:id="@+id/header"
         android:layout_width="match_parent"
         android:layout_height="150px"
@@ -19,16 +19,98 @@
         >
 
         <TextView
+            android:id="@+id/PW"
+            app:layout_constraintStart_toStartOf="parent"
+
             android:layout_width="150px"
             android:layout_height="match_parent"
-            android:text="@string/icon"
+
             app:autoSizeTextType="uniform"
             android:gravity="center"
             android:textAlignment="center"
-            app:layout_constraintStart_toStartOf="parent"/>
+
+            android:text="@string/icon"/>
+
+        <LinearLayout
+            android:id="@+id/CALIB_MODE"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_toRightOf="@+id/PW">
+
+            <TextView
+                android:id="@+id/Back"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+
+                android:layout_weight="1"
+                android:gravity="center"
+
+                android:text="<Back"
+                android:textAlignment="center"
+
+                android:textSize="100px"
+
+                />
 
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
+            <TextView
+                android:id="@+id/Apply"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+
+                android:layout_weight="1"
+                android:gravity="center"
+
+                android:text="Apply"
+                android:textAlignment="center"
+
+                android:textSize="100px"
+
+                />
+
+        </LinearLayout>
+
+        <LinearLayout
+        android:id="@+id/INPUT_MODE"
+        android:layout_width="0px"
+        android:layout_height="match_parent"
+        android:layout_toRightOf="@+id/PW">
+
+        <TextView
+            android:id="@+id/Back2"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+
+            android:layout_weight="1"
+            android:gravity="center"
+
+            android:text="Default user"
+            android:textAlignment="center"
+
+            android:textSize="100px"
+
+            />
+
+
+        <TextView
+            android:id="@+id/Apply2"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+
+            android:layout_weight="1"
+            android:gravity="center"
+
+            android:text="Pattern"
+            android:textAlignment="center"
+
+            android:textSize="100px"
+
+            />
+
+    </LinearLayout>
+
+
+    </RelativeLayout>
 
     <RelativeLayout
         android:id="@+id/submain_activity"
