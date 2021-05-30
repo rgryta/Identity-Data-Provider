@@ -1,7 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name" translatable="false">IdentityCreator</string>
-    <string name="icon" translatable="false">PW<br/>🆔</string>
     <string name="info_string">Warsaw University of Technology <br /><br />
         User modeling and identification based on touch and gyro analysis <br />
         Purpose of this project is to verify if it is possible to authenticate current smartphone holder based on the behavioral characteristics of touch input.<br /><br />

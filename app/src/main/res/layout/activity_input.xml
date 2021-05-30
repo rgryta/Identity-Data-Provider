@@ -33,9 +33,9 @@
 
         <LinearLayout
             android:id="@+id/CALIB_MODE"
-            android:layout_width="match_parent"
+            android:layout_width="0px"
             android:layout_height="match_parent"
-            android:layout_toRightOf="@+id/PW">
+            android:layout_toRightOf="@+id/PW"> <!-- width=0 or match_parent -->
 
             <TextView
                 android:id="@+id/Back"
@@ -70,44 +70,111 @@
 
         </LinearLayout>
 
-        <LinearLayout
+        <RelativeLayout
         android:id="@+id/INPUT_MODE"
-        android:layout_width="0px"
+        android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_toRightOf="@+id/PW">
+        android:layout_toRightOf="@+id/PW"> <!-- width=0 or match_parent -->
 
-        <TextView
-            android:id="@+id/Back2"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
+            <LinearLayout
+                android:id="@+id/UpperINPUT"
+                android:layout_width="match_parent"
+                android:layout_height="75px"
+                >
+                <RelativeLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    >
+                    <TextView
+                        android:id="@+id/UserBox"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
 
-            android:layout_weight="1"
-            android:gravity="center"
+                        android:text="U: "
+                        android:gravity="center"
 
-            android:text="Default user"
-            android:textAlignment="center"
+                        android:textSize="50px"
+                        />
+                    <TextView
+                        android:id="@+id/User"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
 
-            android:textSize="100px"
+                        android:gravity="center"
 
-            />
+                        android:text="Default"
+                        android:textAlignment="center"
+                        android:layout_toRightOf="@id/UserBox"
+
+                        android:textSize="50px"
+                        />
+                </RelativeLayout>
 
 
-        <TextView
-            android:id="@+id/Apply2"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
+                <TextView
+                    android:id="@+id/Recalib"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
 
-            android:layout_weight="1"
-            android:gravity="center"
+                    android:gravity="center"
 
-            android:text="Pattern"
-            android:textAlignment="center"
+                    android:text="Recalibrate"
+                    android:textAlignment="center"
 
-            android:textSize="100px"
+                    android:textSize="50px"
+                    android:layout_weight="1"
+                    />
+            </LinearLayout>
 
-            />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="75px"
+                android:layout_below="@id/UpperINPUT"
+                >
+                <TextView
+                    android:id="@+id/Plus"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
 
-    </LinearLayout>
+                    android:gravity="center"
+
+                    android:text="<"
+                    android:textAlignment="center"
+
+                    android:textSize="50px"
+                    android:layout_weight="0.2"
+                    />
+                <TextView
+                    android:id="@+id/Pattern"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+
+                    android:gravity="center"
+
+                    android:text="1-2-3-4"
+                    android:textAlignment="center"
+
+                    android:textSize="50px"
+                    android:layout_weight="0.6"
+                    />
+                <TextView
+                    android:id="@+id/Minus"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+
+                    android:gravity="center"
+
+                    android:text=">"
+                    android:textAlignment="center"
+
+                    android:textSize="50px"
+                    android:layout_weight="0.2"
+                    />
+
+            </LinearLayout>
+
+    </RelativeLayout>
 
 
     </RelativeLayout>
