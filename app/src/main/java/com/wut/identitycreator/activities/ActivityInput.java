@@ -226,8 +226,36 @@ public class ActivityInput extends Activity {
         }
     }
 
+
     public void switchMode(View view) {
         switchMode();
+    }
+
+
+    public void backFromCalib(View view){
+        if (dbHandler.settings.get("CALIB").equals("-1")){
+            Toast.makeText(getApplicationContext(),R.string.firstCalib,Toast.LENGTH_SHORT).show();
+        }
+        else {
+
+            View v = findViewById(R.id.submain_activity);
+            v.setPadding(v.getPaddingLeft(), Integer.parseInt(dbHandler.settings.get("CALIB")),v.getPaddingRight(),0);
+
+            resetPass();
+
+            switchMode();
+        }
+    }
+
+    public void saveCalib(View view){
+            View v = findViewById(R.id.submain_activity);
+            dbHandler.addAndSetCalib(String.valueOf(v.getPaddingTop()));
+
+            v.setPadding(v.getPaddingLeft(), Integer.parseInt(dbHandler.settings.get("CALIB")),v.getPaddingRight(),0);
+
+            resetPass();
+
+            switchMode();
     }
 }
 

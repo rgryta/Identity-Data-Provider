@@ -19,4 +19,6 @@
     </string>
     <string name="profile">Profile:</string>
     <string name="recalibrate">Recalibrate</string>
+    <string name="firstCalib">First calibration is mandatory</string>
+    <string name="calibExists">Calibration option already exists. Updating view...</string>
 </resources>
