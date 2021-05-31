@@ -15,4 +15,6 @@
         Thank you for your contribution to the project. <br />
         by Radosław Gryta
     </string>
+    <string name="profile">Profil:</string>
+    <string name="recalibrate">Kalibruj</string>
 </resources>

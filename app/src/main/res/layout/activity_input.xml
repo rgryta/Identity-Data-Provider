@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/activity_input"
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-
-    android:orientation="vertical"
+    android:id="@+id/activity_input"
 
     android:layout_width="match_parent"
+
     android:layout_height="match_parent"
+    android:orientation="vertical"
 
     tools:context=".activities.ActivityInput">
 
@@ -20,170 +20,182 @@
 
         <TextView
             android:id="@+id/PW"
-            app:layout_constraintStart_toStartOf="parent"
-
             android:layout_width="150px"
-            android:layout_height="match_parent"
 
-            app:autoSizeTextType="uniform"
+            android:layout_height="match_parent"
+            android:background="@android:color/darker_gray"
+
             android:gravity="center"
+            android:text="@string/icon"
             android:textAlignment="center"
+            app:autoSizeTextType="uniform"
 
-            android:text="@string/icon"/>
+            app:layout_constraintStart_toStartOf="parent"/>
 
-        <LinearLayout
-            android:id="@+id/CALIB_MODE"
-            android:layout_width="0px"
+        <Space
+            android:id="@+id/spacer"
+            android:layout_width="10dp"
             android:layout_height="match_parent"
-            android:layout_toRightOf="@+id/PW"> <!-- width=0 or match_parent -->
-
-            <TextView
-                android:id="@+id/Back"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-
-                android:layout_weight="1"
-                android:gravity="center"
-
-                android:text="<Back"
-                android:textAlignment="center"
-
-                android:textSize="100px"
-
-                />
-
-
-            <TextView
-                android:id="@+id/Apply"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-
-                android:layout_weight="1"
-                android:gravity="center"
-
-                android:text="Apply"
-                android:textAlignment="center"
-
-                android:textSize="100px"
-
-                />
-
-        </LinearLayout>
+            android:layout_toRightOf="@+id/PW"/>
 
         <RelativeLayout
-        android:id="@+id/INPUT_MODE"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_toRightOf="@+id/PW"> <!-- width=0 or match_parent -->
-
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_toRightOf="@+id/spacer"
+            >
             <LinearLayout
-                android:id="@+id/UpperINPUT"
-                android:layout_width="match_parent"
-                android:layout_height="75px"
-                >
-                <RelativeLayout
+                android:id="@+id/CALIB_MODE"
+                android:layout_width="0px"
+                android:layout_height="match_parent"> <!-- width=0 or match_parent -->
+
+                <TextView
+                    android:id="@+id/Back"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
+
                     android:layout_weight="1"
+                    android:gravity="center"
+
+                    android:onClick="switchMode"
+                    android:text="◀"
+                    android:textAlignment="center"
+
+                    android:textSize="75px"
+
+                    android:textStyle="bold"
+                    />
+
+
+                <TextView
+                    android:id="@+id/Apply"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+
+                    android:layout_weight="1"
+                    android:gravity="center"
+
+                    android:text="💾"
+                    android:textAlignment="center"
+
+                    android:textSize="75px"
+
+                    />
+
+            </LinearLayout>
+
+            <RelativeLayout
+            android:id="@+id/INPUT_MODE"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"> <!-- width=0 or match_parent -->
+
+                <LinearLayout
+                    android:id="@+id/UpperINPUT"
+                    android:layout_width="match_parent"
+                    android:layout_height="75px"
+                    >
+                    <RelativeLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        >
+                        <TextView
+                            android:id="@+id/UserBox"
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+
+                            android:gravity="center"
+                            android:text="@string/profile"
+
+                            android:textSize="50px"
+                            />
+                        <TextView
+                            android:id="@+id/User"
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+
+                            android:layout_toRightOf="@id/UserBox"
+
+                            android:gravity="center"
+                            android:text="Default"
+                            android:textAlignment="center"
+
+                            android:textSize="50px"
+                            />
+                    </RelativeLayout>
+
+
+                    <TextView
+                        android:id="@+id/Recalib"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+
+                        android:layout_weight="1"
+
+                        android:gravity="center"
+                        android:onClick="switchMode"
+
+                        android:text="@string/recalibrate"
+                        android:textAlignment="center"
+
+                        android:textSize="50px"
+                        />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="75px"
+                    android:layout_below="@id/UpperINPUT"
                     >
                     <TextView
-                        android:id="@+id/UserBox"
+                        android:id="@+id/Plus"
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
 
-                        android:text="U: "
-                        android:gravity="center"
+                        android:layout_weight="0.2"
 
+                        android:gravity="center"
+                        android:text="❮"
+
+                        android:textAlignment="center"
                         android:textSize="50px"
                         />
                     <TextView
-                        android:id="@+id/User"
+                        android:id="@+id/Pattern"
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
 
+                        android:layout_weight="0.6"
+
                         android:gravity="center"
+                        android:text="1-2-3-4"
 
-                        android:text="Default"
                         android:textAlignment="center"
-                        android:layout_toRightOf="@id/UserBox"
-
                         android:textSize="50px"
                         />
-                </RelativeLayout>
+                    <TextView
+                        android:id="@+id/Minus"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
 
+                        android:layout_weight="0.2"
 
-                <TextView
-                    android:id="@+id/Recalib"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:text="❯"
 
-                    android:gravity="center"
+                        android:textAlignment="center"
+                        android:textSize="50px"
+                        />
 
-                    android:text="Recalibrate"
-                    android:textAlignment="center"
-
-                    android:textSize="50px"
-                    android:layout_weight="1"
-                    />
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="75px"
-                android:layout_below="@id/UpperINPUT"
-                >
-                <TextView
-                    android:id="@+id/Plus"
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-
-                    android:gravity="center"
-
-                    android:text="<"
-                    android:textAlignment="center"
-
-                    android:textSize="50px"
-                    android:layout_weight="0.2"
-                    />
-                <TextView
-                    android:id="@+id/Pattern"
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-
-                    android:gravity="center"
-
-                    android:text="1-2-3-4"
-                    android:textAlignment="center"
-
-                    android:textSize="50px"
-                    android:layout_weight="0.6"
-                    />
-                <TextView
-                    android:id="@+id/Minus"
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-
-                    android:gravity="center"
-
-                    android:text=">"
-                    android:textAlignment="center"
-
-                    android:textSize="50px"
-                    android:layout_weight="0.2"
-                    />
-
-            </LinearLayout>
-
-    </RelativeLayout>
-
-
+                </LinearLayout>
+            </RelativeLayout>
+        </RelativeLayout>
     </RelativeLayout>
 
     <RelativeLayout
         android:id="@+id/submain_activity"
-        android:layout_below="@id/header"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:layout_below="@id/header">
 
         <GridView
             android:id="@+id/radioGrid"
@@ -195,9 +207,9 @@
 
     <com.wut.identitycreator.views.ViewDrawPath
         android:id="@+id/passPath"
-        android:layout_below="@id/header"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_below="@id/header"
         />
 
 </RelativeLayout>

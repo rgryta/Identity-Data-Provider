@@ -17,6 +17,8 @@ import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.GridView;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import java.io.IOException;
@@ -77,10 +79,15 @@ public class ActivityInput extends Activity {
         if (dbHandler.settings.get("CALIB").equals("-1")) {
             mode="CALIB";
 
-            int height = size.y;
-            height -= width;
+            int height = size.y - width;
             int hOff = Math.floorDiv(height,2);
-            view.setPadding(sOff,hOff+sOff,sOff,0);
+            view.setPadding(sOff,(int)Math.round((hOff+sOff)/10.0)*10,sOff,0);
+
+            View v = findViewById(R.id.INPUT_MODE);
+            v.setLayoutParams(new RelativeLayout.LayoutParams(0, RelativeLayout.LayoutParams.MATCH_PARENT));
+
+            v = findViewById(R.id.CALIB_MODE);
+            v.setLayoutParams(new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.MATCH_PARENT));
         }
         else {
             mode="INPUT";
@@ -99,7 +106,6 @@ public class ActivityInput extends Activity {
         //there doesn't seem to eb
         Handler handler = new Handler(Looper.getMainLooper());
         handler.postDelayed(() -> dialog.dismissDialog(), 2000);
-
     }
 
 
@@ -121,39 +127,20 @@ public class ActivityInput extends Activity {
         System.out.println(ev.getToolMinor());
         */
 
-
-        if (mode.equals("INPUT")){
-            View v = findViewById(R.id.passPath);
-
-            Rect rect = new Rect();
-            v.getDrawingRect(rect);
-
-            return handleInput(ev,v.getTop()+getStatusHeight());
-        }
-        else if (mode.equals("CALIB")){
-
-            View v = findViewById(R.id.submain_activity);
-
-            //if ((ev.getY()>(v.getTop()+getStatusHeight())) && (ev.getY()<(v.getTop()+getStatusHeight()+v.getHeight()))) System.out.println("JESTEM");
-            View v2 = findViewById(R.id.radioGrid);
-            Rect rect = new Rect();
-            v2.getDrawingRect(rect);
-
-            int topPadding = (int)ev.getY()-(v.getTop()+getStatusHeight()+rect.width()/2);
-
-            System.out.println(topPadding);
-            System.out.println(v.getHeight());
-            System.out.println(rect.width()/2);
-            if (topPadding>v.getHeight()-rect.width()){
-                topPadding = v.getHeight()-rect.width();
+        View v = findViewById(R.id.passPath);
+        int topHeight = v.getTop()+getStatusHeight();
+        if ((ev.getY()>topHeight) && (ev.getY()<(topHeight+v.getHeight()))){
+            if (mode.equals("INPUT")){
+                return handleInput(ev,topHeight);
             }
-            else if (topPadding<0) topPadding=0;
-
-            v.setPadding(v.getPaddingLeft(),topPadding,v.getPaddingRight(),0);
-
+            else if (mode.equals("CALIB")){
+                return handleCalib(ev);
+            }
         }
-
-
+        else {
+            resetPass();
+            return super.dispatchTouchEvent(ev);
+        }
         return true;
     }
 
@@ -174,16 +161,41 @@ public class ActivityInput extends Activity {
         }
         // When lifting finger - check passcode for validity and reset the buttons
         else if (ev.getAction()==MotionEvent.ACTION_UP){
-            mViewDrawPath.clearPoints();
-            mViewDrawPath.draw();
-
             boolean res = adapter.verifyResult();
             System.out.println("Rezultat: "+res);
 
-            adapter = new ViewGridAdapter(getApplicationContext(),Math.floorDiv(sSide,3));
-            radioGrid.setAdapter(adapter);
+            resetPass();
         }
         return true;
+    }
+
+    private boolean handleCalib(MotionEvent ev){
+        System.out.println("JESTEM");
+
+        View v = findViewById(R.id.submain_activity);
+        View v2 = findViewById(R.id.radioGrid);
+        Rect rect = new Rect();
+        v2.getDrawingRect(rect);
+
+        int topPadding = (int)ev.getY()-(v.getTop()+getStatusHeight()+rect.width()/2);
+
+        System.out.println(topPadding);
+        System.out.println(v.getHeight());
+        System.out.println(rect.width()/2);
+        if (topPadding>v.getHeight()-rect.width()){
+            topPadding = v.getHeight()-rect.width();
+        }
+        else if (topPadding<0) topPadding=0;
+
+        v.setPadding(v.getPaddingLeft(),(int)Math.round(topPadding/50.0)*50,v.getPaddingRight(),0);
+        return true;
+    }
+
+    private void resetPass(){
+        mViewDrawPath.clearPoints();
+        mViewDrawPath.draw();
+        adapter = new ViewGridAdapter(getApplicationContext(),Math.floorDiv(sSide,3));
+        radioGrid.setAdapter(adapter);
     }
 
     private int getStatusHeight(){
@@ -195,5 +207,27 @@ public class ActivityInput extends Activity {
         return result;
     }
 
+    private void switchMode(){
+        if (mode.equals("CALIB")){
+            mode="INPUT";
+            View v = findViewById(R.id.INPUT_MODE);
+            v.setLayoutParams(new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.MATCH_PARENT));
+
+            v = findViewById(R.id.CALIB_MODE);
+            v.setLayoutParams(new RelativeLayout.LayoutParams(0, RelativeLayout.LayoutParams.MATCH_PARENT));
+        }
+        else {
+            mode="CALIB";
+            View v = findViewById(R.id.INPUT_MODE);
+            v.setLayoutParams(new RelativeLayout.LayoutParams(0, RelativeLayout.LayoutParams.MATCH_PARENT));
+
+            v = findViewById(R.id.CALIB_MODE);
+            v.setLayoutParams(new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.MATCH_PARENT));
+        }
+    }
+
+    public void switchMode(View view) {
+        switchMode();
+    }
 }
 
