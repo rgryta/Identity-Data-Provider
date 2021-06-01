@@ -117,6 +117,8 @@
                             android:layout_toRightOf="@id/UserBox"
 
                             android:gravity="center"
+                            android:onClick="startUserDialog"
+
                             android:text="Default"
                             android:textAlignment="center"
 

@@ -29,6 +29,7 @@ import com.wut.identitycreator.data.DataDBHandler;
 import com.wut.identitycreator.data.DataDBHelper;
 import com.wut.identitycreator.data.DataDBSchema;
 import com.wut.identitycreator.dialogs.DialogLoading;
+import com.wut.identitycreator.dialogs.DialogUsers;
 import com.wut.identitycreator.views.ViewGridAdapter;
 import com.wut.identitycreator.views.ViewDrawPath;
 
@@ -283,6 +284,11 @@ public class ActivityInput extends Activity {
         dbHandler.setConfigPattern(idx);
         setHeader();
         resetPass();
+    }
+
+    public void startUserDialog(View view) {
+        DialogUsers dialog = new DialogUsers(this);
+        dialog.startDialog(dbHandler.users);
     }
 }
 

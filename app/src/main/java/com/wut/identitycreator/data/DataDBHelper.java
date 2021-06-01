@@ -88,7 +88,7 @@ public class DataDBHelper extends SQLiteOpenHelper {
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-
+        //do nothing
     }
 
 
@@ -101,7 +101,7 @@ public class DataDBHelper extends SQLiteOpenHelper {
                 uniqueID = UUID.randomUUID().toString();
                 SharedPreferences.Editor editor = sharedPrefs.edit();
                 editor.putString(PREF_UNIQUE_ID, uniqueID);
-                editor.commit();
+                editor.apply();
             }
         }
         return uniqueID;
