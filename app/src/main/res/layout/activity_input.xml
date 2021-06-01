@@ -50,10 +50,10 @@
 
                 <TextView
                     android:id="@+id/Back"
-                    android:layout_width="wrap_content"
+                    android:layout_width="0px"
                     android:layout_height="match_parent"
 
-                    android:layout_weight="1"
+                    android:layout_weight="0.5"
                     android:gravity="center"
 
                     android:onClick="backFromCalib"
@@ -68,10 +68,10 @@
 
                 <TextView
                     android:id="@+id/Apply"
-                    android:layout_width="wrap_content"
+                    android:layout_width="0px"
                     android:layout_height="match_parent"
 
-                    android:layout_weight="1"
+                    android:layout_weight="0.5"
                     android:gravity="center"
 
                     android:onClick="saveCalib"
@@ -95,9 +95,9 @@
                     android:layout_height="75px"
                     >
                     <RelativeLayout
-                        android:layout_width="wrap_content"
+                        android:layout_width="0px"
                         android:layout_height="match_parent"
-                        android:layout_weight="1"
+                        android:layout_weight="0.5"
                         >
                         <TextView
                             android:id="@+id/UserBox"
@@ -127,10 +127,10 @@
 
                     <TextView
                         android:id="@+id/Recalib"
-                        android:layout_width="wrap_content"
+                        android:layout_width="0px"
                         android:layout_height="match_parent"
 
-                        android:layout_weight="1"
+                        android:layout_weight="0.5"
 
                         android:gravity="center"
                         android:onClick="switchMode"
@@ -149,20 +149,21 @@
                     >
                     <TextView
                         android:id="@+id/Plus"
-                        android:layout_width="wrap_content"
+                        android:layout_width="0px"
                         android:layout_height="match_parent"
 
                         android:layout_weight="0.2"
 
                         android:gravity="center"
-                        android:text="❮"
+                        android:onClick="patternLeft"
 
+                        android:text="❮"
                         android:textAlignment="center"
                         android:textSize="50px"
                         />
                     <TextView
                         android:id="@+id/Pattern"
-                        android:layout_width="wrap_content"
+                        android:layout_width="0px"
                         android:layout_height="match_parent"
 
                         android:layout_weight="0.6"
@@ -175,14 +176,15 @@
                         />
                     <TextView
                         android:id="@+id/Minus"
-                        android:layout_width="wrap_content"
+                        android:layout_width="0px"
                         android:layout_height="match_parent"
 
                         android:layout_weight="0.2"
 
                         android:gravity="center"
-                        android:text="❯"
+                        android:onClick="patternRight"
 
+                        android:text="❯"
                         android:textAlignment="center"
                         android:textSize="50px"
                         />

@@ -60,7 +60,7 @@ public class DataDBHelper extends SQLiteOpenHelper {
         //Pattern
         values = new ContentValues();
         values.put(DataDBSchema.Config.COLUMN_NAME_PARAM_NAME, "PATTERN");
-        values.put(DataDBSchema.Config.COLUMN_NAME_PARAM_VALUE, "1-4-7-8-9-6-3");
+        values.put(DataDBSchema.Config.COLUMN_NAME_PARAM_VALUE, "0-3-6-7-8-5-2");
         db.insert(DataDBSchema.Config.TABLE_NAME, null, values);
 
         //unique UUID for installation instance
@@ -76,7 +76,13 @@ public class DataDBHelper extends SQLiteOpenHelper {
 
         //Default pattern
         values = new ContentValues();
-        values.put(DataDBSchema.Pattern.COLUMN_NAME_SEQUENCE, "1-4-7-8-9-6-3");
+        values.put(DataDBSchema.Pattern.COLUMN_NAME_SEQUENCE, "0-3-6-7-8-5-2");
+        db.insert(DataDBSchema.Pattern.TABLE_NAME, null, values);
+        values = new ContentValues();
+        values.put(DataDBSchema.Pattern.COLUMN_NAME_SEQUENCE, "0-1-2-5-8");
+        db.insert(DataDBSchema.Pattern.TABLE_NAME, null, values);
+        values = new ContentValues();
+        values.put(DataDBSchema.Pattern.COLUMN_NAME_SEQUENCE, "0-1-4-8");
         db.insert(DataDBSchema.Pattern.TABLE_NAME, null, values);
     }
 

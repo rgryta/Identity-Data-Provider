@@ -9,6 +9,7 @@ import android.widget.Toast;
 
 import java.io.IOException;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -16,12 +17,19 @@ public class DataDBHandler implements Serializable {
 
     DataDBHelper dbHelper;
 
+    //CALIB, USER, PATTERN, UUID
     public Map<String,String>  settings;
+
+    public ArrayList<String> patterns;
+    public ArrayList<String> users;
 
     public DataDBHandler(Context ctx) throws IOException {
         dbHelper = new DataDBHelper(ctx);
         settings = new HashMap<>();
         setApplicationStatus();
+
+        getUsers();
+        getPatterns();
     }
 
     public void setApplicationStatus(){
@@ -43,7 +51,6 @@ public class DataDBHandler implements Serializable {
     }
 
     public void addAndSetCalib(String newCalib){
-        boolean result = false;
         ContentValues values = new ContentValues();
         values.put(DataDBSchema.Calibration.COLUMN_NAME_OPTION, newCalib);
         dbHelper.db.insert(DataDBSchema.Calibration.TABLE_NAME, null, values);
@@ -57,16 +64,47 @@ public class DataDBHandler implements Serializable {
     }
 
 
-    public void getCalibrationOptions(){
-
-    }
-
     public void getUsers(){
-
+        users = new ArrayList<>();
+        Cursor cursor = dbHelper.db.query(
+                DataDBSchema.User.TABLE_NAME,   // The table to query
+                null,             // The array of columns to return (pass null to get all)
+                null,              // The columns for the WHERE clause
+                null,          // The values for the WHERE clause
+                null,                   // don't group the rows
+                null,                   // don't filter by row groups
+                null               // The sort order
+        );
+        while (cursor.moveToNext()) {
+            users.add(cursor.getString(cursor.getColumnIndex(DataDBSchema.User.COLUMN_NAME_USER)));
+        }
+        cursor.close();
     }
 
     public void getPatterns(){
+        patterns = new ArrayList<>();
+        Cursor cursor = dbHelper.db.query(
+                DataDBSchema.Pattern.TABLE_NAME,   // The table to query
+                null,             // The array of columns to return (pass null to get all)
+                null,              // The columns for the WHERE clause
+                null,          // The values for the WHERE clause
+                null,                   // don't group the rows
+                null,                   // don't filter by row groups
+                null               // The sort order
+        );
+        while (cursor.moveToNext()) {
+            patterns.add(cursor.getString(cursor.getColumnIndex(DataDBSchema.Pattern.COLUMN_NAME_SEQUENCE)));
+        }
+        cursor.close();
+    }
 
+    public void setConfigPattern(int idx){
+        settings.put("PATTERN",patterns.get(idx));
+
+        ContentValues values = new ContentValues();
+        values.put(DataDBSchema.Config.COLUMN_NAME_PARAM_NAME, "PATTERN");
+        values.put(DataDBSchema.Config.COLUMN_NAME_PARAM_VALUE, patterns.get(idx));
+        dbHelper.db.update(DataDBSchema.Config.TABLE_NAME, values,DataDBSchema.Config.COLUMN_NAME_PARAM_NAME+"=\"PATTERN\"",null);
     }
 
 

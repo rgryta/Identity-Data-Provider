@@ -34,16 +34,12 @@ public class ViewGridAdapter extends BaseAdapter {
     ArrayList<Integer> passwd = new ArrayList<>(); //correct
     ArrayList<Integer> inPasswd = new ArrayList<>(); //input
 
-    public ViewGridAdapter(Context applicationContext, int width) {
+    public ViewGridAdapter(Context applicationContext, int width, String pattern) {
         context = applicationContext;
         sWidth = width;
         inflater = (LayoutInflater.from(applicationContext));
 
-        //passwd.add(0);
-        passwd.add(1);
-        passwd.add(2);
-        passwd.add(4);
-        passwd.add(6);
+        passwd.addAll(parsePattern(pattern));
     }
     @Override
     public int getCount() {
@@ -58,6 +54,13 @@ public class ViewGridAdapter extends BaseAdapter {
     @Override
     public long getItemId(int i) {
         return 0;
+    }
+
+    public ArrayList<Integer> parsePattern(String pattern){
+        ArrayList<Integer> password = new ArrayList<>();
+        String[] splitPattern = pattern.split("-");
+        for (String s : splitPattern) password.add(Integer.valueOf(s));
+        return password;
     }
 
     public boolean verifyResult(){

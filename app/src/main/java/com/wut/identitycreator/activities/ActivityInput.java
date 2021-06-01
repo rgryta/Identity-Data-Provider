@@ -19,6 +19,7 @@ import android.view.WindowManager;
 import android.widget.GridView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.io.IOException;
@@ -65,6 +66,8 @@ public class ActivityInput extends Activity {
             e.printStackTrace();
         }
 
+        setHeader();
+
         // Input area calibration
         View view = findViewById(R.id.submain_activity);
 
@@ -96,7 +99,7 @@ public class ActivityInput extends Activity {
 
         // Create an object of CustomAdapter and set Adapter to GirdView
         radioGrid = findViewById(R.id.radioGrid); // init GridView
-        adapter = new ViewGridAdapter(getApplicationContext(),Math.floorDiv(sSide,3));
+        adapter = new ViewGridAdapter(getApplicationContext(),Math.floorDiv(sSide,3),dbHandler.settings.get("PATTERN"));
 
         radioGrid.setAdapter(adapter);
 
@@ -170,8 +173,6 @@ public class ActivityInput extends Activity {
     }
 
     private boolean handleCalib(MotionEvent ev){
-        System.out.println("JESTEM");
-
         View v = findViewById(R.id.submain_activity);
         View v2 = findViewById(R.id.radioGrid);
         Rect rect = new Rect();
@@ -194,7 +195,7 @@ public class ActivityInput extends Activity {
     private void resetPass(){
         mViewDrawPath.clearPoints();
         mViewDrawPath.draw();
-        adapter = new ViewGridAdapter(getApplicationContext(),Math.floorDiv(sSide,3));
+        adapter = new ViewGridAdapter(getApplicationContext(),Math.floorDiv(sSide,3),dbHandler.settings.get("PATTERN"));
         radioGrid.setAdapter(adapter);
     }
 
@@ -256,6 +257,32 @@ public class ActivityInput extends Activity {
             resetPass();
 
             switchMode();
+    }
+
+
+    public void setHeader(){
+        TextView v = findViewById(R.id.User);
+        v.setText(dbHandler.settings.get("USER"));
+        v = findViewById(R.id.Pattern);
+        v.setText(dbHandler.settings.get("PATTERN"));
+    }
+
+    public void patternLeft(View view) {
+        int idx = dbHandler.patterns.indexOf(dbHandler.settings.get("PATTERN"));
+        if (idx>0) idx--;
+        else idx = dbHandler.patterns.size()-1;
+        dbHandler.setConfigPattern(idx);
+        setHeader();
+        resetPass();
+    }
+
+    public void patternRight(View view) {
+        int idx = dbHandler.patterns.indexOf(dbHandler.settings.get("PATTERN"));
+        if (idx>=dbHandler.patterns.size()-1) idx=0;
+        else idx++;
+        dbHandler.setConfigPattern(idx);
+        setHeader();
+        resetPass();
     }
 }
 
