@@ -17,7 +17,7 @@
     </string>
     <string name="profile">Profil:</string>
     <string name="recalibrate">Kalibruj</string>
-    <string name="firstCalib">Pierwsza kalibracja jest obowiązkowa</string>
-    <string name="calibExists">Podana konfiguracja już istnieje. Aktualizacja widoku...</string>
+    <string name="error_msg_first_calibration">Pierwsza kalibracja jest obowiązkowa</string>
+    <string name="calibration_exists">Podana konfiguracja już istnieje. Aktualizacja widoku…</string>
     <string name="new_user">Nowy użytkownik</string>
 </resources>

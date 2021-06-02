@@ -58,7 +58,7 @@
                     android:gravity="center"
 
                     android:onClick="backFromCalib"
-                    android:text="◀"
+                    android:text="@string/go_back"
                     android:background="?attr/selectableItemBackground"
                     android:textAlignment="center"
 
@@ -165,7 +165,7 @@
                         android:gravity="center"
                         android:onClick="patternLeft"
 
-                        android:text="❮"
+                        android:text="@string/previous"
                         android:background="?attr/selectableItemBackground"
                         android:textAlignment="center"
                         android:textSize="14sp"
@@ -193,7 +193,7 @@
                         android:gravity="center"
                         android:onClick="patternRight"
 
-                        android:text="❯"
+                        android:text="@string/next"
                         android:background="?attr/selectableItemBackground"
                         android:textAlignment="center"
                         android:textSize="14sp"

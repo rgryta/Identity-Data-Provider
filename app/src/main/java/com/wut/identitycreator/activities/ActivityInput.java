@@ -1,32 +1,24 @@
 package com.wut.identitycreator.activities;
 
 import android.app.Activity;
-import android.database.Cursor;
 import android.graphics.Point;
 import android.graphics.PointF;
 import android.graphics.Rect;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.view.Display;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.Window;
-import android.view.WindowManager;
-import android.widget.EditText;
 import android.widget.GridView;
-import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import java.io.IOException;
 import java.util.List;
+import java.util.Objects;
 
 import com.wut.identitycreator.data.DataDBHandler;
-import com.wut.identitycreator.data.DataDBHelper;
-import com.wut.identitycreator.data.DataDBSchema;
 import com.wut.identitycreator.dialogs.DialogLoading;
 import com.wut.identitycreator.dialogs.DialogUsers;
 import com.wut.identitycreator.views.ViewGridAdapter;
@@ -59,11 +51,7 @@ public class ActivityInput extends Activity {
         dialog.startDialog();
 
 
-        try {
-            dbHandler = new DataDBHandler(getApplicationContext());
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        dbHandler = new DataDBHandler(getApplicationContext());
 
         setHeader();
 
@@ -78,7 +66,7 @@ public class ActivityInput extends Activity {
         int sOff = Math.floorDiv(width,10); //square offset
         sSide = width-2*sOff;
 
-        if (dbHandler.settings.get("CALIB").equals("-1")) {
+        if (Objects.equals(dbHandler.settings.get("CALIB"), "-1")) {
             mode="CALIB";
 
             int height = size.y - width;
@@ -93,7 +81,7 @@ public class ActivityInput extends Activity {
         }
         else {
             mode="INPUT";
-            view.setPadding(sOff, Integer.parseInt(dbHandler.settings.get("CALIB")),sOff,0);
+            view.setPadding(sOff, Integer.parseInt(Objects.requireNonNull(dbHandler.settings.get("CALIB"))),sOff,0);
         }
 
         // Create an object of CustomAdapter and set Adapter to GirdView
@@ -102,12 +90,12 @@ public class ActivityInput extends Activity {
 
         radioGrid.setAdapter(adapter);
 
-        mViewDrawPath = (ViewDrawPath)findViewById(R.id.passPath);
+        mViewDrawPath = findViewById(R.id.passPath);
 
         //unblock screen after 2 seconds (initialization - getting x/y values for the grid points
         //there doesn't seem to eb
         Handler handler = new Handler(Looper.getMainLooper());
-        handler.postDelayed(() -> dialog.dismissDialog(), 2000);
+        handler.postDelayed(dialog::dismissDialog, 2000);
     }
 
 
@@ -233,13 +221,13 @@ public class ActivityInput extends Activity {
 
 
     public void backFromCalib(View view){
-        if (dbHandler.settings.get("CALIB").equals("-1")){
-            Toast.makeText(getApplicationContext(),R.string.firstCalib,Toast.LENGTH_SHORT).show();
+        if (Objects.equals(dbHandler.settings.get("CALIB"), "-1")){
+            Toast.makeText(getApplicationContext(),R.string.error_msg_first_calibration,Toast.LENGTH_SHORT).show();
         }
         else {
 
             View v = findViewById(R.id.submain_activity);
-            v.setPadding(v.getPaddingLeft(), Integer.parseInt(dbHandler.settings.get("CALIB")),v.getPaddingRight(),0);
+            v.setPadding(v.getPaddingLeft(), Integer.parseInt(Objects.requireNonNull(dbHandler.settings.get("CALIB"))),v.getPaddingRight(),0);
 
             resetPass();
 
@@ -251,7 +239,7 @@ public class ActivityInput extends Activity {
             View v = findViewById(R.id.submain_activity);
             dbHandler.addAndSetCalib(String.valueOf(v.getPaddingTop()));
 
-            v.setPadding(v.getPaddingLeft(), Integer.parseInt(dbHandler.settings.get("CALIB")),v.getPaddingRight(),0);
+            v.setPadding(v.getPaddingLeft(), Integer.parseInt(Objects.requireNonNull(dbHandler.settings.get("CALIB"))),v.getPaddingRight(),0);
 
             resetPass();
 

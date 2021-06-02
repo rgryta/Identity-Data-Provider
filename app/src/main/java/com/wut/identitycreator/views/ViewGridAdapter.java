@@ -11,7 +11,6 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.RadioButton;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.RequiresApi;
 import androidx.constraintlayout.widget.ConstraintLayout;
@@ -49,7 +48,7 @@ public class ViewGridAdapter extends BaseAdapter {
     @Override
     public Object getItem(int position){
         return rbs[position];
-    };
+    }
 
     @Override
     public long getItemId(int i) {
@@ -91,7 +90,7 @@ public class ViewGridAdapter extends BaseAdapter {
         vw.setMaxHeight(sWidth);
 
         textId[pointer] = view.findViewById(R.id.radioId);
-        int idx = passwd.indexOf(new Integer(pointer));
+        int idx = passwd.indexOf(pointer);
         if (idx==-1) textId[pointer].setText("");
         else textId[pointer].setText(String.valueOf(idx+1));
 
@@ -111,81 +110,78 @@ public class ViewGridAdapter extends BaseAdapter {
     private void intermediateToggles(int pointer){
         switch (pointer) {
         case 0:
-            if ((inPasswd.get(inPasswd.size() - 1) == 2) && (!inPasswd.contains(new Integer(1)))) {
+            if ((inPasswd.get(inPasswd.size() - 1) == 2) && (!inPasswd.contains(1))) {
                 rbs[1].toggle();
                 rbs[1].callOnClick();
-            } else if ((inPasswd.get(inPasswd.size() - 1) == 6) && (!inPasswd.contains(new Integer(3)))) {
+            } else if ((inPasswd.get(inPasswd.size() - 1) == 6) && (!inPasswd.contains(3))) {
                 rbs[3].toggle();
                 rbs[3].callOnClick();
-            } else if ((inPasswd.get(inPasswd.size() - 1) == 8) && (!inPasswd.contains(new Integer(4)))) {
+            } else if ((inPasswd.get(inPasswd.size() - 1) == 8) && (!inPasswd.contains(4))) {
                 rbs[4].toggle();
                 rbs[4].callOnClick();
             }
             break;
         case 1:
-            System.out.println("TUT: Jestem");
-            System.out.println("TUT: "+inPasswd.get(inPasswd.size() - 1));
-            if ((inPasswd.get(inPasswd.size() - 1) == 7) && (!inPasswd.contains(new Integer(4)))) {
+            if ((inPasswd.get(inPasswd.size() - 1) == 7) && (!inPasswd.contains(4))) {
                 rbs[4].toggle();
                 rbs[4].callOnClick();
             }
             break;
         case 2:
-            if ((inPasswd.get(inPasswd.size() - 1) == 0) && (!inPasswd.contains(new Integer(1)))) {
+            if ((inPasswd.get(inPasswd.size() - 1) == 0) && (!inPasswd.contains(1))) {
                 rbs[1].toggle();
                 rbs[1].callOnClick();
-            } else if ((inPasswd.get(inPasswd.size() - 1) == 8) && (!inPasswd.contains(new Integer(5)))) {
+            } else if ((inPasswd.get(inPasswd.size() - 1) == 8) && (!inPasswd.contains(5))) {
                 rbs[5].toggle();
                 rbs[5].callOnClick();
-            } else if ((inPasswd.get(inPasswd.size() - 1) == 7) && (!inPasswd.contains(new Integer(4)))) {
+            } else if ((inPasswd.get(inPasswd.size() - 1) == 7) && (!inPasswd.contains(4))) {
                 rbs[4].toggle();
                 rbs[4].callOnClick();
             }
             break;
         case 3:
-            if ((inPasswd.get(inPasswd.size() - 1) == 5) && (!inPasswd.contains(new Integer(4)))) {
+            if ((inPasswd.get(inPasswd.size() - 1) == 5) && (!inPasswd.contains(4))) {
                 rbs[4].toggle();
                 rbs[4].callOnClick();
             }
             break;
         case 5:
-            if ((inPasswd.get(inPasswd.size() - 1) == 3) && (!inPasswd.contains(new Integer(4)))) {
+            if ((inPasswd.get(inPasswd.size() - 1) == 3) && (!inPasswd.contains(4))) {
                 rbs[4].toggle();
                 rbs[4].callOnClick();
             }
             break;
         case 6:
-            if ((inPasswd.get(inPasswd.size() - 1) == 8) && (!inPasswd.contains(new Integer(7)))) {
+            if ((inPasswd.get(inPasswd.size() - 1) == 8) && (!inPasswd.contains(7))) {
                 rbs[7].toggle();
                 rbs[7].callOnClick();
-            } else if ((inPasswd.get(inPasswd.size() - 1) == 0) && (!inPasswd.contains(new Integer(3)))) {
+            } else if ((inPasswd.get(inPasswd.size() - 1) == 0) && (!inPasswd.contains(3))) {
                 rbs[3].toggle();
                 rbs[3].callOnClick();
-            } else if ((inPasswd.get(inPasswd.size() - 1) == 2) && (!inPasswd.contains(new Integer(4)))) {
+            } else if ((inPasswd.get(inPasswd.size() - 1) == 2) && (!inPasswd.contains(4))) {
                 rbs[4].toggle();
                 rbs[4].callOnClick();
             }
             break;
         case 7:
-            if ((inPasswd.get(inPasswd.size() - 1) == 1) && (!inPasswd.contains(new Integer(4)))) {
+            if ((inPasswd.get(inPasswd.size() - 1) == 1) && (!inPasswd.contains(4))) {
                 rbs[4].toggle();
                 rbs[4].callOnClick();
             }
             break;
         case 8:
-            if ((inPasswd.get(inPasswd.size() - 1) == 6) && (!inPasswd.contains(new Integer(7)))) {
+            if ((inPasswd.get(inPasswd.size() - 1) == 6) && (!inPasswd.contains(7))) {
                 rbs[7].toggle();
                 rbs[7].callOnClick();
-            } else if ((inPasswd.get(inPasswd.size() - 1) == 2) && (!inPasswd.contains(new Integer(5)))) {
+            } else if ((inPasswd.get(inPasswd.size() - 1) == 2) && (!inPasswd.contains(5))) {
                 rbs[5].toggle();
                 rbs[5].callOnClick();
-            } else if ((inPasswd.get(inPasswd.size() - 1) == 0) && (!inPasswd.contains(new Integer(4)))) {
+            } else if ((inPasswd.get(inPasswd.size() - 1) == 0) && (!inPasswd.contains(4))) {
                 rbs[4].toggle();
                 rbs[4].callOnClick();
             }
             break;
         default:
     }
-
     }
 }

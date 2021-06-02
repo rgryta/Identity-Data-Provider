@@ -5,10 +5,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-import android.provider.Settings;
-import android.widget.Toast;
 
-import java.io.IOException;
 import java.util.UUID;
 
 public class DataDBHelper extends SQLiteOpenHelper {
@@ -21,7 +18,7 @@ public class DataDBHelper extends SQLiteOpenHelper {
     private static String uniqueID = null;
     private static final String PREF_UNIQUE_ID = "PREF_UNIQUE_ID";
 
-    public DataDBHelper(Context context) throws IOException {
+    public DataDBHelper(Context context) {
         super(context, DB_NAME , null, 1);
         db = getWritableDatabase();
 
@@ -72,42 +69,6 @@ public class DataDBHelper extends SQLiteOpenHelper {
         //Default user
         values = new ContentValues();
         values.put(DataDBSchema.User.COLUMN_NAME_USER, "DEFAULT");
-        db.insert(DataDBSchema.User.TABLE_NAME, null, values);
-        values = new ContentValues();
-        values.put(DataDBSchema.User.COLUMN_NAME_USER, "2ND USER");
-        db.insert(DataDBSchema.User.TABLE_NAME, null, values);
-        values = new ContentValues();
-        values.put(DataDBSchema.User.COLUMN_NAME_USER, "3 USER");
-        db.insert(DataDBSchema.User.TABLE_NAME, null, values);
-        values = new ContentValues();
-        values.put(DataDBSchema.User.COLUMN_NAME_USER, "4 USER");
-        db.insert(DataDBSchema.User.TABLE_NAME, null, values);
-        values = new ContentValues();
-        values.put(DataDBSchema.User.COLUMN_NAME_USER, "5 USER");
-        db.insert(DataDBSchema.User.TABLE_NAME, null, values);
-        values = new ContentValues();
-        values.put(DataDBSchema.User.COLUMN_NAME_USER, "6 USER");
-        db.insert(DataDBSchema.User.TABLE_NAME, null, values);
-        values = new ContentValues();
-        values.put(DataDBSchema.User.COLUMN_NAME_USER, "7 USER");
-        db.insert(DataDBSchema.User.TABLE_NAME, null, values);
-        values = new ContentValues();
-        values.put(DataDBSchema.User.COLUMN_NAME_USER, "8 USER");
-        db.insert(DataDBSchema.User.TABLE_NAME, null, values);
-        values = new ContentValues();
-        values.put(DataDBSchema.User.COLUMN_NAME_USER, "9 USER");
-        db.insert(DataDBSchema.User.TABLE_NAME, null, values);
-        values = new ContentValues();
-        values.put(DataDBSchema.User.COLUMN_NAME_USER, "01 USER");
-        db.insert(DataDBSchema.User.TABLE_NAME, null, values);
-        values = new ContentValues();
-        values.put(DataDBSchema.User.COLUMN_NAME_USER, "03 USER");
-        db.insert(DataDBSchema.User.TABLE_NAME, null, values);
-        values = new ContentValues();
-        values.put(DataDBSchema.User.COLUMN_NAME_USER, "04 USER");
-        db.insert(DataDBSchema.User.TABLE_NAME, null, values);
-        values = new ContentValues();
-        values.put(DataDBSchema.User.COLUMN_NAME_USER, "05 USER");
         db.insert(DataDBSchema.User.TABLE_NAME, null, values);
 
         //Default pattern

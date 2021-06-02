@@ -15,9 +15,9 @@ import java.util.List;
 
 public class ViewDrawPath extends View {
 
-    private Paint paint = new Paint();
+    private final Paint paint = new Paint();
 
-    private List<PointF> pointFS = new ArrayList<PointF>();
+    private final List<PointF> pointFS = new ArrayList<>();
 
     public ViewDrawPath(Context context) {
         super(context);
@@ -53,9 +53,9 @@ public class ViewDrawPath extends View {
     private float[] getLines(){
         float[] pos = new float[(pointFS.size()-1)*4];
         for (int i=0;i<pointFS.size()-1;i++){
-            pos[i*4]=pointFS.get(i).x;;
+            pos[i*4]=pointFS.get(i).x;
             pos[i*4+1]=pointFS.get(i).y;//-40;
-            pos[i*4+2]=pointFS.get(i+1).x;;
+            pos[i*4+2]=pointFS.get(i+1).x;
             pos[i*4+3]=pointFS.get(i+1).y;//-40;
         }
         return pos;

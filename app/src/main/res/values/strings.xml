@@ -15,12 +15,15 @@
         7. You can revisit this page using INFO button.<br />
         <br /><br />
         Thank you for your contribution to the project. <br />
-        by Radosław Gryta
+        by Radoslaw Gryta
     </string>
     <string name="profile">Profile:</string>
     <string name="recalibrate">Recalibrate</string>
-    <string name="firstCalib">First calibration is mandatory</string>
-    <string name="calibExists">Calibration option already exists. Updating view...</string>
+    <string name="error_msg_first_calibration">First calibration is mandatory</string>
+    <string name="calibration_exists">Calibration option already exists. Updating view…</string>
     <string name="checkbox" translatable="false">✓</string>
     <string name="new_user">New user</string>
+    <string name="go_back" translatable="false">◀</string>
+    <string name="previous" translatable="false">❮</string>
+    <string name="next" translatable="false">❯</string>
 </resources>

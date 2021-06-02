@@ -3,11 +3,7 @@ package com.wut.identitycreator.data;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
-import android.database.sqlite.SQLiteConstraintException;
-import android.database.sqlite.SQLiteDatabase;
-import android.widget.Toast;
 
-import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -23,7 +19,7 @@ public class DataDBHandler implements Serializable {
     public ArrayList<String> patterns;
     public ArrayList<String> users;
 
-    public DataDBHandler(Context ctx) throws IOException {
+    public DataDBHandler(Context ctx) {
         dbHelper = new DataDBHelper(ctx);
         settings = new HashMap<>();
         setApplicationStatus();
