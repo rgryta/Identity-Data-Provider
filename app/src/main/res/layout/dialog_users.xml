@@ -1,23 +1,52 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:padding="50dp">
+    android:padding="20dp"
+
+    android:orientation="vertical">
 
     <ListView
         android:id="@+id/UserList"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
 
+        android:gravity="start"
         android:layout_weight="1"
+        />
 
-        android:layout_marginStart="0dp"
-        android:layout_marginTop="0dp"
-        android:layout_marginEnd="0dp"
-        android:layout_marginBottom="0dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"/>
-</androidx.constraintlayout.widget.ConstraintLayout>
+    <RelativeLayout
+        android:id="@+id/new_user_form"
+        android:layout_width="match_parent"
+        android:layout_height="?android:attr/listPreferredItemHeight"
+        android:gravity="start"
+        android:layout_weight="0"
+        >
+        <EditText
+            android:id="@+id/new_user_name"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+
+            android:gravity="center_vertical"
+            android:hint="@string/new_user"
+
+            android:layout_toStartOf="@id/new_user_accept"
+            />
+        <TextView
+            android:id="@+id/new_user_accept"
+            android:layout_width="?android:attr/listPreferredItemHeight"
+            android:layout_height="match_parent"
+
+            android:gravity="center|center"
+            android:text="@string/checkbox"
+            android:textSize="40sp"
+            android:layout_alignParentEnd="true"
+
+            android:background="?attr/selectableItemBackground"
+            android:onClick="addNewUser"
+            />
+
+    </RelativeLayout>
+
+</LinearLayout>

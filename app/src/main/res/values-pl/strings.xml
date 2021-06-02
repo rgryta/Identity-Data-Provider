@@ -19,4 +19,5 @@
     <string name="recalibrate">Kalibruj</string>
     <string name="firstCalib">Pierwsza kalibracja jest obowiązkowa</string>
     <string name="calibExists">Podana konfiguracja już istnieje. Aktualizacja widoku...</string>
+    <string name="new_user">Nowy użytkownik</string>
 </resources>

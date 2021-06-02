@@ -1,7 +1,5 @@
 package com.wut.identitycreator.activities;
 
-import androidx.annotation.RequiresApi;
-
 import android.app.Activity;
 import android.database.Cursor;
 import android.graphics.Point;
@@ -16,6 +14,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.EditText;
 import android.widget.GridView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -36,7 +35,6 @@ import com.wut.identitycreator.views.ViewDrawPath;
 import com.wut.identitycreator.*;
 
 
-@RequiresApi(api = Build.VERSION_CODES.O)
 public class ActivityInput extends Activity {
 
     GridView radioGrid;
@@ -289,6 +287,12 @@ public class ActivityInput extends Activity {
     public void startUserDialog(View view) {
         DialogUsers dialog = new DialogUsers(this);
         dialog.startDialog(dbHandler.users);
+    }
+
+    public void addAndSetUser(String user){
+        dbHandler.addAndSetConfigUser(user);
+        setHeader();
+        resetPass();
     }
 }
 

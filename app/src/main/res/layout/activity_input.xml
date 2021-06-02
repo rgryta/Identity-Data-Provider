@@ -14,19 +14,20 @@
     <RelativeLayout
         android:id="@+id/header"
         android:layout_width="match_parent"
-        android:layout_height="150px"
-        android:layout_margin="50px"
+        android:layout_height="75dp"
+        android:layout_margin="5dp"
         >
 
         <TextView
             android:id="@+id/PW"
-            android:layout_width="150px"
+            android:layout_width="65dp"
 
             android:layout_height="match_parent"
             android:background="@android:color/darker_gray"
 
             android:gravity="center"
             android:text="@string/icon"
+            android:lines="2"
             android:textAlignment="center"
             app:autoSizeTextType="uniform"
 
@@ -34,23 +35,23 @@
 
         <Space
             android:id="@+id/spacer"
-            android:layout_width="10dp"
+            android:layout_width="15dp"
             android:layout_height="match_parent"
-            android:layout_toRightOf="@+id/PW"/>
+            android:layout_toEndOf="@+id/PW"/>
 
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_toRightOf="@+id/spacer"
+            android:layout_toEndOf="@+id/spacer"
             >
             <LinearLayout
                 android:id="@+id/CALIB_MODE"
-                android:layout_width="0px"
+                android:layout_width="0dp"
                 android:layout_height="match_parent"> <!-- width=0 or match_parent -->
 
                 <TextView
                     android:id="@+id/Back"
-                    android:layout_width="0px"
+                    android:layout_width="0dp"
                     android:layout_height="match_parent"
 
                     android:layout_weight="0.5"
@@ -58,9 +59,10 @@
 
                     android:onClick="backFromCalib"
                     android:text="◀"
+                    android:background="?attr/selectableItemBackground"
                     android:textAlignment="center"
 
-                    android:textSize="75px"
+                    android:textSize="40sp"
 
                     android:textStyle="bold"
                     />
@@ -68,17 +70,18 @@
 
                 <TextView
                     android:id="@+id/Apply"
-                    android:layout_width="0px"
+                    android:layout_width="0dp"
                     android:layout_height="match_parent"
 
                     android:layout_weight="0.5"
                     android:gravity="center"
 
                     android:onClick="saveCalib"
-                    android:text="💾"
+                    android:text="@string/checkbox"
+                    android:background="?attr/selectableItemBackground"
                     android:textAlignment="center"
 
-                    android:textSize="75px"
+                    android:textSize="40sp"
 
                     />
 
@@ -92,10 +95,10 @@
                 <LinearLayout
                     android:id="@+id/UpperINPUT"
                     android:layout_width="match_parent"
-                    android:layout_height="75px"
+                    android:layout_height="40dp"
                     >
                     <RelativeLayout
-                        android:layout_width="0px"
+                        android:layout_width="0dp"
                         android:layout_height="match_parent"
                         android:layout_weight="0.5"
                         >
@@ -107,29 +110,31 @@
                             android:gravity="center"
                             android:text="@string/profile"
 
-                            android:textSize="50px"
+                            android:textSize="20sp"
                             />
                         <TextView
                             android:id="@+id/User"
-                            android:layout_width="wrap_content"
+                            android:layout_width="match_parent"
                             android:layout_height="match_parent"
 
-                            android:layout_toRightOf="@id/UserBox"
+                            android:layout_toEndOf="@id/UserBox"
 
                             android:gravity="center"
                             android:onClick="startUserDialog"
 
-                            android:text="Default"
+                            android:text=""
+                            android:scrollHorizontally="true"
+                            android:background="?attr/selectableItemBackground"
                             android:textAlignment="center"
 
-                            android:textSize="50px"
+                            android:textSize="20sp"
                             />
                     </RelativeLayout>
 
 
                     <TextView
                         android:id="@+id/Recalib"
-                        android:layout_width="0px"
+                        android:layout_width="0dp"
                         android:layout_height="match_parent"
 
                         android:layout_weight="0.5"
@@ -139,19 +144,20 @@
 
                         android:text="@string/recalibrate"
                         android:textAlignment="center"
+                        android:background="?attr/selectableItemBackground"
 
-                        android:textSize="50px"
+                        android:textSize="20sp"
                         />
                 </LinearLayout>
 
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="75px"
+                    android:layout_height="35dp"
                     android:layout_below="@id/UpperINPUT"
                     >
                     <TextView
                         android:id="@+id/Plus"
-                        android:layout_width="0px"
+                        android:layout_width="0dp"
                         android:layout_height="match_parent"
 
                         android:layout_weight="0.2"
@@ -160,25 +166,26 @@
                         android:onClick="patternLeft"
 
                         android:text="❮"
+                        android:background="?attr/selectableItemBackground"
                         android:textAlignment="center"
-                        android:textSize="50px"
+                        android:textSize="14sp"
                         />
                     <TextView
                         android:id="@+id/Pattern"
-                        android:layout_width="0px"
+                        android:layout_width="0dp"
                         android:layout_height="match_parent"
 
                         android:layout_weight="0.6"
 
                         android:gravity="center"
-                        android:text="1-2-3-4"
+                        android:text=""
 
                         android:textAlignment="center"
-                        android:textSize="50px"
+                        android:textSize="14sp"
                         />
                     <TextView
                         android:id="@+id/Minus"
-                        android:layout_width="0px"
+                        android:layout_width="0dp"
                         android:layout_height="match_parent"
 
                         android:layout_weight="0.2"
@@ -187,8 +194,9 @@
                         android:onClick="patternRight"
 
                         android:text="❯"
+                        android:background="?attr/selectableItemBackground"
                         android:textAlignment="center"
-                        android:textSize="50px"
+                        android:textSize="14sp"
                         />
 
                 </LinearLayout>

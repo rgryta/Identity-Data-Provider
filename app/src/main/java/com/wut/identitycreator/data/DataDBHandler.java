@@ -80,6 +80,26 @@ public class DataDBHandler implements Serializable {
         }
         cursor.close();
     }
+    public void addAndSetConfigUser(String user){
+        ContentValues values;
+
+        int idx = users.indexOf(user);
+        if (idx!=-1){
+            settings.put("USER",users.get(idx));
+        }
+        else{
+            users.add(user);
+            settings.put("USER",user);
+            values = new ContentValues();
+            values.put(DataDBSchema.User.COLUMN_NAME_USER, user);
+            dbHelper.db.insert(DataDBSchema.User.TABLE_NAME, null,values);
+        }
+
+        values = new ContentValues();
+        values.put(DataDBSchema.Config.COLUMN_NAME_PARAM_NAME, "USER");
+        values.put(DataDBSchema.Config.COLUMN_NAME_PARAM_VALUE, user);
+        dbHelper.db.update(DataDBSchema.Config.TABLE_NAME, values,DataDBSchema.Config.COLUMN_NAME_PARAM_NAME+"=\"USER\"",null);
+    }
 
     public void getPatterns(){
         patterns = new ArrayList<>();

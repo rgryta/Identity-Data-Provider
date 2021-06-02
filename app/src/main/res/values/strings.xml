@@ -21,4 +21,6 @@
     <string name="recalibrate">Recalibrate</string>
     <string name="firstCalib">First calibration is mandatory</string>
     <string name="calibExists">Calibration option already exists. Updating view...</string>
+    <string name="checkbox" translatable="false">✓</string>
+    <string name="new_user">New user</string>
 </resources>
