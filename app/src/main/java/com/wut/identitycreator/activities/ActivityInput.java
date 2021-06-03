@@ -284,7 +284,7 @@ public class ActivityInput extends Activity {
     }
 
     public void startUserDialog(View view) {
-        int hasGoodPattern = dbHandler.checkProgressAndSetBestCalib();
+        int hasGoodPattern = dbHandler.checkProgressAndSetBestCalib(true);
         if (hasGoodPattern!=-1) {
             View v = findViewById(R.id.submain_activity);
             v.setPadding(v.getPaddingLeft(), Integer.parseInt(Objects.requireNonNull(dbHandler.settings.get("CALIB"))),v.getPaddingRight(),0);
@@ -322,5 +322,26 @@ public class ActivityInput extends Activity {
         msg = String.valueOf(ev.getRawX());
         dbHandler.addDataEntry(msg);
     }
+
+    boolean doublePatternTap = false;
+
+    public void createNewPattern(View vw) {
+        if (doublePatternTap) {
+            //second tap - begin new pattern setup
+
+
+            doublePatternTap = false;
+            return;
+        }
+        int calibOption = dbHandler.checkProgressAndSetBestCalib(false);
+        if (calibOption==-1) Toast.makeText(this, R.string.error_custom_pattern_primary_tests, Toast.LENGTH_LONG).show();
+        else{
+            this.doublePatternTap = true;
+            Toast.makeText(this, R.string.custom_pattern_tap_twice, Toast.LENGTH_SHORT).show();
+
+            new Handler().postDelayed(() -> doublePatternTap=false, 1000);
+        }
+    }
+
 }
 

@@ -29,4 +29,6 @@
     <string name="exit_double_press">Please click BACK again to exit</string>
     <string name="error_wrong_pattern">Wrong pattern!</string>
     <string name="error_new_user_primary_tests">To add new user please complete all primary tests for at least one calibration setting</string>
+    <string name="error_custom_pattern_primary_tests">To add custom pattern please complete all primary tests for at least one calibration setting</string>
+    <string name="custom_pattern_tap_twice">Tap again to set up custom pattern</string>
 </resources>

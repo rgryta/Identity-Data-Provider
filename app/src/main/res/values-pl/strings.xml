@@ -23,4 +23,6 @@
     <string name="exit_double_press">Kliknij COFNIJ ponownie, aby wyjść</string>
     <string name="error_wrong_pattern">Zły wzór!</string>
     <string name="error_new_user_primary_tests">Aby dodać nowego użytkownika należy ukończyć podstawowe testy dla przynajmniej jednego ustawienia kalibracji</string>
+    <string name="error_custom_pattern_primary_tests">Aby dodać własny wzór należy ukończyć podstawowe testy dla przynajmniej jednego ustawienia kalibracji</string>
+    <string name="custom_pattern_tap_twice">Kliknij ponownie aby ustawić własny wzór</string>
 </resources>

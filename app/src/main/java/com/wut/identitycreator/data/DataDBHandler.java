@@ -149,12 +149,12 @@ public class DataDBHandler implements Serializable {
         dbHelper.db.insert(DataDBSchema.DataEntry.TABLE_NAME, null,values);
     }
 
-    public int checkProgressAndSetBestCalib(){
+    public int checkProgressAndSetBestCalib(boolean set){
         Cursor cursor = dbHelper.db.rawQuery(
                 "select calib from data_entry\n" +
                         "where calib in (select calib from (select user,calib,pattern,count(*) from data_entry\n" +
                         "group by user,calib,pattern\n" +
-                        "having count(*)>=20)\n" +//ponad 20 entries
+                        "having count(*)>=20)\n" +//ponad 20 entries, dla testów dać mniej
                         "group by user,calib\n" +
                         "having count(*)>=3)\n" +//na 3 różnych patternach
                         "group by calib\n" +
@@ -163,7 +163,7 @@ public class DataDBHandler implements Serializable {
         int selCalib=-1;
         while (cursor.moveToNext()) selCalib = cursor.getInt(0);
         cursor.close();
-        if (selCalib!=-1) addAndSetCalib(String.valueOf(selCalib));
+        if ((selCalib!=-1)&&(set)) addAndSetCalib(String.valueOf(selCalib));
         return selCalib;
     }
 
