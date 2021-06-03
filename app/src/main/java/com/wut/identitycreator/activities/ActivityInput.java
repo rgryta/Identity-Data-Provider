@@ -84,6 +84,8 @@ public class ActivityInput extends Activity {
             view.setPadding(sOff, Integer.parseInt(Objects.requireNonNull(dbHandler.settings.get("CALIB"))),sOff,0);
         }
 
+        setHeaderMode();
+
         // Create an object of CustomAdapter and set Adapter to GirdView
         radioGrid = findViewById(R.id.radioGrid); // init GridView
         adapter = new ViewGridAdapter(this,Math.floorDiv(sSide,3),dbHandler.settings.get("PATTERN"));
@@ -184,7 +186,14 @@ public class ActivityInput extends Activity {
             }
             else if (topPadding<0) topPadding=0;
 
-            v.setPadding(v.getPaddingLeft(),(int)Math.round(topPadding/50.0)*50,v.getPaddingRight(),0);
+            topPadding = (int)Math.round(topPadding/50.0)*50;
+
+            v.setPadding(v.getPaddingLeft(),topPadding,v.getPaddingRight(),0);
+
+            TextView calibTests = findViewById(R.id.calib_data_entries_num);
+            int count = dbHandler.completedTestsForCalib(String.valueOf(topPadding));
+            calibTests.setText(getResources().getQuantityString(R.plurals.completed_tests,count,count));
+
         }
         return true;
     }
@@ -208,19 +217,32 @@ public class ActivityInput extends Activity {
     private void switchMode(){
         if (mode.equals("CALIB")){
             mode="INPUT";
-            View v = findViewById(R.id.INPUT_MODE);
-            v.setLayoutParams(new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.MATCH_PARENT));
-
-            v = findViewById(R.id.CALIB_MODE);
-            v.setLayoutParams(new RelativeLayout.LayoutParams(0, RelativeLayout.LayoutParams.MATCH_PARENT));
         }
         else {
             mode="CALIB";
-            View v = findViewById(R.id.INPUT_MODE);
-            v.setLayoutParams(new RelativeLayout.LayoutParams(0, RelativeLayout.LayoutParams.MATCH_PARENT));
+        }
+        setHeaderMode();
+    }
 
-            v = findViewById(R.id.CALIB_MODE);
-            v.setLayoutParams(new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.MATCH_PARENT));
+    private void setHeaderMode(){
+        View v;
+        switch (mode){
+            case "CALIB":
+                v = findViewById(R.id.INPUT_MODE);
+                v.setLayoutParams(new RelativeLayout.LayoutParams(0, RelativeLayout.LayoutParams.MATCH_PARENT));
+
+                v = findViewById(R.id.CALIB_MODE);
+                v.setLayoutParams(new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.MATCH_PARENT));
+                break;
+            case "INPUT":
+                v = findViewById(R.id.INPUT_MODE);
+                v.setLayoutParams(new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.MATCH_PARENT));
+
+                v = findViewById(R.id.CALIB_MODE);
+                v.setLayoutParams(new RelativeLayout.LayoutParams(0, RelativeLayout.LayoutParams.MATCH_PARENT));
+                break;
+            default:
+                break;
         }
     }
 
@@ -263,6 +285,9 @@ public class ActivityInput extends Activity {
         v = findViewById(R.id.Pattern);
         String patternHeader = dbHandler.settings.get("PATTERN")+" ("+dbHandler.completedTests()+")";
         v.setText(patternHeader);
+        v = findViewById(R.id.calib_data_entries_num);
+        int count = dbHandler.completedTestsForCalib(dbHandler.settings.get("CALIB"));
+        v.setText(getResources().getQuantityString(R.plurals.completed_tests,count,count));
     }
 
     public void patternLeft(View view) {
@@ -344,4 +369,3 @@ public class ActivityInput extends Activity {
     }
 
 }
-

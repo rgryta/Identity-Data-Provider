@@ -154,7 +154,7 @@ public class DataDBHandler implements Serializable {
                 "select calib from data_entry\n" +
                         "where calib in (select calib from (select user,calib,pattern,count(*) from data_entry\n" +
                         "group by user,calib,pattern\n" +
-                        "having count(*)>=20)\n" +//ponad 20 entries, dla testów dać mniej
+                        "having count(*)>=20)\n" +//ponad 0 entries, dla testów dać mniej
                         "group by user,calib\n" +
                         "having count(*)>=3)\n" +//na 3 różnych patternach
                         "group by calib\n" +
@@ -167,4 +167,18 @@ public class DataDBHandler implements Serializable {
         return selCalib;
     }
 
+    public int completedTestsForCalib(String calibOption){
+        Cursor cursor = dbHelper.db.query(
+                DataDBSchema.DataEntry.TABLE_NAME,   // The table to query
+                null,             // The array of columns to return (pass null to get all)
+                DataDBSchema.DataEntry.COLUMN_NAME_CALIB+"=?",              // The columns for the WHERE clause
+                new String[] {calibOption},          // The values for the WHERE clause
+                null,                   // don't group the rows
+                null,                   // don't filter by row groups
+                null               // The sort order
+        );
+        int count=cursor.getCount();
+        cursor.close();
+        return count;
+    }
 }

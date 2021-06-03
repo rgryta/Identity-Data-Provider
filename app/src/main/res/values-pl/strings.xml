@@ -25,4 +25,10 @@
     <string name="error_new_user_primary_tests">Aby dodać nowego użytkownika należy ukończyć podstawowe testy dla przynajmniej jednego ustawienia kalibracji</string>
     <string name="error_custom_pattern_primary_tests">Aby dodać własny wzór należy ukończyć podstawowe testy dla przynajmniej jednego ustawienia kalibracji</string>
     <string name="custom_pattern_tap_twice">Kliknij ponownie aby ustawić własny wzór</string>
+    <plurals name="completed_tests">
+        <item quantity="one">Ukończone testy: %d</item>
+        <item quantity="few">Ukończone testy: %d</item>
+        <item quantity="many">Ukończone testy: %d</item>
+        <item quantity="other">Ukończone testy: %d</item>
+    </plurals>
 </resources>

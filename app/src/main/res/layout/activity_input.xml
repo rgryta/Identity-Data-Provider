@@ -46,50 +46,65 @@
             >
             <LinearLayout
                 android:id="@+id/CALIB_MODE"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"> <!-- width=0 or match_parent -->
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"> <!-- width=0 or match_parent -->
 
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp">
+                    <TextView
+                            android:id="@+id/Back"
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+
+                            android:layout_weight="0.5"
+                            android:gravity="center"
+
+                            android:onClick="backFromCalib"
+                            android:text="@string/go_back"
+                            android:background="?attr/selectableItemBackground"
+                            android:textAlignment="center"
+
+                            android:textSize="30sp"
+
+                            android:textStyle="bold"
+                            />
+
+
+                        <TextView
+                            android:id="@+id/Apply"
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+
+                            android:layout_weight="0.5"
+                            android:gravity="center"
+
+                            android:onClick="saveCalib"
+                            android:text="@string/checkbox"
+                            android:background="?attr/selectableItemBackground"
+                            android:textAlignment="center"
+
+                            android:textSize="30sp"
+
+                            />
+                </LinearLayout>
                 <TextView
-                    android:id="@+id/Back"
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
+                    android:id="@+id/calib_data_entries_num"
+                    android:layout_width="match_parent"
+                    android:layout_height="25dp"
 
-                    android:layout_weight="0.5"
                     android:gravity="center"
 
-                    android:onClick="backFromCalib"
-                    android:text="@string/go_back"
-                    android:background="?attr/selectableItemBackground"
                     android:textAlignment="center"
 
-                    android:textSize="40sp"
-
-                    android:textStyle="bold"
+                    android:textSize="14sp"
                     />
-
-
-                <TextView
-                    android:id="@+id/Apply"
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-
-                    android:layout_weight="0.5"
-                    android:gravity="center"
-
-                    android:onClick="saveCalib"
-                    android:text="@string/checkbox"
-                    android:background="?attr/selectableItemBackground"
-                    android:textAlignment="center"
-
-                    android:textSize="40sp"
-
-                    />
-
             </LinearLayout>
 
             <RelativeLayout
             android:id="@+id/INPUT_MODE"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="match_parent"> <!-- width=0 or match_parent -->
 
                 <LinearLayout
