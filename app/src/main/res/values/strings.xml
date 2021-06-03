@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name" translatable="false">IdentityCreator</string>
-    <string name="icon" translatable="false">PW<br />🆔</string>
+    <string name="icon" translatable="false">PW\n🆔</string>
     <string name="profile">Profile:</string>
     <string name="recalibrate">Recalibrate</string>
     <string name="error_msg_first_calibration">First calibration is mandatory</string>
@@ -16,6 +16,50 @@
     <string name="error_custom_pattern_primary_tests">To add custom pattern please complete all primary tests for at least one calibration setting</string>
     <string name="custom_pattern_tap_twice">Tap again to set up custom pattern</string>
     <string name="error_new_pattern_length">Patterns have to be longer than 4</string>
+    <string name="info_welcome_header">Welcome</string>
+    <string name="info_welcome_content">
+        Hi! For starters I\'d like to thank you for your will to help me with my project.
+        Note that if you close this window, you can always reopen it by pressing PW🆔 button to the top left.
+    </string>
+    <string name="info_project_header">Project</string>
+    <string name="info_project_content">
+        The purpose of this project is to verify if it\'s possible to create and identification layer that uses behavioral information of drawing security patterns.
+        Data that you\'re going to provide will be completely anonymous.
+        Your unique ID is randomly generated during your first launch of the application and it disappears when the application is uninstalled - each installation will generate a new ID.
+        You can view your ID at the bottom of this dialog screen and test it by reinstalling this apk.
+    </string>
+    <string name="info_instructions_header">Instructions</string>
+    <string name="info_instructions_content">
+        There are two tasks. Primary and optional. In both you\'ll have to draw patterns on your screen.
+        You can treat this like the \'connect the dots\' game.
+        In order to make this as easy and comfortable for you as possible, you\'ll first need to adjust the height of the pattern grid.
+        To do that you\'ll just have to move your finger up and down and then press check icon.
+        Don\'t worry, you can readjust the height after that if you think it\'s too high or too low.
+    </string>
+    <string name="info_primary_header">Primary task</string>
+    <string name="info_primary_content">
+        Once the calibration process is finished, you\'ll be tasked to draw 3 primary patterns at least 20 times.
+        Remember that number of drawn patterns is specific to your user, pattern and calibration option, so if you readjust the grid height, the counter will be different.
+        Don\'t worry about them though, these counters are not reset so you can always switch your settings back and continue on.
+    </string>
+    <string name="info_optional_header">Optional task</string>
+    <string name="info_optional_content">After completing primary task you will unlock optional tasks. There are two ways to do them.
+        \n1) You can add new user by pressing your Profile\'s name (\'Default\').
+        When you set up a new profile, the calibration setting will also automatically switch back to the option where you completed the most tests.
+        Once you set up a new profile, lend your phone to your friend or family member so that they could also complete the primary tests.
+        Remember that for them to count to the system, they will have to complete at least 20 tests for at least one pattern.
+        The more people provide data for the same phone and calibration setting, the better the results will be.
+        \n2) You can add your own custom patterns. If there\'s a pattern that you\'re particularly familiar with, you will be able to add it with no issues.
+        In order to add/switch patterns just double tap on the pattern string.
+    </string>
+    <string name="info_about_header">About</string>
+    <string name="info_about_content">
+        Creator: Radosław Gryta, Warsaw University of Technology
+        \nSource code: github.com/rgryta/IdentityCreator</string>
+    <string name="info_uuid_header">Your unique ID</string>
+    <string name="close_x" translatable="false">✗</string>
+    <string name="right_triangle" translatable="false">▸\t</string>
+    <string name="down_triangle" translatable="false">▾\t</string>
     <plurals name="completed_tests">
         <item quantity="other">Completed tests: %d</item>
     </plurals>

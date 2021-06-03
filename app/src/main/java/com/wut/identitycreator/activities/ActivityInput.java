@@ -17,6 +17,7 @@ import android.widget.Toast;
 
 import com.wut.identitycreator.R;
 import com.wut.identitycreator.data.DataDBHandler;
+import com.wut.identitycreator.dialogs.DialogInfo;
 import com.wut.identitycreator.dialogs.DialogLoading;
 import com.wut.identitycreator.dialogs.DialogUsers;
 import com.wut.identitycreator.views.ViewDrawPath;
@@ -97,7 +98,12 @@ public class ActivityInput extends Activity {
         //unblock screen after 2 seconds (initialization - getting x/y values for the grid points
         //there doesn't seem to eb
         Handler handler = new Handler(Looper.getMainLooper());
-        handler.postDelayed(dialog::dismissDialog, 2000);
+        handler.postDelayed(() -> {
+            dialog.dismissDialog();
+            if (Objects.equals(dbHandler.settings.get("CALIB"), "-1")) {
+                startInfoDialog(findViewById(R.id.PW));
+            }
+        }, 2000);
     }
 
 
@@ -337,6 +343,11 @@ public class ActivityInput extends Activity {
         else {
             Toast.makeText(this, R.string.error_new_user_primary_tests,Toast.LENGTH_LONG).show();
         }
+    }
+
+    public void startInfoDialog(View view) {
+        DialogInfo dialog = new DialogInfo(this);
+        dialog.startDialog();
     }
 
     public void addAndSetUser(String user){

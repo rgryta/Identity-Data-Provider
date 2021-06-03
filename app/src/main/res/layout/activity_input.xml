@@ -22,13 +22,16 @@
             android:layout_width="65dp"
 
             android:layout_height="match_parent"
-            android:background="@android:color/darker_gray"
+
+            android:background="?attr/selectableItemBackground"
 
             android:gravity="center"
             android:text="@string/icon"
             android:lines="2"
             android:textAlignment="center"
             app:autoSizeTextType="uniform"
+
+            android:onClick="startInfoDialog"
 
             app:layout_constraintStart_toStartOf="parent"/>
 
