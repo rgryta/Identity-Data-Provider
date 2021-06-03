@@ -51,7 +51,7 @@ public class ActivityInput extends Activity {
         dialog.startDialog();
 
 
-        dbHandler = new DataDBHandler(getApplicationContext());
+        dbHandler = new DataDBHandler(this);
 
         setHeader();
 
@@ -86,7 +86,7 @@ public class ActivityInput extends Activity {
 
         // Create an object of CustomAdapter and set Adapter to GirdView
         radioGrid = findViewById(R.id.radioGrid); // init GridView
-        adapter = new ViewGridAdapter(getApplicationContext(),Math.floorDiv(sSide,3),dbHandler.settings.get("PATTERN"));
+        adapter = new ViewGridAdapter(this,Math.floorDiv(sSide,3),dbHandler.settings.get("PATTERN"));
 
         radioGrid.setAdapter(adapter);
 
@@ -152,37 +152,47 @@ public class ActivityInput extends Activity {
         // When lifting finger - check passcode for validity and reset the buttons
         else if (ev.getAction()==MotionEvent.ACTION_UP){
             boolean res = adapter.verifyResult();
-            System.out.println("Rezultat: "+res);
+            if (res) {
+                parseAndAddEntry(ev);
+                setHeader();
+            }
+            else Toast.makeText(this, R.string.error_wrong_pattern, Toast.LENGTH_SHORT).show();
 
             resetPass();
         }
         return true;
     }
 
+    private int startY;
+    private int startPadding;
+
     private boolean handleCalib(MotionEvent ev){
         View v = findViewById(R.id.submain_activity);
-        View v2 = findViewById(R.id.radioGrid);
-        Rect rect = new Rect();
-        v2.getDrawingRect(rect);
-
-        int topPadding = (int)ev.getY()-(v.getTop()+getStatusHeight()+rect.width()/2);
-
-        System.out.println(topPadding);
-        System.out.println(v.getHeight());
-        System.out.println(rect.width()/2);
-        if (topPadding>v.getHeight()-rect.width()){
-            topPadding = v.getHeight()-rect.width();
+        if (ev.getAction()==MotionEvent.ACTION_DOWN) {
+            startY=(int)ev.getY();
+            startPadding = v.getPaddingTop();
         }
-        else if (topPadding<0) topPadding=0;
+        else{
+            View v2 = findViewById(R.id.radioGrid);
+            Rect rect = new Rect();
+            v2.getDrawingRect(rect);
 
-        v.setPadding(v.getPaddingLeft(),(int)Math.round(topPadding/50.0)*50,v.getPaddingRight(),0);
+            int topPadding = startPadding+(int)ev.getY()-startY;
+
+            if (topPadding>v.getHeight()-rect.width()){
+                topPadding = v.getHeight()-rect.width();
+            }
+            else if (topPadding<0) topPadding=0;
+
+            v.setPadding(v.getPaddingLeft(),(int)Math.round(topPadding/50.0)*50,v.getPaddingRight(),0);
+        }
         return true;
     }
 
     private void resetPass(){
         mViewDrawPath.clearPoints();
         mViewDrawPath.draw();
-        adapter = new ViewGridAdapter(getApplicationContext(),Math.floorDiv(sSide,3),dbHandler.settings.get("PATTERN"));
+        adapter = new ViewGridAdapter(this,Math.floorDiv(sSide,3),dbHandler.settings.get("PATTERN"));
         radioGrid.setAdapter(adapter);
     }
 
@@ -222,7 +232,7 @@ public class ActivityInput extends Activity {
 
     public void backFromCalib(View view){
         if (Objects.equals(dbHandler.settings.get("CALIB"), "-1")){
-            Toast.makeText(getApplicationContext(),R.string.error_msg_first_calibration,Toast.LENGTH_SHORT).show();
+            Toast.makeText(this,R.string.error_msg_first_calibration,Toast.LENGTH_SHORT).show();
         }
         else {
 
@@ -242,8 +252,8 @@ public class ActivityInput extends Activity {
             v.setPadding(v.getPaddingLeft(), Integer.parseInt(Objects.requireNonNull(dbHandler.settings.get("CALIB"))),v.getPaddingRight(),0);
 
             resetPass();
-
             switchMode();
+            setHeader();
     }
 
 
@@ -251,7 +261,8 @@ public class ActivityInput extends Activity {
         TextView v = findViewById(R.id.User);
         v.setText(dbHandler.settings.get("USER"));
         v = findViewById(R.id.Pattern);
-        v.setText(dbHandler.settings.get("PATTERN"));
+        String patternHeader = dbHandler.settings.get("PATTERN")+" ("+dbHandler.completedTests()+")";
+        v.setText(patternHeader);
     }
 
     public void patternLeft(View view) {
@@ -273,14 +284,43 @@ public class ActivityInput extends Activity {
     }
 
     public void startUserDialog(View view) {
-        DialogUsers dialog = new DialogUsers(this);
-        dialog.startDialog(dbHandler.users);
+        int hasGoodPattern = dbHandler.checkProgressAndSetBestCalib();
+        if (hasGoodPattern!=-1) {
+            View v = findViewById(R.id.submain_activity);
+            v.setPadding(v.getPaddingLeft(), Integer.parseInt(Objects.requireNonNull(dbHandler.settings.get("CALIB"))),v.getPaddingRight(),0);
+            DialogUsers dialog = new DialogUsers(this);
+            dialog.startDialog(dbHandler.users);
+        }
+        else {
+            Toast.makeText(this, R.string.error_new_user_primary_tests,Toast.LENGTH_LONG).show();
+        }
     }
 
     public void addAndSetUser(String user){
         dbHandler.addAndSetConfigUser(user);
         setHeader();
         resetPass();
+    }
+
+    boolean doubleBackToExitPressedOnce = false;
+
+    @Override
+    public void onBackPressed() {
+        if (doubleBackToExitPressedOnce) {
+            super.onBackPressed();
+            return;
+        }
+
+        this.doubleBackToExitPressedOnce = true;
+        Toast.makeText(this, R.string.exit_double_press, Toast.LENGTH_SHORT).show();
+
+        new Handler().postDelayed(() -> doubleBackToExitPressedOnce=false, 2000);
+    }
+
+    private void parseAndAddEntry(MotionEvent ev){
+        String msg;
+        msg = String.valueOf(ev.getRawX());
+        dbHandler.addDataEntry(msg);
     }
 }
 

@@ -20,4 +20,7 @@
     <string name="error_msg_first_calibration">Pierwsza kalibracja jest obowiązkowa</string>
     <string name="calibration_exists">Podana konfiguracja już istnieje. Aktualizacja widoku…</string>
     <string name="new_user">Nowy użytkownik</string>
+    <string name="exit_double_press">Kliknij COFNIJ ponownie, aby wyjść</string>
+    <string name="error_wrong_pattern">Zły wzór!</string>
+    <string name="error_new_user_primary_tests">Aby dodać nowego użytkownika należy ukończyć podstawowe testy dla przynajmniej jednego ustawienia kalibracji</string>
 </resources>

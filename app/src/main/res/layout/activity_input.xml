@@ -119,13 +119,16 @@
 
                             android:layout_toEndOf="@id/UserBox"
 
-                            android:gravity="center"
+                            android:gravity="center_vertical"
                             android:onClick="startUserDialog"
 
-                            android:text=""
+                            android:ellipsize="marquee"
+                            android:marqueeRepeatLimit="marquee_forever"
                             android:scrollHorizontally="true"
+
+                            android:singleLine="true"
+
                             android:background="?attr/selectableItemBackground"
-                            android:textAlignment="center"
 
                             android:textSize="20sp"
                             />

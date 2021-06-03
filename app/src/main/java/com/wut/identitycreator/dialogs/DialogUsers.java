@@ -50,6 +50,8 @@ public class DialogUsers {
             return true;
         });
 
+        dialog.setCanceledOnTouchOutside(true);
+
         final TextView acceptUser = dialog.findViewById(R.id.new_user_accept);
         acceptUser.setOnClickListener(v -> {
             EditText editText = dialog.findViewById(R.id.new_user_name);

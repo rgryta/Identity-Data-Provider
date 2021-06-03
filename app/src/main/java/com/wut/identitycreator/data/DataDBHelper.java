@@ -6,6 +6,8 @@ import android.content.SharedPreferences;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
+import com.wut.identitycreator.R;
+
 import java.util.UUID;
 
 public class DataDBHelper extends SQLiteOpenHelper {
@@ -51,7 +53,7 @@ public class DataDBHelper extends SQLiteOpenHelper {
         //User
         values = new ContentValues();
         values.put(DataDBSchema.Config.COLUMN_NAME_PARAM_NAME, "USER");
-        values.put(DataDBSchema.Config.COLUMN_NAME_PARAM_VALUE, "DEFAULT");
+        values.put(DataDBSchema.Config.COLUMN_NAME_PARAM_VALUE, "Default");
         db.insert(DataDBSchema.Config.TABLE_NAME, null, values);
 
         //Pattern
@@ -68,7 +70,7 @@ public class DataDBHelper extends SQLiteOpenHelper {
 
         //Default user
         values = new ContentValues();
-        values.put(DataDBSchema.User.COLUMN_NAME_USER, "DEFAULT");
+        values.put(DataDBSchema.User.COLUMN_NAME_USER, "Default");
         db.insert(DataDBSchema.User.TABLE_NAME, null, values);
 
         //Default pattern

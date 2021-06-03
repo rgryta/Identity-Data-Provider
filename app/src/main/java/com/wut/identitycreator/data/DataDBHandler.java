@@ -123,5 +123,48 @@ public class DataDBHandler implements Serializable {
         dbHelper.db.update(DataDBSchema.Config.TABLE_NAME, values,DataDBSchema.Config.COLUMN_NAME_PARAM_NAME+"=\"PATTERN\"",null);
     }
 
+    public int completedTests(){
+        Cursor cursor = dbHelper.db.query(
+                DataDBSchema.DataEntry.TABLE_NAME,   // The table to query
+                null,             // The array of columns to return (pass null to get all)
+                DataDBSchema.DataEntry.COLUMN_NAME_CALIB+"=? AND "+
+                        DataDBSchema.DataEntry.COLUMN_NAME_USER+"=? AND "+
+                        DataDBSchema.DataEntry.COLUMN_NAME_PATTERN+"=?",              // The columns for the WHERE clause
+                new String[] {settings.get("CALIB"), settings.get("USER"), settings.get("PATTERN") },          // The values for the WHERE clause
+                null,                   // don't group the rows
+                null,                   // don't filter by row groups
+                null               // The sort order
+        );
+        int count=cursor.getCount();
+        cursor.close();
+        return count;
+    }
+
+    public void addDataEntry(String dataEntry){
+        ContentValues values = new ContentValues();
+        values.put(DataDBSchema.DataEntry.COLUMN_NAME_CALIB, settings.get("CALIB"));
+        values.put(DataDBSchema.DataEntry.COLUMN_NAME_USER, settings.get("USER"));
+        values.put(DataDBSchema.DataEntry.COLUMN_NAME_PATTERN, settings.get("PATTERN"));
+        values.put(DataDBSchema.DataEntry.COLUMN_NAME_DATA, dataEntry);
+        dbHelper.db.insert(DataDBSchema.DataEntry.TABLE_NAME, null,values);
+    }
+
+    public int checkProgressAndSetBestCalib(){
+        Cursor cursor = dbHelper.db.rawQuery(
+                "select calib from data_entry\n" +
+                        "where calib in (select calib from (select user,calib,pattern,count(*) from data_entry\n" +
+                        "group by user,calib,pattern\n" +
+                        "having count(*)>=20)\n" +//ponad 20 entries
+                        "group by user,calib\n" +
+                        "having count(*)>=3)\n" +//na 3 różnych patternach
+                        "group by calib\n" +
+                        "having max(calib);",null
+        );
+        int selCalib=-1;
+        while (cursor.moveToNext()) selCalib = cursor.getInt(0);
+        cursor.close();
+        if (selCalib!=-1) addAndSetCalib(String.valueOf(selCalib));
+        return selCalib;
+    }
 
 }

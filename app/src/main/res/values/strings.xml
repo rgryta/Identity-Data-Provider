@@ -26,4 +26,7 @@
     <string name="go_back" translatable="false">◀</string>
     <string name="previous" translatable="false">❮</string>
     <string name="next" translatable="false">❯</string>
+    <string name="exit_double_press">Please click BACK again to exit</string>
+    <string name="error_wrong_pattern">Wrong pattern!</string>
+    <string name="error_new_user_primary_tests">To add new user please complete all primary tests for at least one calibration setting</string>
 </resources>
