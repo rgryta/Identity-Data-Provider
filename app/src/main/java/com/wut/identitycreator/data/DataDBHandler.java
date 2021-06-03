@@ -8,6 +8,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 public class DataDBHandler implements Serializable {
 
@@ -180,5 +181,20 @@ public class DataDBHandler implements Serializable {
         int count=cursor.getCount();
         cursor.close();
         return count;
+    }
+
+    public void addAndSetNewPattern(ArrayList<Integer> pattern){
+        String stringPattern = pattern.stream().map(Object::toString)
+                .collect(Collectors.joining("-"));
+        ContentValues values = new ContentValues();
+        values.put(DataDBSchema.Pattern.COLUMN_NAME_SEQUENCE, stringPattern);
+        dbHelper.db.insert(DataDBSchema.Pattern.TABLE_NAME, null,values);
+
+        values = new ContentValues();
+        values.put(DataDBSchema.Config.COLUMN_NAME_PARAM_NAME, "PATTERN");
+        values.put(DataDBSchema.Config.COLUMN_NAME_PARAM_VALUE, stringPattern);
+        dbHelper.db.update(DataDBSchema.Config.TABLE_NAME, values,DataDBSchema.Config.COLUMN_NAME_PARAM_NAME+"=\"PATTERN\"",null);
+
+        dbHelper.close();
     }
 }

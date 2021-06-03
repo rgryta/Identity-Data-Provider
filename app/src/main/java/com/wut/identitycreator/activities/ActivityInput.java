@@ -15,16 +15,16 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import java.util.List;
-import java.util.Objects;
-
+import com.wut.identitycreator.R;
 import com.wut.identitycreator.data.DataDBHandler;
 import com.wut.identitycreator.dialogs.DialogLoading;
 import com.wut.identitycreator.dialogs.DialogUsers;
-import com.wut.identitycreator.views.ViewGridAdapter;
 import com.wut.identitycreator.views.ViewDrawPath;
+import com.wut.identitycreator.views.ViewGridAdapter;
 
-import com.wut.identitycreator.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
 
 
 public class ActivityInput extends Activity {
@@ -155,10 +155,25 @@ public class ActivityInput extends Activity {
         else if (ev.getAction()==MotionEvent.ACTION_UP){
             boolean res = adapter.verifyResult();
             if (res) {
-                parseAndAddEntry(ev);
+                if (Objects.equals(dbHandler.settings.get("PATTERN"), "")){
+                    ArrayList<Integer> newPattern = new ArrayList<>(adapter.getAndClearInPasswd());
+                    dbHandler.addAndSetNewPattern(newPattern);
+
+                    dbHandler = new DataDBHandler(this);
+                }
+                else {
+                    parseAndAddEntry(ev);
+                }
                 setHeader();
             }
-            else Toast.makeText(this, R.string.error_wrong_pattern, Toast.LENGTH_SHORT).show();
+            else {
+                if (Objects.equals(dbHandler.settings.get("PATTERN"), "")){
+                    Toast.makeText(this, R.string.error_new_pattern_length,Toast.LENGTH_SHORT).show();
+                }
+                else {
+                    Toast.makeText(this, R.string.error_wrong_pattern, Toast.LENGTH_SHORT).show();
+                }
+            }
 
             resetPass();
         }
@@ -283,7 +298,10 @@ public class ActivityInput extends Activity {
         TextView v = findViewById(R.id.User);
         v.setText(dbHandler.settings.get("USER"));
         v = findViewById(R.id.Pattern);
-        String patternHeader = dbHandler.settings.get("PATTERN")+" ("+dbHandler.completedTests()+")";
+        String patternHeader = "";
+        if (!Objects.equals(dbHandler.settings.get("PATTERN"), "")){
+            patternHeader = dbHandler.settings.get("PATTERN")+" ("+dbHandler.completedTests()+")";
+        }
         v.setText(patternHeader);
         v = findViewById(R.id.calib_data_entries_num);
         int count = dbHandler.completedTestsForCalib(dbHandler.settings.get("CALIB"));
@@ -354,6 +372,14 @@ public class ActivityInput extends Activity {
         if (doublePatternTap) {
             //second tap - begin new pattern setup
 
+            dbHandler.settings.put("PATTERN","");
+
+            mViewDrawPath.clearPoints();
+            mViewDrawPath.draw();
+            adapter = new ViewGridAdapter(this,Math.floorDiv(sSide,3),"");
+            radioGrid.setAdapter(adapter);
+
+            setHeader();
 
             doublePatternTap = false;
             return;

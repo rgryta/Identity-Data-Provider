@@ -2,7 +2,6 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/activity_input"
 
     android:layout_width="match_parent"
 
@@ -54,8 +53,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="50dp">
                     <TextView
-                            android:id="@+id/Back"
-                            android:layout_width="0dp"
+                        android:layout_width="0dp"
                             android:layout_height="match_parent"
 
                             android:layout_weight="0.5"
@@ -73,7 +71,6 @@
 
 
                         <TextView
-                            android:id="@+id/Apply"
                             android:layout_width="0dp"
                             android:layout_height="match_parent"
 
@@ -151,7 +148,6 @@
 
 
                     <TextView
-                        android:id="@+id/Recalib"
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
 
@@ -174,7 +170,6 @@
                     android:layout_below="@id/UpperINPUT"
                     >
                     <TextView
-                        android:id="@+id/Plus"
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
 
@@ -204,7 +199,6 @@
                         android:textSize="14sp"
                         />
                     <TextView
-                        android:id="@+id/Minus"
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
 

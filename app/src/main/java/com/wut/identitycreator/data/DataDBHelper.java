@@ -6,8 +6,6 @@ import android.content.SharedPreferences;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
-import com.wut.identitycreator.R;
-
 import java.util.UUID;
 
 public class DataDBHelper extends SQLiteOpenHelper {
@@ -91,7 +89,7 @@ public class DataDBHelper extends SQLiteOpenHelper {
     }
 
 
-    public synchronized static String id(Context context) {
+    public synchronized static void id(Context context) {
         if (uniqueID == null) {
             SharedPreferences sharedPrefs = context.getSharedPreferences(
                     PREF_UNIQUE_ID, Context.MODE_PRIVATE);
@@ -103,6 +101,5 @@ public class DataDBHelper extends SQLiteOpenHelper {
                 editor.apply();
             }
         }
-        return uniqueID;
     }
 }

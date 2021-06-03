@@ -33,6 +33,8 @@ public class ViewGridAdapter extends BaseAdapter {
     ArrayList<Integer> passwd = new ArrayList<>(); //correct
     ArrayList<Integer> inPasswd = new ArrayList<>(); //input
 
+
+
     public ViewGridAdapter(Context applicationContext, int width, String pattern) {
         context = applicationContext;
         sWidth = width;
@@ -58,15 +60,30 @@ public class ViewGridAdapter extends BaseAdapter {
     public ArrayList<Integer> parsePattern(String pattern){
         ArrayList<Integer> password = new ArrayList<>();
         String[] splitPattern = pattern.split("-");
-        for (String s : splitPattern) password.add(Integer.valueOf(s));
+        if (splitPattern.length>1) for (String s : splitPattern) password.add(Integer.valueOf(s));
         return password;
     }
 
     public boolean verifyResult(){
         //check input passwd correctness
-        boolean result = inPasswd.equals(passwd);
+        if (passwd.size()==0){
+            if (inPasswd.size()<4) {
+                getAndClearInPasswd();
+                return false;
+            }
+        }
+        else {
+            boolean result = inPasswd.equals(passwd);
+            getAndClearInPasswd();
+            return result;
+        }
+        return true;
+    }
+
+    public ArrayList<Integer> getAndClearInPasswd(){
+        ArrayList<Integer> passwd = new ArrayList<>(inPasswd);
         inPasswd.clear();
-        return result;
+        return passwd;
     }
 
     public List<PointF> getSelected(float top){
