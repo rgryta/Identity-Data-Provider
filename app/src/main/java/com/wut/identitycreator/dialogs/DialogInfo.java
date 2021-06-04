@@ -95,49 +95,49 @@ public class DialogInfo {
 
     @SuppressLint("NonConstantResourceId")
     public void toggleWelcome(View v){
-        TextView tv;
+        View contentView;
         String headerText;
         Resources res = dialog.getContext().getResources();
         switch (v.getId()){
             case R.id.WelcomeTextHeader:
-                tv = dialog.findViewById(R.id.WelcomeTextContent);
+                contentView = dialog.findViewById(R.id.WelcomeTextContent);
                 headerText = res.getString(R.string.info_welcome_header);
                 break;
             case R.id.ProjectTextHeader:
-                tv = dialog.findViewById(R.id.ProjectTextContent);
+                contentView = dialog.findViewById(R.id.ProjectTextContent);
                 headerText = res.getString(R.string.info_project_header);
                 break;
             case R.id.InstructionsTextHeader:
-                tv = dialog.findViewById(R.id.InstructionsTextContent);
+                contentView = dialog.findViewById(R.id.InstructionsTextContent);
                 headerText = res.getString(R.string.info_instructions_header);
                 break;
             case R.id.PrimaryTextHeader:
-                tv = dialog.findViewById(R.id.PrimaryTextContent);
+                contentView = dialog.findViewById(R.id.PrimaryTextContent);
                 headerText = res.getString(R.string.info_primary_header);
                 break;
             case R.id.OptionalTextHeader:
-                tv = dialog.findViewById(R.id.OptionalTextContent);
+                contentView = dialog.findViewById(R.id.OptionalTextContent);
                 headerText = res.getString(R.string.info_optional_header);
                 break;
             case R.id.AboutTextHeader:
-                tv = dialog.findViewById(R.id.AboutTextContent);
+                contentView = dialog.findViewById(R.id.AboutTextContent);
                 headerText = res.getString(R.string.info_about_header);
                 break;
             case R.id.UUIDTextHeader:
-                tv = dialog.findViewById(R.id.UUIDTextContent);
+                contentView = dialog.findViewById(R.id.UUIDTextContent);
                 headerText = res.getString(R.string.info_uuid_header);
                 break;
             default:
                 throw new IllegalStateException("Unexpected value: " + v.getId());
         }
-        ViewGroup.LayoutParams params =  tv.getLayoutParams();
+        ViewGroup.LayoutParams params =  contentView.getLayoutParams();
         switch (params.height){
             case ViewGroup.LayoutParams.WRAP_CONTENT:
-                tv.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, 0));
+                contentView.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, 0));
                 ((TextView)v).setText(res.getString(R.string.right_triangle)+headerText);
                 break;
             case 0:
-                tv.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT));
+                contentView.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT));
                 ((TextView)v).setText(res.getString(R.string.down_triangle)+headerText);
                 break;
             default:

@@ -95,18 +95,31 @@
         android:textStyle="bold"
         android:background="?attr/selectableItemBackground"
         android:gravity="center_vertical"/>
+        <LinearLayout
+            android:id="@+id/InstructionsTextContent"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:orientation="vertical"
+            android:padding="5dp"
+            >
     <TextView
-        android:id="@+id/InstructionsTextContent"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
+        android:layout_height="wrap_content"
         android:layout_weight="0"
         android:scrollbars="vertical"
         android:text="@string/info_instructions_content"
         android:textSize="14sp"
         android:gravity="center_vertical"
         android:justificationMode="inter_word"
-
-        android:padding="5dp" />
+/>
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="0"
+                android:src="@drawable/calib"
+                android:adjustViewBounds="true"
+                />
+        </LinearLayout>
     <Space
         android:layout_width="match_parent"
         android:layout_height="3dp"
@@ -122,10 +135,16 @@
         android:textStyle="bold"
         android:background="?attr/selectableItemBackground"
         android:gravity="center_vertical"/>
-    <TextView
+    <LinearLayout
         android:id="@+id/PrimaryTextContent"
         android:layout_width="match_parent"
         android:layout_height="0dp"
+        android:orientation="vertical"
+        android:padding="5dp"
+        >
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:layout_weight="0"
         android:scrollbars="vertical"
         android:text="@string/info_primary_content"
@@ -134,6 +153,15 @@
         android:justificationMode="inter_word"
 
         android:padding="5dp" />
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="0"
+            android:src="@drawable/pattern"
+            android:adjustViewBounds="true"
+            />
+    </LinearLayout>
     <Space
         android:layout_width="match_parent"
         android:layout_height="3dp"
@@ -149,18 +177,31 @@
         android:textStyle="bold"
         android:background="?attr/selectableItemBackground"
         android:gravity="center_vertical"/>
-    <TextView
-        android:id="@+id/OptionalTextContent"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="0"
-        android:scrollbars="vertical"
-        android:text="@string/info_optional_content"
-        android:textSize="14sp"
-        android:gravity="center_vertical"
-        android:justificationMode="inter_word"
-
-        android:padding="5dp" />
+        <LinearLayout
+            android:id="@+id/OptionalTextContent"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:orientation="vertical"
+            android:padding="5dp"
+            >
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="0"
+                android:scrollbars="vertical"
+                android:text="@string/info_optional_content"
+                android:textSize="14sp"
+                android:gravity="center_vertical"
+                android:justificationMode="inter_word"
+            />
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="0"
+                android:src="@drawable/buttons"
+                android:adjustViewBounds="true"
+                />
+        </LinearLayout>
     <Space
         android:layout_width="match_parent"
         android:layout_height="3dp"

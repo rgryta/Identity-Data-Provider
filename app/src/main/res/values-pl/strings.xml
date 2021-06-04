@@ -12,7 +12,7 @@
     <string name="error_new_pattern_length">Wzór musi mieć długość większą niż 4</string>
     <string name="info_welcome_header">Powitanie</string>
     <string name="info_welcome_content">
-        Cześć! Na początku chciałbym ci podziękować za twój wkład w mój projekt pracy magisterskiej.
+        Na początku chciałbym ci podziękować za twój wkład do pracy naukowej.
         W razie jakbyś przypadkiem zamknął to okno, zawsze możesz do niego powrócić naciskając PW🆔 w lewym górnym rogu.
     </string>
     <string name="info_project_header">Projekt</string>
@@ -42,7 +42,7 @@
         Po zakończeniu zadania głównego odblokowane zostaną dwie opcje dodatkowe.
         \n1) Będziesz w stanie dodać nowego użytkownika naciskając pole z nazwą aktualnie wybranego (\"Default\").
         Tworząc nowy profil użytkownika, ustawienie wysokości kalibracji automatycznie zostanie zmienione do takiego, w którym wykonano największą liczbę testów.
-        Po utworzeniu nowego profilu, pożycz swój telefon znajomemu, bądź członkowi rodziny aby również mogli wykonać testy główne (aby się zaliczały muszą wykonać ich przynajmniej 20 dla jednego wzoru).
+        Po utworzeniu nowego profilu, pożycz swój telefon znajomemu, bądź członkowi rodziny, aby również mogli wykonać testy główne (żeby się zaliczały muszą wykonać ich przynajmniej 20 dla jednego wzoru).
         Im więcej osób skorzysta z tego samego telefonu w tej samej opcji kalibracji, tym wiarygodniejsze będą rezultaty mojej pracy.
         \n2) Możesz dodać swoje własne wzory. Jeżeli jest jakiś wzór, który uważasz, że będzie dla ciebie bardziej komfortowy, to możesz go bez problemu dodać do puli.
         W tym celu kliknij dwukrotnie w pole tekstowe z aktualnie wybranym wzorem.
