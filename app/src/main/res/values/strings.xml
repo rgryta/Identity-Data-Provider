@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name" translatable="false">IdentityCreator</string>
+    <string name="app_name" translatable="false">Identity Data Provider</string>
     <string name="icon" translatable="false">PW\n🆔</string>
     <string name="profile">Profile:</string>
     <string name="recalibrate">Recalibrate</string>

@@ -116,9 +116,9 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="0"
-                android:src="@drawable/calib"
+                android:src="@drawable/calibration_info"
                 android:adjustViewBounds="true"
-                />
+                tools:ignore="ContentDescription" />
         </LinearLayout>
     <Space
         android:layout_width="match_parent"
@@ -160,6 +160,7 @@
             android:layout_weight="0"
             android:src="@drawable/pattern"
             android:adjustViewBounds="true"
+            tools:ignore="ContentDescription"
             />
     </LinearLayout>
     <Space
@@ -200,6 +201,7 @@
                 android:layout_weight="0"
                 android:src="@drawable/buttons"
                 android:adjustViewBounds="true"
+                tools:ignore="ContentDescription"
                 />
         </LinearLayout>
     <Space

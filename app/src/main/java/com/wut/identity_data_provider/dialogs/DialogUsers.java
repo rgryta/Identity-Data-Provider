@@ -1,4 +1,4 @@
-package com.wut.identitycreator.dialogs;
+package com.wut.identity_data_provider.dialogs;
 
 
 import android.annotation.SuppressLint;
@@ -13,81 +13,81 @@ import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import com.wut.identitycreator.*;
-import com.wut.identitycreator.activities.ActivityInput;
+import com.wut.identity_data_provider.*;
+import com.wut.identity_data_provider.activities.ActivityInput;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class DialogUsers {
 
-    private final ActivityInput activity;
-    private AlertDialog dialog;
+    private final ActivityInput mActivity;
+    private AlertDialog mDialog;
 
     public DialogUsers(ActivityInput activity){
-        this.activity=activity;
+        this.mActivity = activity;
     }
 
     @SuppressLint("InflateParams")
     public void startDialog(ArrayList<String> users){
-        AlertDialog.Builder builder = new AlertDialog.Builder(activity);
+        AlertDialog.Builder builder = new AlertDialog.Builder(mActivity);
 
-        LayoutInflater inflater = activity.getLayoutInflater();
+        LayoutInflater inflater = mActivity.getLayoutInflater();
         builder.setView(inflater.inflate(R.layout.dialog_users,null));
         builder.setCancelable(false);
 
-        dialog = builder.create();
-        dialog.show();
+        mDialog = builder.create();
+        mDialog.show();
 
-        final ListView listview = dialog.findViewById(R.id.UserList);
-        final ListArrayAdapter adapter = new ListArrayAdapter(dialog.getContext(),
+        final ListView listview = mDialog.findViewById(R.id.UserList);
+        final ListArrayAdapter adapter = new ListArrayAdapter(mDialog.getContext(),
                 R.layout.list_element_user, users);
         listview.setAdapter(adapter);
-        dialog.setOnKeyListener((dialog, keyCode, event) -> {
+        mDialog.setOnKeyListener((dialog, keyCode, event) -> {
             if (keyCode == KeyEvent.KEYCODE_BACK) {
                 dismissDialog();
             }
             return true;
         });
 
-        dialog.setCanceledOnTouchOutside(true);
+        mDialog.setCanceledOnTouchOutside(true);
 
-        final TextView acceptUser = dialog.findViewById(R.id.new_user_accept);
+        final TextView acceptUser = mDialog.findViewById(R.id.new_user_accept);
         acceptUser.setOnClickListener(v -> {
-            EditText editText = dialog.findViewById(R.id.new_user_name);
-            activity.addAndSetUser(editText.getText().toString());
+            EditText editText = mDialog.findViewById(R.id.new_user_name);
+            mActivity.addAndSetUser(editText.getText().toString());
             dismissDialog();
         });
     }
 
     public void dismissDialog(){
-        dialog.dismiss();
+        mDialog.dismiss();
     }
 
 
     private class ListArrayAdapter extends ArrayAdapter<String> {
 
-        ArrayList<String> users = new ArrayList<>();
+        final ArrayList<String> mUsers = new ArrayList<>();
 
         public ListArrayAdapter(Context context, int textViewResourceId,
                                   List<String> objects) {
             super(context, textViewResourceId, objects);
-            users.addAll(objects);
+            mUsers.addAll(objects);
         }
 
 
         @Override
         public View getView(int position, View convertView, ViewGroup parent) {
-            LayoutInflater inflater = (LayoutInflater) dialog.getContext()
+            LayoutInflater inflater = (LayoutInflater) mDialog.getContext()
                     .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
             assert inflater != null;
             @SuppressLint("ViewHolder") View rowView = inflater.inflate(R.layout.list_element_user, parent, false);
             TextView textView = rowView.findViewById(R.id.UserListElement);
-            textView.setText(users.get(position));
+            textView.setText(mUsers.get(position));
             textView.setOnClickListener(v -> {
-                activity.addAndSetUser(users.get(position));
-                dialog.dismiss();
+                mActivity.addAndSetUser(mUsers.get(position));
+                mDialog.dismiss();
             });
 
             return rowView;

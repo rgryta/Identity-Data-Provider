@@ -1,4 +1,4 @@
-package com.wut.identitycreator.dialogs;
+package com.wut.identity_data_provider.dialogs;
 
 
 import android.annotation.SuppressLint;
@@ -6,30 +6,30 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.view.LayoutInflater;
 
-import com.wut.identitycreator.*;
+import com.wut.identity_data_provider.*;
 
 public class DialogLoading {
 
-    private final Activity activity;
-    private AlertDialog dialog;
+    private final Activity mActivity;
+    private AlertDialog mDialog;
 
     public DialogLoading(Activity activity){
-        this.activity=activity;
+        this.mActivity = activity;
     }
 
     @SuppressLint("InflateParams")
     public void startDialog(){
-        AlertDialog.Builder builder = new AlertDialog.Builder(activity);
+        AlertDialog.Builder builder = new AlertDialog.Builder(mActivity);
 
-        LayoutInflater inflater = activity.getLayoutInflater();
+        LayoutInflater inflater = mActivity.getLayoutInflater();
         builder.setView(inflater.inflate(R.layout.dialog_loading,null));
         builder.setCancelable(false);
 
-        dialog = builder.create();
-        dialog.show();
+        mDialog = builder.create();
+        mDialog.show();
     }
 
     public void dismissDialog(){
-        dialog.dismiss();
+        mDialog.dismiss();
     }
 }

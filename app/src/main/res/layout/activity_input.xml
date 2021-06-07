@@ -47,7 +47,7 @@
             android:layout_toEndOf="@+id/spacer"
             >
             <LinearLayout
-                android:id="@+id/CALIB_MODE"
+                android:id="@+id/calibrationModeHeader"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:orientation="vertical"> <!-- width=0 or match_parent -->
@@ -62,7 +62,7 @@
                             android:layout_weight="0.5"
                             android:gravity="center"
 
-                            android:onClick="backFromCalib"
+                            android:onClick="backFromCalibration"
                             android:text="@string/go_back"
                             android:background="?attr/selectableItemBackground"
                             android:textAlignment="center"
@@ -80,7 +80,7 @@
                             android:layout_weight="0.5"
                             android:gravity="center"
 
-                            android:onClick="saveCalib"
+                            android:onClick="saveCalibration"
                             android:text="@string/checkbox"
                             android:background="?attr/selectableItemBackground"
                             android:textAlignment="center"
@@ -90,7 +90,7 @@
                             />
                 </LinearLayout>
                 <TextView
-                    android:id="@+id/calib_data_entries_num"
+                    android:id="@+id/calibrationEntriesCount"
                     android:layout_width="match_parent"
                     android:layout_height="25dp"
 
@@ -222,7 +222,7 @@
     </RelativeLayout>
 
     <RelativeLayout
-        android:id="@+id/submain_activity"
+        android:id="@+id/patternDomain"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/header">
@@ -235,7 +235,7 @@
         </GridView>
     </RelativeLayout>
 
-    <com.wut.identitycreator.views.ViewDrawPath
+    <com.wut.identity_data_provider.views.ViewDrawPath
         android:id="@+id/passPath"
         android:layout_width="match_parent"
         android:layout_height="match_parent"

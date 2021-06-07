@@ -1,4 +1,4 @@
-package com.wut.identitycreator.views;
+package com.wut.identity_data_provider.views;
 
 import android.content.Context;
 import android.graphics.Canvas;

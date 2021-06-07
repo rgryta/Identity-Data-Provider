@@ -1,4 +1,4 @@
-package com.wut.identitycreator.data;
+package com.wut.identity_data_provider.data;
 
 import android.provider.BaseColumns;
 
@@ -19,11 +19,11 @@ public class DataDBSchema {
     }
 
     public static class Calibration implements BaseColumns {
-        public static final String TABLE_NAME = "CALIB";
+        public static final String TABLE_NAME = "CALIBRATION";
 
         public static final String COLUMN_NAME_OPTION = "OPTION";
 
-        public static final String SQL_CREATE_CALIB = "create table if not exists " + TABLE_NAME + " (" +
+        public static final String SQL_CREATE_CALIBRATION = "create table if not exists " + TABLE_NAME + " (" +
                 COLUMN_NAME_OPTION + " TEXT PRIMARY KEY NOT NULL" +
                 ");";
     }
@@ -52,7 +52,7 @@ public class DataDBSchema {
         public static final String TABLE_NAME = "DATA_ENTRY";
 
         public static final String COLUMN_NAME_ID = "_ID";
-        public static final String COLUMN_NAME_CALIB = "CALIB";
+        public static final String COLUMN_NAME_CALIBRATION = "CALIBRATION";
         public static final String COLUMN_NAME_USER = "USER";
         public static final String COLUMN_NAME_PATTERN = "PATTERN";
         public static final String COLUMN_NAME_DATA = "DATA";
@@ -60,12 +60,12 @@ public class DataDBSchema {
 
         public static final String SQL_CREATE_DATA_ENTRY = "create table if not exists " + TABLE_NAME + " (" +
                 COLUMN_NAME_ID + " INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT" + ", "+
-                COLUMN_NAME_CALIB + " TEXT NOT NULL" + ", "+
+                COLUMN_NAME_CALIBRATION + " TEXT NOT NULL" + ", "+
                 COLUMN_NAME_USER + " TEXT NOT NULL" + ", "+
                 COLUMN_NAME_PATTERN + " TEXT NOT NULL" + ", "+
                 COLUMN_NAME_DATA + " TEXT NOT NULL" + ", "+
                 COLUMN_NAME_STATUS + " INTEGER NOT NULL DEFAULT 0" +", "+
-                "FOREIGN KEY("+COLUMN_NAME_CALIB+") REFERENCES "+Calibration.TABLE_NAME+"("+Calibration.COLUMN_NAME_OPTION+")"+", "+
+                "FOREIGN KEY("+COLUMN_NAME_CALIBRATION+") REFERENCES "+Calibration.TABLE_NAME+"("+Calibration.COLUMN_NAME_OPTION+")"+", "+
                 "FOREIGN KEY("+COLUMN_NAME_USER+") REFERENCES "+User.TABLE_NAME+"("+User.COLUMN_NAME_USER+")"+", "+
                 "FOREIGN KEY("+COLUMN_NAME_PATTERN+") REFERENCES "+Pattern.TABLE_NAME+"("+ Pattern.COLUMN_NAME_SEQUENCE+")"+
                 ");";

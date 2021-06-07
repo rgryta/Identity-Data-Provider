@@ -1,7 +1,6 @@
-package com.wut.identitycreator.activities;
+package com.wut.identity_data_provider.activities;
 
 import android.app.Activity;
-import android.content.Context;
 import android.graphics.Point;
 import android.graphics.PointF;
 import android.graphics.Rect;
@@ -21,13 +20,13 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.wut.identitycreator.R;
-import com.wut.identitycreator.data.DataDBHandler;
-import com.wut.identitycreator.dialogs.DialogInfo;
-import com.wut.identitycreator.dialogs.DialogLoading;
-import com.wut.identitycreator.dialogs.DialogUsers;
-import com.wut.identitycreator.views.ViewDrawPath;
-import com.wut.identitycreator.views.ViewGridAdapter;
+import com.wut.identity_data_provider.R;
+import com.wut.identity_data_provider.data.DataDBHandler;
+import com.wut.identity_data_provider.dialogs.DialogInfo;
+import com.wut.identity_data_provider.dialogs.DialogLoading;
+import com.wut.identity_data_provider.dialogs.DialogUsers;
+import com.wut.identity_data_provider.views.ViewDrawPath;
+import com.wut.identity_data_provider.views.ViewGridAdapter;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -37,56 +36,52 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-import static java.lang.System.currentTimeMillis;
-
 
 public class ActivityInput extends Activity implements SensorEventListener {
+    private final static String MODE_INPUT = "INPUT";
+    private final static String MODE_CALIBRATION = "CALIBRATION";
 
-    GridView radioGrid;
+    private String mMode; //INPUT or CALIBRATION
+    private DataDBHandler mDBHandler;
 
-    ViewDrawPath mViewDrawPath;
+    private int mPatternSquareSideWidth;
+    private GridView mPatternGrid;
+    private ViewGridAdapter mPatternGridAdapter;
+    private ViewDrawPath mPatternDrawView;
 
-    DataDBHandler dbHandler;
+    private JSONArray mInputPatternData;
 
-    //mode = input OR calib
-    String mode;
-
-    private ViewGridAdapter adapter;
-    private int sSide;
-
-    private JSONArray data_entry;
     private SensorManager mSensorManager;
-
-    private ArrayList<Sensor> sensors = new ArrayList<>();
-
+    private final ArrayList<Sensor> mSensors = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_input);
 
-        //Block screen with loading dialog
+        // Block screen with loading dialog
         DialogLoading dialog = new DialogLoading(this);
         dialog.startDialog();
 
+        // Initialize DB connection
+        mDBHandler = new DataDBHandler(this);
 
-        dbHandler = new DataDBHandler(this);
-
-        setHeader();
+        updateActivityHeader();
 
         // Input area calibration
-        View view = findViewById(R.id.submain_activity);
+        View view = findViewById(R.id.patternDomain);
 
+        // Calculate the width of Grid Pattern Square
         Display display = getWindowManager().getDefaultDisplay();
         Point size = new Point();
         display.getSize(size);
         int width = size.x;
+        int sOff = Math.floorDiv(width,10); // Offset from left and right to make it not to touch the sides of screen
+        mPatternSquareSideWidth = width-2*sOff;
 
-        int sOff = Math.floorDiv(width,10); //square offset
-        sSide = width-2*sOff;
-
-        if (Objects.equals(dbHandler.settings.get("CALIB"), "-1")) {
-            mode="CALIB";
+        // Check if it's the 1st launch
+        if (Objects.equals(mDBHandler.mSettings.get(DataDBHandler.SETTING_CALIBRATION), "-1")) {
+            mMode = MODE_CALIBRATION;
 
             int height = size.y - width;
             int hOff = Math.floorDiv(height,2);
@@ -95,30 +90,30 @@ public class ActivityInput extends Activity implements SensorEventListener {
             View v = findViewById(R.id.INPUT_MODE);
             v.setLayoutParams(new RelativeLayout.LayoutParams(0, RelativeLayout.LayoutParams.MATCH_PARENT));
 
-            v = findViewById(R.id.CALIB_MODE);
+            v = findViewById(R.id.calibrationModeHeader);
             v.setLayoutParams(new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.MATCH_PARENT));
         }
         else {
-            mode="INPUT";
-            view.setPadding(sOff, Integer.parseInt(Objects.requireNonNull(dbHandler.settings.get("CALIB"))),sOff,0);
+            mMode = MODE_INPUT;
+            view.setPadding(sOff, Integer.parseInt(Objects.requireNonNull(mDBHandler.mSettings.get(DataDBHandler.SETTING_CALIBRATION))),sOff,0);
         }
 
         setHeaderMode();
 
         // Create an object of CustomAdapter and set Adapter to GirdView
-        radioGrid = findViewById(R.id.radioGrid); // init GridView
-        adapter = new ViewGridAdapter(this,Math.floorDiv(sSide,3),dbHandler.settings.get("PATTERN"));
+        mPatternGrid = findViewById(R.id.radioGrid); // init GridView
+        mPatternGridAdapter = new ViewGridAdapter(this,Math.floorDiv(mPatternSquareSideWidth,3), mDBHandler.mSettings.get(DataDBHandler.SETTING_PATTERN));
 
-        radioGrid.setAdapter(adapter);
+        mPatternGrid.setAdapter(mPatternGridAdapter);
 
-        mViewDrawPath = findViewById(R.id.passPath);
+        mPatternDrawView = findViewById(R.id.passPath);
 
         mSensorManager = (SensorManager)getSystemService(SENSOR_SERVICE);
-        sensors.add(mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER));
-        sensors.add(mSensorManager.getDefaultSensor(Sensor.TYPE_GYROSCOPE));
-        sensors.add(mSensorManager.getDefaultSensor(Sensor.TYPE_ROTATION_VECTOR));
-        sensors.add(mSensorManager.getDefaultSensor(Sensor.TYPE_LINEAR_ACCELERATION));
-        sensors.add(mSensorManager.getDefaultSensor(Sensor.TYPE_GRAVITY));
+        mSensors.add(mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER));
+        mSensors.add(mSensorManager.getDefaultSensor(Sensor.TYPE_GYROSCOPE));
+        mSensors.add(mSensorManager.getDefaultSensor(Sensor.TYPE_ROTATION_VECTOR));
+        mSensors.add(mSensorManager.getDefaultSensor(Sensor.TYPE_LINEAR_ACCELERATION));
+        mSensors.add(mSensorManager.getDefaultSensor(Sensor.TYPE_GRAVITY));
         
         
         //unblock screen after 2 seconds (initialization - getting x/y values for the grid points
@@ -126,7 +121,7 @@ public class ActivityInput extends Activity implements SensorEventListener {
         Handler handler = new Handler(Looper.getMainLooper());
         handler.postDelayed(() -> {
             dialog.dismissDialog();
-            if (Objects.equals(dbHandler.settings.get("CALIB"), "-1")) {
+            if (Objects.equals(mDBHandler.mSettings.get(DataDBHandler.SETTING_CALIBRATION), "-1")) {
                 startInfoDialog(findViewById(R.id.PW));
             }
         }, 2000);
@@ -135,7 +130,7 @@ public class ActivityInput extends Activity implements SensorEventListener {
     @Override
     protected void onResume() {
         super.onResume();
-        for (Sensor sensor : sensors){
+        for (Sensor sensor : mSensors){
             mSensorManager.registerListener(this, sensor, SensorManager.SENSOR_DELAY_FASTEST);
         }
     }
@@ -168,9 +163,7 @@ public class ActivityInput extends Activity implements SensorEventListener {
     }
 
     @Override
-    public void onAccuracyChanged(Sensor sensor, int i) {
-        //  NOTHING
-    }
+    public void onAccuracyChanged(Sensor sensor, int i) {}
 
     private JSONObject getSensorsData() throws JSONException{
         JSONObject sensorsData = new JSONObject();
@@ -214,11 +207,12 @@ public class ActivityInput extends Activity implements SensorEventListener {
         View v = findViewById(R.id.passPath);
         int topHeight = v.getTop()+getStatusHeight();
         if ((ev.getY()>topHeight) && (ev.getY()<(topHeight+v.getHeight()))){
-            if (mode.equals("INPUT")){
+            if (mMode.equals(MODE_INPUT)){
                 return handleInput(ev,topHeight);
             }
-            else if (mode.equals("CALIB")){
-                return handleCalib(ev);
+            else if (mMode.equals(MODE_CALIBRATION)){
+                handleCalibration(ev);
+                return true;
             }
         }
         else {
@@ -232,9 +226,8 @@ public class ActivityInput extends Activity implements SensorEventListener {
     private long startTimeNano;
 
     private boolean handleInput(MotionEvent ev, float top){
-        long time = System.nanoTime();
         if (ev.getAction()==MotionEvent.ACTION_DOWN){
-            data_entry = new JSONArray();
+            mInputPatternData = new JSONArray();
             startTime = System.currentTimeMillis();
             startTimeNano = System.nanoTime();
         }
@@ -245,11 +238,11 @@ public class ActivityInput extends Activity implements SensorEventListener {
             ev.setAction(MotionEvent.ACTION_UP);
             boolean res = super.dispatchTouchEvent(ev);
 
-            List<PointF> points = adapter.getSelected(top);
+            List<PointF> points = mPatternGridAdapter.getSelected(top);
             points.add(new PointF(ev.getX(),ev.getY()-top));
 
-            mViewDrawPath.resetPoints(points);
-            mViewDrawPath.draw();
+            mPatternDrawView.resetPoints(points);
+            mPatternDrawView.draw();
 
             JSONObject event = new JSONObject();
             try{
@@ -258,39 +251,39 @@ public class ActivityInput extends Activity implements SensorEventListener {
                 JSONObject touch = new JSONObject();
                 touch.put("x",ev.getRawX());
                 touch.put("y",ev.getRawY());
-                touch.put("tM",ev.getTouchMajor());
-                touch.put("tm",ev.getTouchMinor());
-                touch.put("s",ev.getSize());
-                touch.put("p",ev.getPressure());
+                // touch.put("tM",ev.getTouchMajor());
+                // touch.put("tm",ev.getTouchMinor());
+                // touch.put("s",ev.getSize());
+                // touch.put("p",ev.getPressure());
                 event.put("tch",touch);
                 event.put("sns",getSensorsData());
                 //ToolMajor and ToolMinor are out-of-scope
-                data_entry.put(event);
+                mInputPatternData.put(event);
             }
             catch (JSONException e){
                 e.printStackTrace();
-                data_entry = new JSONArray();
+                mInputPatternData = new JSONArray();
             }
 
             return res;
         }
         // When lifting finger - check passcode for validity and reset the buttons
         else if (ev.getAction()==MotionEvent.ACTION_UP){
-            boolean res = adapter.verifyResult();
+            boolean res = mPatternGridAdapter.verifyResult();
             if (res) {
-                if (Objects.equals(dbHandler.settings.get("PATTERN"), "")){
-                    ArrayList<Integer> newPattern = new ArrayList<>(adapter.getAndClearInPasswd());
-                    dbHandler.addAndSetNewPattern(newPattern);
+                if (Objects.equals(mDBHandler.mSettings.get(DataDBHandler.SETTING_PATTERN), "")){
+                    ArrayList<Integer> newPattern = new ArrayList<>(mPatternGridAdapter.getAndClearInPasswd());
+                    mDBHandler.addAndSetNewPattern(newPattern);
 
-                    dbHandler = new DataDBHandler(this);
+                    mDBHandler = new DataDBHandler(this);
                 }
                 else {
                     parseAndAddEntry(ev);
                 }
-                setHeader();
+                updateActivityHeader();
             }
             else {
-                if (Objects.equals(dbHandler.settings.get("PATTERN"), "")){
+                if (Objects.equals(mDBHandler.mSettings.get(DataDBHandler.SETTING_PATTERN), "")){
                     Toast.makeText(this, R.string.error_new_pattern_length,Toast.LENGTH_SHORT).show();
                 }
                 else {
@@ -306,8 +299,8 @@ public class ActivityInput extends Activity implements SensorEventListener {
     private int startY;
     private int startPadding;
 
-    private boolean handleCalib(MotionEvent ev){
-        View v = findViewById(R.id.submain_activity);
+    private void handleCalibration(MotionEvent ev){
+        View v = findViewById(R.id.patternDomain);
         if (ev.getAction()==MotionEvent.ACTION_DOWN) {
             startY=(int)ev.getY();
             startPadding = v.getPaddingTop();
@@ -328,19 +321,18 @@ public class ActivityInput extends Activity implements SensorEventListener {
 
             v.setPadding(v.getPaddingLeft(),topPadding,v.getPaddingRight(),0);
 
-            TextView calibTests = findViewById(R.id.calib_data_entries_num);
-            int count = dbHandler.completedTestsForCalib(String.valueOf(topPadding));
-            calibTests.setText(getResources().getQuantityString(R.plurals.completed_tests,count,count));
+            TextView calibrationTests = findViewById(R.id.calibrationEntriesCount);
+            int count = mDBHandler.completedTestsForCalibration(String.valueOf(topPadding));
+            calibrationTests.setText(getResources().getQuantityString(R.plurals.completed_tests,count,count));
 
         }
-        return true;
     }
 
     private void resetPass(){
-        mViewDrawPath.clearPoints();
-        mViewDrawPath.draw();
-        adapter = new ViewGridAdapter(this,Math.floorDiv(sSide,3),dbHandler.settings.get("PATTERN"));
-        radioGrid.setAdapter(adapter);
+        mPatternDrawView.clearPoints();
+        mPatternDrawView.draw();
+        mPatternGridAdapter = new ViewGridAdapter(this,Math.floorDiv(mPatternSquareSideWidth,3), mDBHandler.mSettings.get(DataDBHandler.SETTING_PATTERN));
+        mPatternGrid.setAdapter(mPatternGridAdapter);
     }
 
     private int getStatusHeight(){
@@ -353,30 +345,30 @@ public class ActivityInput extends Activity implements SensorEventListener {
     }
 
     private void switchMode(){
-        if (mode.equals("CALIB")){
-            mode="INPUT";
+        if (mMode.equals(MODE_CALIBRATION)){
+            mMode = MODE_INPUT;
         }
         else {
-            mode="CALIB";
+            mMode = MODE_CALIBRATION;
         }
         setHeaderMode();
     }
 
     private void setHeaderMode(){
         View v;
-        switch (mode){
-            case "CALIB":
+        switch (mMode){
+            case MODE_CALIBRATION:
                 v = findViewById(R.id.INPUT_MODE);
                 v.setLayoutParams(new RelativeLayout.LayoutParams(0, RelativeLayout.LayoutParams.MATCH_PARENT));
 
-                v = findViewById(R.id.CALIB_MODE);
+                v = findViewById(R.id.calibrationModeHeader);
                 v.setLayoutParams(new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.MATCH_PARENT));
                 break;
-            case "INPUT":
+            case MODE_INPUT:
                 v = findViewById(R.id.INPUT_MODE);
                 v.setLayoutParams(new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.MATCH_PARENT));
 
-                v = findViewById(R.id.CALIB_MODE);
+                v = findViewById(R.id.calibrationModeHeader);
                 v.setLayoutParams(new RelativeLayout.LayoutParams(0, RelativeLayout.LayoutParams.MATCH_PARENT));
                 break;
             default:
@@ -390,14 +382,14 @@ public class ActivityInput extends Activity implements SensorEventListener {
     }
 
 
-    public void backFromCalib(View view){
-        if (Objects.equals(dbHandler.settings.get("CALIB"), "-1")){
+    public void backFromCalibration(View view){
+        if (Objects.equals(mDBHandler.mSettings.get(DataDBHandler.SETTING_CALIBRATION), "-1")){
             Toast.makeText(this,R.string.error_msg_first_calibration,Toast.LENGTH_SHORT).show();
         }
         else {
 
-            View v = findViewById(R.id.submain_activity);
-            v.setPadding(v.getPaddingLeft(), Integer.parseInt(Objects.requireNonNull(dbHandler.settings.get("CALIB"))),v.getPaddingRight(),0);
+            View v = findViewById(R.id.patternDomain);
+            v.setPadding(v.getPaddingLeft(), Integer.parseInt(Objects.requireNonNull(mDBHandler.mSettings.get(DataDBHandler.SETTING_CALIBRATION))),v.getPaddingRight(),0);
 
             resetPass();
 
@@ -405,57 +397,57 @@ public class ActivityInput extends Activity implements SensorEventListener {
         }
     }
 
-    public void saveCalib(View view){
-            View v = findViewById(R.id.submain_activity);
-            dbHandler.addAndSetCalib(String.valueOf(v.getPaddingTop()));
+    public void saveCalibration(View view){
+            View v = findViewById(R.id.patternDomain);
+            mDBHandler.addAndSetCalibration(String.valueOf(v.getPaddingTop()));
 
-            v.setPadding(v.getPaddingLeft(), Integer.parseInt(Objects.requireNonNull(dbHandler.settings.get("CALIB"))),v.getPaddingRight(),0);
+            v.setPadding(v.getPaddingLeft(), Integer.parseInt(Objects.requireNonNull(mDBHandler.mSettings.get(DataDBHandler.SETTING_CALIBRATION))),v.getPaddingRight(),0);
 
             resetPass();
             switchMode();
-            setHeader();
+            updateActivityHeader();
     }
 
 
-    public void setHeader(){
+    public void updateActivityHeader(){
         TextView v = findViewById(R.id.User);
-        v.setText(dbHandler.settings.get("USER"));
+        v.setText(mDBHandler.mSettings.get(DataDBHandler.SETTING_USER));
         v = findViewById(R.id.Pattern);
         String patternHeader = "";
-        if (!Objects.equals(dbHandler.settings.get("PATTERN"), "")){
-            patternHeader = dbHandler.settings.get("PATTERN")+" ("+dbHandler.completedTests()+")";
+        if (!Objects.equals(mDBHandler.mSettings.get(DataDBHandler.SETTING_PATTERN), "")){
+            patternHeader = mDBHandler.mSettings.get(DataDBHandler.SETTING_PATTERN)+" ("+ mDBHandler.completedTests()+")";
         }
         v.setText(patternHeader);
-        v = findViewById(R.id.calib_data_entries_num);
-        int count = dbHandler.completedTestsForCalib(dbHandler.settings.get("CALIB"));
+        v = findViewById(R.id.calibrationEntriesCount);
+        int count = mDBHandler.completedTestsForCalibration(mDBHandler.mSettings.get(DataDBHandler.SETTING_CALIBRATION));
         v.setText(getResources().getQuantityString(R.plurals.completed_tests,count,count));
     }
 
     public void patternLeft(View view) {
-        int idx = dbHandler.patterns.indexOf(dbHandler.settings.get("PATTERN"));
+        int idx = mDBHandler.mPatterns.indexOf(mDBHandler.mSettings.get(DataDBHandler.SETTING_PATTERN));
         if (idx>0) idx--;
-        else idx = dbHandler.patterns.size()-1;
-        dbHandler.setConfigPattern(idx);
-        setHeader();
+        else idx = mDBHandler.mPatterns.size()-1;
+        mDBHandler.setConfigPattern(idx);
+        updateActivityHeader();
         resetPass();
     }
 
     public void patternRight(View view) {
-        int idx = dbHandler.patterns.indexOf(dbHandler.settings.get("PATTERN"));
-        if (idx>=dbHandler.patterns.size()-1) idx=0;
+        int idx = mDBHandler.mPatterns.indexOf(mDBHandler.mSettings.get(DataDBHandler.SETTING_PATTERN));
+        if (idx>= mDBHandler.mPatterns.size()-1) idx=0;
         else idx++;
-        dbHandler.setConfigPattern(idx);
-        setHeader();
+        mDBHandler.setConfigPattern(idx);
+        updateActivityHeader();
         resetPass();
     }
 
     public void startUserDialog(View view) {
-        int hasGoodPattern = dbHandler.checkProgressAndSetBestCalib(true);
+        int hasGoodPattern = mDBHandler.checkProgressAndSetBestCalibration(true);
         if (hasGoodPattern!=-1) {
-            View v = findViewById(R.id.submain_activity);
-            v.setPadding(v.getPaddingLeft(), Integer.parseInt(Objects.requireNonNull(dbHandler.settings.get("CALIB"))),v.getPaddingRight(),0);
+            View v = findViewById(R.id.patternDomain);
+            v.setPadding(v.getPaddingLeft(), Integer.parseInt(Objects.requireNonNull(mDBHandler.mSettings.get(DataDBHandler.SETTING_CALIBRATION))),v.getPaddingRight(),0);
             DialogUsers dialog = new DialogUsers(this);
-            dialog.startDialog(dbHandler.users);
+            dialog.startDialog(mDBHandler.mUsers);
         }
         else {
             Toast.makeText(this, R.string.error_new_user_primary_tests,Toast.LENGTH_LONG).show();
@@ -468,8 +460,8 @@ public class ActivityInput extends Activity implements SensorEventListener {
     }
 
     public void addAndSetUser(String user){
-        dbHandler.addAndSetConfigUser(user);
-        setHeader();
+        mDBHandler.addAndSetConfigUser(user);
+        updateActivityHeader();
         resetPass();
     }
 
@@ -492,9 +484,9 @@ public class ActivityInput extends Activity implements SensorEventListener {
         JSONObject msg = new JSONObject();
         JSONObject header = new JSONObject();
         try {
-            header.put("id",dbHandler.settings.get("UUID"));
-            header.put("u",dbHandler.settings.get("USER"));
-            header.put("ptn",dbHandler.settings.get("PATTERN"));
+            header.put("id", mDBHandler.mSettings.get(DataDBHandler.SETTING_UUID));
+            header.put("u", mDBHandler.mSettings.get(DataDBHandler.SETTING_USER));
+            header.put("ptn", mDBHandler.mSettings.get(DataDBHandler.SETTING_PATTERN));
 
             JSONObject densityJSON = new JSONObject();
             DisplayMetrics metrics = getResources().getDisplayMetrics();
@@ -502,18 +494,18 @@ public class ActivityInput extends Activity implements SensorEventListener {
             densityJSON.put("ydpi",metrics.ydpi);
             header.put("dpi",densityJSON);
 
-            header.put("c",adapter.calibrationSetting());
+            header.put("c", mPatternGridAdapter.calibrationSetting());
 
             header.put("tstamp",startTime);
 
             msg.put("header",header);
-            msg.put("data",data_entry);
-            dbHandler.addDataEntry(msg.toString());
+            msg.put("data", mInputPatternData);
+            mDBHandler.addDataEntry(msg.toString());
         } catch (JSONException e) {
             e.printStackTrace();
         }
         finally {
-            data_entry = null;
+            mInputPatternData = null;
         }
     }
 
@@ -523,20 +515,20 @@ public class ActivityInput extends Activity implements SensorEventListener {
         if (doublePatternTap) {
             //second tap - begin new pattern setup
 
-            dbHandler.settings.put("PATTERN","");
+            mDBHandler.mSettings.put(DataDBHandler.SETTING_PATTERN,"");
 
-            mViewDrawPath.clearPoints();
-            mViewDrawPath.draw();
-            adapter = new ViewGridAdapter(this,Math.floorDiv(sSide,3),"");
-            radioGrid.setAdapter(adapter);
+            mPatternDrawView.clearPoints();
+            mPatternDrawView.draw();
+            mPatternGridAdapter = new ViewGridAdapter(this,Math.floorDiv(mPatternSquareSideWidth,3),"");
+            mPatternGrid.setAdapter(mPatternGridAdapter);
 
-            setHeader();
+            updateActivityHeader();
 
             doublePatternTap = false;
             return;
         }
-        int calibOption = dbHandler.checkProgressAndSetBestCalib(false);
-        if (calibOption==-1) Toast.makeText(this, R.string.error_custom_pattern_primary_tests, Toast.LENGTH_LONG).show();
+        int calibrationOption = mDBHandler.checkProgressAndSetBestCalibration(false);
+        if (calibrationOption==-1) Toast.makeText(this, R.string.error_custom_pattern_primary_tests, Toast.LENGTH_LONG).show();
         else{
             this.doublePatternTap = true;
             Toast.makeText(this, R.string.custom_pattern_tap_twice, Toast.LENGTH_SHORT).show();

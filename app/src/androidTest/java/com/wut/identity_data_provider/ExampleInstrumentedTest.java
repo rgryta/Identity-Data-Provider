@@ -1,4 +1,4 @@
-package com.wut.identitycreator;
+package com.wut.identity_data_provider;
 
 import android.content.Context;
 
@@ -21,6 +21,6 @@ public class ExampleInstrumentedTest {
     public void useAppContext() {
         // Context of the app under test.
         Context appContext = InstrumentationRegistry.getInstrumentation().getTargetContext();
-        assertEquals("com.wut.identitycreator", appContext.getPackageName());
+        assertEquals("com.wut.identity_data_provider", appContext.getPackageName());
     }
 }

@@ -1,11 +1,10 @@
-package com.wut.identitycreator.views;
+package com.wut.identity_data_provider.views;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.PointF;
 import android.graphics.Rect;
 import android.os.Build;
-import android.util.JsonReader;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,7 +18,7 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.wut.identitycreator.*;
+import com.wut.identity_data_provider.*;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -27,15 +26,15 @@ import org.json.JSONObject;
 @RequiresApi(api = Build.VERSION_CODES.O)
 public class ViewGridAdapter extends BaseAdapter {
 
-    Context context;
-    LayoutInflater inflater;
-    int sWidth;
+    final Context context;
+    final LayoutInflater inflater;
+    final int sWidth;
 
-    RadioButton[] rbs = new RadioButton[9];
-    TextView[] textId = new TextView[9];
+    final RadioButton[] rbs = new RadioButton[9];
+    final TextView[] textId = new TextView[9];
 
-    ArrayList<Integer> passwd = new ArrayList<>(); //correct
-    ArrayList<Integer> inPasswd = new ArrayList<>(); //input
+    final ArrayList<Integer> passwd = new ArrayList<>(); //correct
+    final ArrayList<Integer> inPasswd = new ArrayList<>(); //input
 
 
 

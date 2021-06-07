@@ -1,4 +1,4 @@
-package com.wut.identitycreator;
+package com.wut.identity_data_provider;
 
 import org.junit.Test;
 

@@ -1,32 +1,25 @@
-package com.wut.identitycreator.data;
+package com.wut.identity_data_provider.data;
 
 import android.content.ContentValues;
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
-import java.util.UUID;
+import com.wut.identity_data_provider.dialogs.DialogInfo;
 
 public class DataDBHelper extends SQLiteOpenHelper {
 
 
     public static final String DB_NAME = "identity_data.db";
-
-    public SQLiteDatabase db;
-
-    private static String uniqueID = null;
-    private static final String PREF_UNIQUE_ID = "PREF_UNIQUE_ID";
+    public final SQLiteDatabase db;
 
     public DataDBHelper(Context context) {
         super(context, DB_NAME , null, 1);
         db = getWritableDatabase();
 
-        id(context);
-
         ContentValues values = new ContentValues();
         values.put(DataDBSchema.Config.COLUMN_NAME_PARAM_NAME, "UUID");
-        values.put(DataDBSchema.Config.COLUMN_NAME_PARAM_VALUE, uniqueID);
+        values.put(DataDBSchema.Config.COLUMN_NAME_PARAM_VALUE, DialogInfo.id(context));
         db.update(DataDBSchema.Config.TABLE_NAME, values,DataDBSchema.Config.COLUMN_NAME_PARAM_NAME+"=\"UUID\"",null);
     }
 
@@ -34,7 +27,7 @@ public class DataDBHelper extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase db) {
         //parameters are for currently selected: calibration option, user and pattern
         db.execSQL(DataDBSchema.Config.SQL_CREATE_CONFIG);
-        db.execSQL(DataDBSchema.Calibration.SQL_CREATE_CALIB);
+        db.execSQL(DataDBSchema.Calibration.SQL_CREATE_CALIBRATION);
         db.execSQL(DataDBSchema.User.SQL_CREATE_USERS);
         db.execSQL(DataDBSchema.Pattern.SQL_CREATE_PATTERN);
         db.execSQL(DataDBSchema.DataEntry.SQL_CREATE_DATA_ENTRY);
@@ -42,9 +35,9 @@ public class DataDBHelper extends SQLiteOpenHelper {
         ContentValues values;
 
         //Default parameters
-        //Calib
+        //Calibration
         values = new ContentValues();
-        values.put(DataDBSchema.Config.COLUMN_NAME_PARAM_NAME, "CALIB");
+        values.put(DataDBSchema.Config.COLUMN_NAME_PARAM_NAME, "CALIBRATION");
         values.put(DataDBSchema.Config.COLUMN_NAME_PARAM_VALUE, "-1"); //Has to be overwritten by user
         db.insert(DataDBSchema.Config.TABLE_NAME, null, values);
 
@@ -84,22 +77,6 @@ public class DataDBHelper extends SQLiteOpenHelper {
     }
 
     @Override
-    public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        //do nothing
-    }
+    public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {}
 
-
-    public synchronized static void id(Context context) {
-        if (uniqueID == null) {
-            SharedPreferences sharedPrefs = context.getSharedPreferences(
-                    PREF_UNIQUE_ID, Context.MODE_PRIVATE);
-            uniqueID = sharedPrefs.getString(PREF_UNIQUE_ID, null);
-            if (uniqueID == null) {
-                uniqueID = UUID.randomUUID().toString();
-                SharedPreferences.Editor editor = sharedPrefs.edit();
-                editor.putString(PREF_UNIQUE_ID, uniqueID);
-                editor.apply();
-            }
-        }
-    }
 }
