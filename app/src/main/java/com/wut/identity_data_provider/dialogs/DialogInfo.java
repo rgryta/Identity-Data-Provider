@@ -50,7 +50,7 @@ public class DialogInfo {
         for (int i : new int[]{R.id.WelcomeTextHeader, R.id.ProjectTextHeader,
                 R.id.InstructionsTextHeader, R.id.PrimaryTextHeader,
                 R.id.OptionalTextHeader, R.id.AboutTextHeader, R.id.UUIDTextHeader})
-            mDialog.findViewById(i).setOnClickListener(view -> toggleWelcome(view));
+            mDialog.findViewById(i).setOnClickListener(this::toggleWelcome);
 
         mDialog.findViewById(R.id.info_dialog_close).setOnClickListener(view -> dismissDialog());
     }

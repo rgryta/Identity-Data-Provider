@@ -36,7 +36,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-
+/**
+ * Main and the only Activity class for Identity Data Provider.
+ */
 public class ActivityInput extends Activity implements SensorEventListener {
     private final static String MODE_INPUT = "INPUT";
     private final static String MODE_CALIBRATION = "CALIBRATION";
@@ -54,6 +56,11 @@ public class ActivityInput extends Activity implements SensorEventListener {
     private SensorManager mSensorManager;
     private final ArrayList<Sensor> mSensors = new ArrayList<>();
 
+    /**
+     * Creates all the initial settings required to perform the data provision tests.
+     * These are maintained within the SQLite Database, which is created during first application launch.
+     * Connection to the database is open until the ActivityInput is closed.
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -102,11 +109,12 @@ public class ActivityInput extends Activity implements SensorEventListener {
         // Create an object of CustomAdapter and set Adapter to GirdView
         mPatternGrid = findViewById(R.id.radioGrid); // init GridView
         mPatternGridAdapter = new ViewGridAdapter(this, Math.floorDiv(mPatternSquareSideWidth, 3), mDBHandler.mSettings.get(DataDBHandler.SETTING_PATTERN));
-
         mPatternGrid.setAdapter(mPatternGridAdapter);
 
+        // Assign drawing view
         mPatternDrawView = findViewById(R.id.passPath);
 
+        // Set up sensor manager to create listeners
         mSensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
         mSensors.add(mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER));
         mSensors.add(mSensorManager.getDefaultSensor(Sensor.TYPE_GYROSCOPE));
@@ -115,8 +123,7 @@ public class ActivityInput extends Activity implements SensorEventListener {
         mSensors.add(mSensorManager.getDefaultSensor(Sensor.TYPE_GRAVITY));
 
 
-        //unblock screen after 2 seconds (initialization - getting x/y values for the grid points
-        //there doesn't seem to eb
+        // Unblock screen after 2 seconds - internal android issues with screen X/Y initialization
         Handler handler = new Handler(Looper.getMainLooper());
         handler.postDelayed(() -> {
             dialog.dismissDialog();
@@ -126,6 +133,9 @@ public class ActivityInput extends Activity implements SensorEventListener {
         }, 2000);
     }
 
+    /**
+     * Restore sensor listeners in onResume().
+     */
     @Override
     protected void onResume() {
         super.onResume();
@@ -140,6 +150,11 @@ public class ActivityInput extends Activity implements SensorEventListener {
     private float[] mLinAccData = new float[3];
     private float[] mGravData = new float[3];
 
+    /**
+     * Updates internal float arrays with the most recent sensor data.
+     *
+     * @param event  event that caused listener to execute this method
+     */
     public void onSensorChanged(SensorEvent event) {
         switch (event.sensor.getType()) {
             case Sensor.TYPE_ACCELEROMETER:
@@ -162,10 +177,18 @@ public class ActivityInput extends Activity implements SensorEventListener {
         }
     }
 
+    /**
+     * Needs to be declared as a proper implementation of SensorEventListener.
+     */
     @Override
     public void onAccuracyChanged(Sensor sensor, int i) {
     }
 
+    /**
+     * This method arranges most recent sensor data into one JSON object that will be part of the main
+     * data entry.
+     * @return      JSON with data from all the supported sensors
+     */
     private JSONObject getSensorsData() throws JSONException {
         JSONObject sensorsData = new JSONObject();
 
@@ -203,6 +226,13 @@ public class ActivityInput extends Activity implements SensorEventListener {
         return sensorsData;
     }
 
+
+    /**
+     * This method catches and handles all the touch events within the application.
+     *
+     * @param ev  event that caused touchscreen listener to execute this method
+     * @return      Boolean describing whether the event was consumed properly
+     */
     @Override
     public boolean dispatchTouchEvent(MotionEvent ev) {
         View v = findViewById(R.id.passPath);
@@ -224,6 +254,14 @@ public class ActivityInput extends Activity implements SensorEventListener {
     private long startTime;
     private long startTimeNano;
 
+    /**
+     * Method for handling events when user is in INPUT mode.
+     * INPUT mode handles drawing patterns, including functionality to add new ones.
+     *
+     * @param ev  event that caused touchscreen listener to execute main dispatch method
+     * @param top  height of the Android status bar together with application header
+     * @return      Boolean describing whether the event was consumed properly
+     */
     private boolean handleInput(MotionEvent ev, float top) {
         if (ev.getAction() == MotionEvent.ACTION_DOWN) {
             mInputPatternData = new JSONArray();
@@ -275,7 +313,7 @@ public class ActivityInput extends Activity implements SensorEventListener {
 
                     mDBHandler = new DataDBHandler(this);
                 } else {
-                    parseAndAddEntry(ev);
+                    parseAndAddEntry();
                 }
                 updateActivityHeader();
             } else {
@@ -294,6 +332,12 @@ public class ActivityInput extends Activity implements SensorEventListener {
     private int startY;
     private int startPadding;
 
+    /**
+     * Method for handling events when user is in CALIBRATION mode.
+     * CALIBRATION mode allows user to move the pattern grid up and down to adjust the height.
+     *
+     * @param ev  event that caused touchscreen listener to execute main dispatch method
+     */
     private void handleCalibration(MotionEvent ev) {
         View v = findViewById(R.id.patternDomain);
         if (ev.getAction() == MotionEvent.ACTION_DOWN) {
@@ -321,6 +365,10 @@ public class ActivityInput extends Activity implements SensorEventListener {
         }
     }
 
+    /**
+     * Method for clearing the pattern drawing and creating new pattern grid adapter.
+     * Behaves like "RESET TEST".
+     */
     private void resetPass() {
         mPatternDrawView.clearPoints();
         mPatternDrawView.draw();
@@ -328,6 +376,9 @@ public class ActivityInput extends Activity implements SensorEventListener {
         mPatternGrid.setAdapter(mPatternGridAdapter);
     }
 
+    /**
+     * @return Returns integer describing height of Android status bar.
+     */
     private int getStatusHeight() {
         int result = 0;
         int resourceId = getResources().getIdentifier("status_bar_height", "dimen", "android");
@@ -337,6 +388,9 @@ public class ActivityInput extends Activity implements SensorEventListener {
         return result;
     }
 
+    /**
+     * Toggles between CALIBRATION and INPUT modes.
+     */
     private void switchMode() {
         if (mMode.equals(MODE_CALIBRATION)) {
             mMode = MODE_INPUT;
@@ -346,6 +400,9 @@ public class ActivityInput extends Activity implements SensorEventListener {
         setHeaderMode();
     }
 
+    /**
+     * Sets up the application header accordingly to the currently selected mode.
+     */
     private void setHeaderMode() {
         View v;
         switch (mMode) {
@@ -369,11 +426,21 @@ public class ActivityInput extends Activity implements SensorEventListener {
     }
 
 
+    /**
+     * Short method for executing switch as onClick method.
+     *
+     * @param view  View that executes the method as an onClick method.
+     */
     public void switchMode(View view) {
         switchMode();
     }
 
 
+    /**
+     * Handle pressing built-in "back" button when in CALIBRATION mode.
+     *
+     * @param view  View that executes the method as an onClick method.
+     */
     public void backFromCalibration(View view) {
         if (Objects.equals(mDBHandler.mSettings.get(DataDBHandler.SETTING_CALIBRATION), "-1")) {
             Toast.makeText(this, R.string.error_msg_first_calibration, Toast.LENGTH_SHORT).show();
@@ -388,6 +455,11 @@ public class ActivityInput extends Activity implements SensorEventListener {
         }
     }
 
+    /**
+     * Handle pressing built-in "back" button when in CALIBRATION mode.
+     *
+     * @param view  View that executes the method as an onClick method.
+     */
     public void saveCalibration(View view) {
         View v = findViewById(R.id.patternDomain);
         mDBHandler.addAndSetCalibration(String.valueOf(v.getPaddingTop()));
@@ -470,7 +542,7 @@ public class ActivityInput extends Activity implements SensorEventListener {
         new Handler().postDelayed(() -> doubleBackToExitPressedOnce = false, 2000);
     }
 
-    private void parseAndAddEntry(MotionEvent ev) {
+    private void parseAndAddEntry() {
         JSONObject msg = new JSONObject();
         JSONObject header = new JSONObject();
         try {
