@@ -5,6 +5,7 @@ import android.content.Context;
 import android.graphics.PointF;
 import android.graphics.Rect;
 import android.os.Build;
+import android.util.JsonReader;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,6 +20,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.wut.identitycreator.*;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 @RequiresApi(api = Build.VERSION_CODES.O)
 public class ViewGridAdapter extends BaseAdapter {
@@ -63,6 +67,22 @@ public class ViewGridAdapter extends BaseAdapter {
         if (splitPattern.length>1) for (String s : splitPattern) password.add(Integer.valueOf(s));
         return password;
     }
+
+    public JSONObject calibrationSetting() throws JSONException{
+        JSONObject calibration = new JSONObject();
+        for (int i=0; i<rbs.length; i++){
+            Rect rect = new Rect();
+            rbs[i].getGlobalVisibleRect(rect);
+            JSONObject button = new JSONObject();
+                button.put("left",rect.left);
+                button.put("right",rect.right);
+                button.put("top",rect.top);
+                button.put("bottom",rect.bottom);
+                calibration.put(String.valueOf(i),button);
+        }
+        return calibration;
+    }
+
 
     public boolean verifyResult(){
         //check input passwd correctness

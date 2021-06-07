@@ -1,12 +1,18 @@
 package com.wut.identitycreator.activities;
 
 import android.app.Activity;
+import android.content.Context;
 import android.graphics.Point;
 import android.graphics.PointF;
 import android.graphics.Rect;
+import android.hardware.Sensor;
+import android.hardware.SensorEvent;
+import android.hardware.SensorEventListener;
+import android.hardware.SensorManager;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
+import android.util.DisplayMetrics;
 import android.view.Display;
 import android.view.MotionEvent;
 import android.view.View;
@@ -23,12 +29,18 @@ import com.wut.identitycreator.dialogs.DialogUsers;
 import com.wut.identitycreator.views.ViewDrawPath;
 import com.wut.identitycreator.views.ViewGridAdapter;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
+import static java.lang.System.currentTimeMillis;
 
-public class ActivityInput extends Activity {
+
+public class ActivityInput extends Activity implements SensorEventListener {
 
     GridView radioGrid;
 
@@ -41,6 +53,12 @@ public class ActivityInput extends Activity {
 
     private ViewGridAdapter adapter;
     private int sSide;
+
+    private JSONArray data_entry;
+    private SensorManager mSensorManager;
+
+    private ArrayList<Sensor> sensors = new ArrayList<>();
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -95,6 +113,14 @@ public class ActivityInput extends Activity {
 
         mViewDrawPath = findViewById(R.id.passPath);
 
+        mSensorManager = (SensorManager)getSystemService(SENSOR_SERVICE);
+        sensors.add(mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER));
+        sensors.add(mSensorManager.getDefaultSensor(Sensor.TYPE_GYROSCOPE));
+        sensors.add(mSensorManager.getDefaultSensor(Sensor.TYPE_ROTATION_VECTOR));
+        sensors.add(mSensorManager.getDefaultSensor(Sensor.TYPE_LINEAR_ACCELERATION));
+        sensors.add(mSensorManager.getDefaultSensor(Sensor.TYPE_GRAVITY));
+        
+        
         //unblock screen after 2 seconds (initialization - getting x/y values for the grid points
         //there doesn't seem to eb
         Handler handler = new Handler(Looper.getMainLooper());
@@ -106,25 +132,85 @@ public class ActivityInput extends Activity {
         }, 2000);
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        for (Sensor sensor : sensors){
+            mSensorManager.registerListener(this, sensor, SensorManager.SENSOR_DELAY_FASTEST);
+        }
+    }
+
+    private float[] mAccData = new float[3];
+    private float[] mGyroData = new float[3];
+    private float[] mRotVecData = new float[4];
+    private float[] mLinAccData = new float[3];
+    private float[] mGravData = new float[3];
+    public void onSensorChanged(SensorEvent event) {
+        switch (event.sensor.getType()){
+            case Sensor.TYPE_ACCELEROMETER:
+                mAccData = event.values.clone();
+                break;
+            case Sensor.TYPE_GYROSCOPE:
+                mGyroData = event.values.clone();
+                break;
+            case Sensor.TYPE_ROTATION_VECTOR:
+                mRotVecData = event.values.clone();
+                break;
+            case Sensor.TYPE_LINEAR_ACCELERATION:
+                mLinAccData = event.values.clone();
+                break;
+            case Sensor.TYPE_GRAVITY:
+                mGravData = event.values.clone();
+                break;
+            default:
+                break;
+        }
+    }
+
+    @Override
+    public void onAccuracyChanged(Sensor sensor, int i) {
+        //  NOTHING
+    }
+
+    private JSONObject getSensorsData() throws JSONException{
+        JSONObject sensorsData = new JSONObject();
+
+        JSONObject sensor = new JSONObject();
+        sensor.put("X",mAccData[0]);
+        sensor.put("Y",mAccData[1]);
+        sensor.put("Z",mAccData[2]);
+        sensorsData.put("acc",sensor);
+
+        sensor = new JSONObject();
+        sensor.put("X",mGyroData[0]);
+        sensor.put("Y",mGyroData[1]);
+        sensor.put("Z",mGyroData[2]);
+        sensorsData.put("gyro",sensor);
+
+        sensor = new JSONObject();
+        sensor.put("X",mRotVecData[0]);
+        sensor.put("Y",mRotVecData[1]);
+        sensor.put("Z",mRotVecData[2]);
+        sensor.put("scalar",mRotVecData[3]);
+        sensorsData.put("rotV",sensor);
+
+        sensor = new JSONObject();
+        sensor.put("X",mLinAccData[0]);
+        sensor.put("Y",mLinAccData[1]);
+        sensor.put("Z",mLinAccData[2]);
+        sensorsData.put("linAcc",sensor);
+
+        sensor = new JSONObject();
+        sensor.put("X",mGravData[0]);
+        sensor.put("Y",mGravData[1]);
+        sensor.put("Z",mGravData[2]);
+        sensorsData.put("grav",sensor);
+
+        return sensorsData;
+    }
 
     @Override
     public boolean dispatchTouchEvent (MotionEvent ev){
-
-        System.out.println("----------");
-        //System.out.println(ev.getX());
-        //System.out.println(ev.getY());
-
-        //Not usable
-        /*
-        System.out.println(ev.getSize());
-        System.out.println(ev.getPressure());
-
-        System.out.println(ev.getTouchMajor());
-        System.out.println(ev.getTouchMinor());
-        System.out.println(ev.getToolMajor());
-        System.out.println(ev.getToolMinor());
-        */
-
         View v = findViewById(R.id.passPath);
         int topHeight = v.getTop()+getStatusHeight();
         if ((ev.getY()>topHeight) && (ev.getY()<(topHeight+v.getHeight()))){
@@ -142,7 +228,17 @@ public class ActivityInput extends Activity {
         return true;
     }
 
+    private long startTime;
+    private long startTimeNano;
+
     private boolean handleInput(MotionEvent ev, float top){
+        long time = System.nanoTime();
+        if (ev.getAction()==MotionEvent.ACTION_DOWN){
+            data_entry = new JSONArray();
+            startTime = System.currentTimeMillis();
+            startTimeNano = System.nanoTime();
+        }
+
         if ((ev.getAction()==MotionEvent.ACTION_DOWN)||(ev.getAction()==MotionEvent.ACTION_MOVE)){
             ev.setAction(MotionEvent.ACTION_DOWN);
             super.dispatchTouchEvent(ev);
@@ -154,6 +250,27 @@ public class ActivityInput extends Activity {
 
             mViewDrawPath.resetPoints(points);
             mViewDrawPath.draw();
+
+            JSONObject event = new JSONObject();
+            try{
+                event.put("time",System.nanoTime()-startTimeNano);
+
+                JSONObject touch = new JSONObject();
+                touch.put("x",ev.getRawX());
+                touch.put("y",ev.getRawY());
+                touch.put("tM",ev.getTouchMajor());
+                touch.put("tm",ev.getTouchMinor());
+                touch.put("s",ev.getSize());
+                touch.put("p",ev.getPressure());
+                event.put("tch",touch);
+                event.put("sns",getSensorsData());
+                //ToolMajor and ToolMinor are out-of-scope
+                data_entry.put(event);
+            }
+            catch (JSONException e){
+                e.printStackTrace();
+                data_entry = new JSONArray();
+            }
 
             return res;
         }
@@ -372,9 +489,32 @@ public class ActivityInput extends Activity {
     }
 
     private void parseAndAddEntry(MotionEvent ev){
-        String msg;
-        msg = String.valueOf(ev.getRawX());
-        dbHandler.addDataEntry(msg);
+        JSONObject msg = new JSONObject();
+        JSONObject header = new JSONObject();
+        try {
+            header.put("id",dbHandler.settings.get("UUID"));
+            header.put("u",dbHandler.settings.get("USER"));
+            header.put("ptn",dbHandler.settings.get("PATTERN"));
+
+            JSONObject densityJSON = new JSONObject();
+            DisplayMetrics metrics = getResources().getDisplayMetrics();
+            densityJSON.put("xdpi",metrics.xdpi);
+            densityJSON.put("ydpi",metrics.ydpi);
+            header.put("dpi",densityJSON);
+
+            header.put("c",adapter.calibrationSetting());
+
+            header.put("tstamp",startTime);
+
+            msg.put("header",header);
+            msg.put("data",data_entry);
+            dbHandler.addDataEntry(msg.toString());
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        finally {
+            data_entry = null;
+        }
     }
 
     boolean doublePatternTap = false;
