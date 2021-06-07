@@ -15,18 +15,17 @@ import android.widget.TextView;
 import androidx.annotation.RequiresApi;
 import androidx.constraintlayout.widget.ConstraintLayout;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import com.wut.identity_data_provider.*;
+import com.wut.identity_data_provider.R;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @RequiresApi(api = Build.VERSION_CODES.O)
 public class ViewGridAdapter extends BaseAdapter {
 
-    final Context context;
     final LayoutInflater inflater;
     final int sWidth;
 
@@ -37,21 +36,20 @@ public class ViewGridAdapter extends BaseAdapter {
     final ArrayList<Integer> inPasswd = new ArrayList<>(); //input
 
 
-
     public ViewGridAdapter(Context applicationContext, int width, String pattern) {
-        context = applicationContext;
         sWidth = width;
         inflater = (LayoutInflater.from(applicationContext));
 
         passwd.addAll(parsePattern(pattern));
     }
+
     @Override
     public int getCount() {
         return 9;
     }
 
     @Override
-    public Object getItem(int position){
+    public Object getItem(int position) {
         return rbs[position];
     }
 
@@ -60,38 +58,37 @@ public class ViewGridAdapter extends BaseAdapter {
         return 0;
     }
 
-    public ArrayList<Integer> parsePattern(String pattern){
+    public ArrayList<Integer> parsePattern(String pattern) {
         ArrayList<Integer> password = new ArrayList<>();
         String[] splitPattern = pattern.split("-");
-        if (splitPattern.length>1) for (String s : splitPattern) password.add(Integer.valueOf(s));
+        if (splitPattern.length > 1) for (String s : splitPattern) password.add(Integer.valueOf(s));
         return password;
     }
 
-    public JSONObject calibrationSetting() throws JSONException{
+    public JSONObject calibrationSetting() throws JSONException {
         JSONObject calibration = new JSONObject();
-        for (int i=0; i<rbs.length; i++){
+        for (int i = 0; i < rbs.length; i++) {
             Rect rect = new Rect();
             rbs[i].getGlobalVisibleRect(rect);
             JSONObject button = new JSONObject();
-                button.put("left",rect.left);
-                button.put("right",rect.right);
-                button.put("top",rect.top);
-                button.put("bottom",rect.bottom);
-                calibration.put(String.valueOf(i),button);
+            button.put("left", rect.left);
+            button.put("right", rect.right);
+            button.put("top", rect.top);
+            button.put("bottom", rect.bottom);
+            calibration.put(String.valueOf(i), button);
         }
         return calibration;
     }
 
 
-    public boolean verifyResult(){
+    public boolean verifyResult() {
         //check input passwd correctness
-        if (passwd.size()==0){
-            if (inPasswd.size()<4) {
+        if (passwd.size() == 0) {
+            if (inPasswd.size() < 4) {
                 getAndClearInPasswd();
                 return false;
             }
-        }
-        else {
+        } else {
             boolean result = inPasswd.equals(passwd);
             getAndClearInPasswd();
             return result;
@@ -99,19 +96,19 @@ public class ViewGridAdapter extends BaseAdapter {
         return true;
     }
 
-    public ArrayList<Integer> getAndClearInPasswd(){
+    public ArrayList<Integer> getAndClearInPasswd() {
         ArrayList<Integer> passwd = new ArrayList<>(inPasswd);
         inPasswd.clear();
         return passwd;
     }
 
-    public List<PointF> getSelected(float top){
+    public List<PointF> getSelected(float top) {
         List<PointF> points = new ArrayList<>();
-        for (int i : inPasswd){
+        for (int i : inPasswd) {
             Rect rect = new Rect();
             rbs[i].getGlobalVisibleRect(rect);
 
-            points.add(new PointF(rect.centerX(),rect.centerY()-top));
+            points.add(new PointF(rect.centerX(), rect.centerY() - top));
         }
         return points;
     }
@@ -127,12 +124,12 @@ public class ViewGridAdapter extends BaseAdapter {
 
         textId[pointer] = view.findViewById(R.id.radioId);
         int idx = passwd.indexOf(pointer);
-        if (idx==-1) textId[pointer].setText("");
-        else textId[pointer].setText(String.valueOf(idx+1));
+        if (idx == -1) textId[pointer].setText("");
+        else textId[pointer].setText(String.valueOf(idx + 1));
 
         rbs[pointer] = view.findViewById(R.id.radioGrid);
         rbs[pointer].setOnClickListener(v -> {
-            if (inPasswd.size()>0) {
+            if (inPasswd.size() > 0) {
                 intermediateToggles(pointer);
             }
 
@@ -143,81 +140,81 @@ public class ViewGridAdapter extends BaseAdapter {
         return view;
     }
 
-    private void intermediateToggles(int pointer){
+    private void intermediateToggles(int pointer) {
         switch (pointer) {
-        case 0:
-            if ((inPasswd.get(inPasswd.size() - 1) == 2) && (!inPasswd.contains(1))) {
-                rbs[1].toggle();
-                rbs[1].callOnClick();
-            } else if ((inPasswd.get(inPasswd.size() - 1) == 6) && (!inPasswd.contains(3))) {
-                rbs[3].toggle();
-                rbs[3].callOnClick();
-            } else if ((inPasswd.get(inPasswd.size() - 1) == 8) && (!inPasswd.contains(4))) {
-                rbs[4].toggle();
-                rbs[4].callOnClick();
-            }
-            break;
-        case 1:
-            if ((inPasswd.get(inPasswd.size() - 1) == 7) && (!inPasswd.contains(4))) {
-                rbs[4].toggle();
-                rbs[4].callOnClick();
-            }
-            break;
-        case 2:
-            if ((inPasswd.get(inPasswd.size() - 1) == 0) && (!inPasswd.contains(1))) {
-                rbs[1].toggle();
-                rbs[1].callOnClick();
-            } else if ((inPasswd.get(inPasswd.size() - 1) == 8) && (!inPasswd.contains(5))) {
-                rbs[5].toggle();
-                rbs[5].callOnClick();
-            } else if ((inPasswd.get(inPasswd.size() - 1) == 7) && (!inPasswd.contains(4))) {
-                rbs[4].toggle();
-                rbs[4].callOnClick();
-            }
-            break;
-        case 3:
-            if ((inPasswd.get(inPasswd.size() - 1) == 5) && (!inPasswd.contains(4))) {
-                rbs[4].toggle();
-                rbs[4].callOnClick();
-            }
-            break;
-        case 5:
-            if ((inPasswd.get(inPasswd.size() - 1) == 3) && (!inPasswd.contains(4))) {
-                rbs[4].toggle();
-                rbs[4].callOnClick();
-            }
-            break;
-        case 6:
-            if ((inPasswd.get(inPasswd.size() - 1) == 8) && (!inPasswd.contains(7))) {
-                rbs[7].toggle();
-                rbs[7].callOnClick();
-            } else if ((inPasswd.get(inPasswd.size() - 1) == 0) && (!inPasswd.contains(3))) {
-                rbs[3].toggle();
-                rbs[3].callOnClick();
-            } else if ((inPasswd.get(inPasswd.size() - 1) == 2) && (!inPasswd.contains(4))) {
-                rbs[4].toggle();
-                rbs[4].callOnClick();
-            }
-            break;
-        case 7:
-            if ((inPasswd.get(inPasswd.size() - 1) == 1) && (!inPasswd.contains(4))) {
-                rbs[4].toggle();
-                rbs[4].callOnClick();
-            }
-            break;
-        case 8:
-            if ((inPasswd.get(inPasswd.size() - 1) == 6) && (!inPasswd.contains(7))) {
-                rbs[7].toggle();
-                rbs[7].callOnClick();
-            } else if ((inPasswd.get(inPasswd.size() - 1) == 2) && (!inPasswd.contains(5))) {
-                rbs[5].toggle();
-                rbs[5].callOnClick();
-            } else if ((inPasswd.get(inPasswd.size() - 1) == 0) && (!inPasswd.contains(4))) {
-                rbs[4].toggle();
-                rbs[4].callOnClick();
-            }
-            break;
-        default:
-    }
+            case 0:
+                if ((inPasswd.get(inPasswd.size() - 1) == 2) && (!inPasswd.contains(1))) {
+                    rbs[1].toggle();
+                    rbs[1].callOnClick();
+                } else if ((inPasswd.get(inPasswd.size() - 1) == 6) && (!inPasswd.contains(3))) {
+                    rbs[3].toggle();
+                    rbs[3].callOnClick();
+                } else if ((inPasswd.get(inPasswd.size() - 1) == 8) && (!inPasswd.contains(4))) {
+                    rbs[4].toggle();
+                    rbs[4].callOnClick();
+                }
+                break;
+            case 1:
+                if ((inPasswd.get(inPasswd.size() - 1) == 7) && (!inPasswd.contains(4))) {
+                    rbs[4].toggle();
+                    rbs[4].callOnClick();
+                }
+                break;
+            case 2:
+                if ((inPasswd.get(inPasswd.size() - 1) == 0) && (!inPasswd.contains(1))) {
+                    rbs[1].toggle();
+                    rbs[1].callOnClick();
+                } else if ((inPasswd.get(inPasswd.size() - 1) == 8) && (!inPasswd.contains(5))) {
+                    rbs[5].toggle();
+                    rbs[5].callOnClick();
+                } else if ((inPasswd.get(inPasswd.size() - 1) == 7) && (!inPasswd.contains(4))) {
+                    rbs[4].toggle();
+                    rbs[4].callOnClick();
+                }
+                break;
+            case 3:
+                if ((inPasswd.get(inPasswd.size() - 1) == 5) && (!inPasswd.contains(4))) {
+                    rbs[4].toggle();
+                    rbs[4].callOnClick();
+                }
+                break;
+            case 5:
+                if ((inPasswd.get(inPasswd.size() - 1) == 3) && (!inPasswd.contains(4))) {
+                    rbs[4].toggle();
+                    rbs[4].callOnClick();
+                }
+                break;
+            case 6:
+                if ((inPasswd.get(inPasswd.size() - 1) == 8) && (!inPasswd.contains(7))) {
+                    rbs[7].toggle();
+                    rbs[7].callOnClick();
+                } else if ((inPasswd.get(inPasswd.size() - 1) == 0) && (!inPasswd.contains(3))) {
+                    rbs[3].toggle();
+                    rbs[3].callOnClick();
+                } else if ((inPasswd.get(inPasswd.size() - 1) == 2) && (!inPasswd.contains(4))) {
+                    rbs[4].toggle();
+                    rbs[4].callOnClick();
+                }
+                break;
+            case 7:
+                if ((inPasswd.get(inPasswd.size() - 1) == 1) && (!inPasswd.contains(4))) {
+                    rbs[4].toggle();
+                    rbs[4].callOnClick();
+                }
+                break;
+            case 8:
+                if ((inPasswd.get(inPasswd.size() - 1) == 6) && (!inPasswd.contains(7))) {
+                    rbs[7].toggle();
+                    rbs[7].callOnClick();
+                } else if ((inPasswd.get(inPasswd.size() - 1) == 2) && (!inPasswd.contains(5))) {
+                    rbs[5].toggle();
+                    rbs[5].callOnClick();
+                } else if ((inPasswd.get(inPasswd.size() - 1) == 0) && (!inPasswd.contains(4))) {
+                    rbs[4].toggle();
+                    rbs[4].callOnClick();
+                }
+                break;
+            default:
+        }
     }
 }

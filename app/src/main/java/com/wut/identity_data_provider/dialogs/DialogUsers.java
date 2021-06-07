@@ -13,7 +13,7 @@ import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import com.wut.identity_data_provider.*;
+import com.wut.identity_data_provider.R;
 import com.wut.identity_data_provider.activities.ActivityInput;
 
 import java.util.ArrayList;
@@ -24,16 +24,16 @@ public class DialogUsers {
     private final ActivityInput mActivity;
     private AlertDialog mDialog;
 
-    public DialogUsers(ActivityInput activity){
+    public DialogUsers(ActivityInput activity) {
         this.mActivity = activity;
     }
 
     @SuppressLint("InflateParams")
-    public void startDialog(ArrayList<String> users){
+    public void startDialog(ArrayList<String> users) {
         AlertDialog.Builder builder = new AlertDialog.Builder(mActivity);
 
         LayoutInflater inflater = mActivity.getLayoutInflater();
-        builder.setView(inflater.inflate(R.layout.dialog_users,null));
+        builder.setView(inflater.inflate(R.layout.dialog_users, null));
         builder.setCancelable(false);
 
         mDialog = builder.create();
@@ -60,7 +60,7 @@ public class DialogUsers {
         });
     }
 
-    public void dismissDialog(){
+    public void dismissDialog() {
         mDialog.dismiss();
     }
 
@@ -70,7 +70,7 @@ public class DialogUsers {
         final ArrayList<String> mUsers = new ArrayList<>();
 
         public ListArrayAdapter(Context context, int textViewResourceId,
-                                  List<String> objects) {
+                                List<String> objects) {
             super(context, textViewResourceId, objects);
             mUsers.addAll(objects);
         }

@@ -17,7 +17,7 @@ public class DataDBHandler implements Serializable {
     public final static String SETTING_USER = "USER";
     public final static String SETTING_PATTERN = "PATTERN";
 
-    public final Map<String,String> mSettings; //CALIBRATION, USER, PATTERN, UUID
+    public final Map<String, String> mSettings; //CALIBRATION, USER, PATTERN, UUID
 
     private final DataDBHelper mDBHelper;
 
@@ -33,7 +33,7 @@ public class DataDBHandler implements Serializable {
         getPatterns();
     }
 
-    public void setApplicationStatus(){
+    public void setApplicationStatus() {
 
         Cursor cursor = mDBHelper.db.query(
                 DataDBSchema.Config.TABLE_NAME,   // The table to query
@@ -46,12 +46,12 @@ public class DataDBHandler implements Serializable {
         );
         while (cursor.moveToNext()) {
             mSettings.put(cursor.getString(cursor.getColumnIndex(DataDBSchema.Config.COLUMN_NAME_PARAM_NAME)),
-                        cursor.getString(cursor.getColumnIndex(DataDBSchema.Config.COLUMN_NAME_PARAM_VALUE)));
+                    cursor.getString(cursor.getColumnIndex(DataDBSchema.Config.COLUMN_NAME_PARAM_VALUE)));
         }
         cursor.close();
     }
 
-    public void addAndSetCalibration(String newCalibration){
+    public void addAndSetCalibration(String newCalibration) {
         ContentValues values = new ContentValues();
         values.put(DataDBSchema.Calibration.COLUMN_NAME_OPTION, newCalibration);
         mDBHelper.db.insert(DataDBSchema.Calibration.TABLE_NAME, null, values);
@@ -59,13 +59,13 @@ public class DataDBHandler implements Serializable {
         values = new ContentValues();
         values.put(DataDBSchema.Config.COLUMN_NAME_PARAM_NAME, SETTING_CALIBRATION);
         values.put(DataDBSchema.Config.COLUMN_NAME_PARAM_VALUE, newCalibration);
-        mDBHelper.db.update(DataDBSchema.Config.TABLE_NAME, values,DataDBSchema.Config.COLUMN_NAME_PARAM_NAME+"=\""+SETTING_CALIBRATION+"\"",null);
+        mDBHelper.db.update(DataDBSchema.Config.TABLE_NAME, values, DataDBSchema.Config.COLUMN_NAME_PARAM_NAME + "=\"" + SETTING_CALIBRATION + "\"", null);
 
-        mSettings.put(SETTING_CALIBRATION,newCalibration);
+        mSettings.put(SETTING_CALIBRATION, newCalibration);
     }
 
 
-    public void getUsers(){
+    public void getUsers() {
         mUsers = new ArrayList<>();
         Cursor cursor = mDBHelper.db.query(
                 DataDBSchema.User.TABLE_NAME,   // The table to query
@@ -81,28 +81,28 @@ public class DataDBHandler implements Serializable {
         }
         cursor.close();
     }
-    public void addAndSetConfigUser(String user){
+
+    public void addAndSetConfigUser(String user) {
         ContentValues values;
 
         int idx = mUsers.indexOf(user);
-        if (idx!=-1){
+        if (idx != -1) {
             mSettings.put(SETTING_USER, mUsers.get(idx));
-        }
-        else{
+        } else {
             mUsers.add(user);
-            mSettings.put(SETTING_USER,user);
+            mSettings.put(SETTING_USER, user);
             values = new ContentValues();
             values.put(DataDBSchema.User.COLUMN_NAME_USER, user);
-            mDBHelper.db.insert(DataDBSchema.User.TABLE_NAME, null,values);
+            mDBHelper.db.insert(DataDBSchema.User.TABLE_NAME, null, values);
         }
 
         values = new ContentValues();
         values.put(DataDBSchema.Config.COLUMN_NAME_PARAM_NAME, SETTING_USER);
         values.put(DataDBSchema.Config.COLUMN_NAME_PARAM_VALUE, user);
-        mDBHelper.db.update(DataDBSchema.Config.TABLE_NAME, values,DataDBSchema.Config.COLUMN_NAME_PARAM_NAME+"=\""+SETTING_USER+"\"",null);
+        mDBHelper.db.update(DataDBSchema.Config.TABLE_NAME, values, DataDBSchema.Config.COLUMN_NAME_PARAM_NAME + "=\"" + SETTING_USER + "\"", null);
     }
 
-    public void getPatterns(){
+    public void getPatterns() {
         mPatterns = new ArrayList<>();
         Cursor cursor = mDBHelper.db.query(
                 DataDBSchema.Pattern.TABLE_NAME,   // The table to query
@@ -119,42 +119,42 @@ public class DataDBHandler implements Serializable {
         cursor.close();
     }
 
-    public void setConfigPattern(int idx){
+    public void setConfigPattern(int idx) {
         mSettings.put(SETTING_PATTERN, mPatterns.get(idx));
 
         ContentValues values = new ContentValues();
         values.put(DataDBSchema.Config.COLUMN_NAME_PARAM_NAME, SETTING_PATTERN);
         values.put(DataDBSchema.Config.COLUMN_NAME_PARAM_VALUE, mPatterns.get(idx));
-        mDBHelper.db.update(DataDBSchema.Config.TABLE_NAME, values,DataDBSchema.Config.COLUMN_NAME_PARAM_NAME+"=\""+SETTING_PATTERN+"\"",null);
+        mDBHelper.db.update(DataDBSchema.Config.TABLE_NAME, values, DataDBSchema.Config.COLUMN_NAME_PARAM_NAME + "=\"" + SETTING_PATTERN + "\"", null);
     }
 
-    public int completedTests(){
+    public int completedTests() {
         Cursor cursor = mDBHelper.db.query(
                 DataDBSchema.DataEntry.TABLE_NAME,   // The table to query
                 null,             // The array of columns to return (pass null to get all)
-                DataDBSchema.DataEntry.COLUMN_NAME_CALIBRATION+"=? AND "+
-                        DataDBSchema.DataEntry.COLUMN_NAME_USER+"=? AND "+
-                        DataDBSchema.DataEntry.COLUMN_NAME_PATTERN+"=?",              // The columns for the WHERE clause
-                new String[] {mSettings.get(SETTING_CALIBRATION), mSettings.get(SETTING_USER), mSettings.get(SETTING_PATTERN) },          // The values for the WHERE clause
+                DataDBSchema.DataEntry.COLUMN_NAME_CALIBRATION + "=? AND " +
+                        DataDBSchema.DataEntry.COLUMN_NAME_USER + "=? AND " +
+                        DataDBSchema.DataEntry.COLUMN_NAME_PATTERN + "=?",              // The columns for the WHERE clause
+                new String[]{mSettings.get(SETTING_CALIBRATION), mSettings.get(SETTING_USER), mSettings.get(SETTING_PATTERN)},          // The values for the WHERE clause
                 null,                   // don't group the rows
                 null,                   // don't filter by row groups
                 null               // The sort order
         );
-        int count=cursor.getCount();
+        int count = cursor.getCount();
         cursor.close();
         return count;
     }
 
-    public void addDataEntry(String dataEntry){
+    public void addDataEntry(String dataEntry) {
         ContentValues values = new ContentValues();
         values.put(DataDBSchema.DataEntry.COLUMN_NAME_CALIBRATION, mSettings.get(SETTING_CALIBRATION));
         values.put(DataDBSchema.DataEntry.COLUMN_NAME_USER, mSettings.get(SETTING_USER));
         values.put(DataDBSchema.DataEntry.COLUMN_NAME_PATTERN, mSettings.get(SETTING_PATTERN));
         values.put(DataDBSchema.DataEntry.COLUMN_NAME_DATA, dataEntry);
-        mDBHelper.db.insert(DataDBSchema.DataEntry.TABLE_NAME, null,values);
+        mDBHelper.db.insert(DataDBSchema.DataEntry.TABLE_NAME, null, values);
     }
 
-    public int checkProgressAndSetBestCalibration(boolean set){
+    public int checkProgressAndSetBestCalibration(boolean set) {
         Cursor cursor = mDBHelper.db.rawQuery(
                 "select calibration from data_entry\n" +
                         "where calibration in (select calibration from (select user,calibration,pattern,count(*) from data_entry\n" +
@@ -163,41 +163,42 @@ public class DataDBHandler implements Serializable {
                         "group by user,calibration\n" +
                         "having count(*)>=3)\n" +// over 3 different patterns (main ones)
                         "group by calibration\n" +
-                        "having max(calibration);",null
+                        "having max(calibration);", null
         );
-        int selectedCalibration=-1;
+        int selectedCalibration = -1;
         while (cursor.moveToNext()) selectedCalibration = cursor.getInt(0);
         cursor.close();
-        if ((selectedCalibration!=-1)&&(set)) addAndSetCalibration(String.valueOf(selectedCalibration));
+        if ((selectedCalibration != -1) && (set))
+            addAndSetCalibration(String.valueOf(selectedCalibration));
         return selectedCalibration;
     }
 
-    public int completedTestsForCalibration(String calibrationOption){
+    public int completedTestsForCalibration(String calibrationOption) {
         Cursor cursor = mDBHelper.db.query(
                 DataDBSchema.DataEntry.TABLE_NAME,   // The table to query
                 null,             // The array of columns to return (pass null to get all)
-                DataDBSchema.DataEntry.COLUMN_NAME_CALIBRATION+"=?",              // The columns for the WHERE clause
-                new String[] {calibrationOption},          // The values for the WHERE clause
+                DataDBSchema.DataEntry.COLUMN_NAME_CALIBRATION + "=?",              // The columns for the WHERE clause
+                new String[]{calibrationOption},          // The values for the WHERE clause
                 null,                   // don't group the rows
                 null,                   // don't filter by row groups
                 null               // The sort order
         );
-        int count=cursor.getCount();
+        int count = cursor.getCount();
         cursor.close();
         return count;
     }
 
-    public void addAndSetNewPattern(ArrayList<Integer> pattern){
+    public void addAndSetNewPattern(ArrayList<Integer> pattern) {
         String stringPattern = pattern.stream().map(Object::toString)
                 .collect(Collectors.joining("-"));
         ContentValues values = new ContentValues();
         values.put(DataDBSchema.Pattern.COLUMN_NAME_SEQUENCE, stringPattern);
-        mDBHelper.db.insert(DataDBSchema.Pattern.TABLE_NAME, null,values);
+        mDBHelper.db.insert(DataDBSchema.Pattern.TABLE_NAME, null, values);
 
         values = new ContentValues();
         values.put(DataDBSchema.Config.COLUMN_NAME_PARAM_NAME, SETTING_PATTERN);
         values.put(DataDBSchema.Config.COLUMN_NAME_PARAM_VALUE, stringPattern);
-        mDBHelper.db.update(DataDBSchema.Config.TABLE_NAME, values,DataDBSchema.Config.COLUMN_NAME_PARAM_NAME+"=\""+SETTING_PATTERN+"\"",null);
+        mDBHelper.db.update(DataDBSchema.Config.TABLE_NAME, values, DataDBSchema.Config.COLUMN_NAME_PARAM_NAME + "=\"" + SETTING_PATTERN + "\"", null);
 
         mDBHelper.close();
     }

@@ -14,26 +14,25 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.wut.identity_data_provider.*;
+import com.wut.identity_data_provider.R;
 
 import java.util.UUID;
 
-@SuppressWarnings("ALL")
 public class DialogInfo {
 
     private final Activity mActivity;
     private AlertDialog mDialog;
 
-    public DialogInfo(Activity activity){
+    public DialogInfo(Activity activity) {
         this.mActivity = activity;
     }
 
     @SuppressLint("InflateParams")
-    public void startDialog(){
+    public void startDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(mActivity);
 
         LayoutInflater inflater = mActivity.getLayoutInflater();
-        builder.setView(inflater.inflate(R.layout.dialog_info,null));
+        builder.setView(inflater.inflate(R.layout.dialog_info, null));
         builder.setCancelable(false);
 
         mDialog = builder.create();
@@ -48,13 +47,10 @@ public class DialogInfo {
 
         setText();
 
-        mDialog.findViewById(R.id.WelcomeTextHeader).setOnClickListener(view -> toggleWelcome(view));
-        mDialog.findViewById(R.id.ProjectTextHeader).setOnClickListener(view -> toggleWelcome(view));
-        mDialog.findViewById(R.id.InstructionsTextHeader).setOnClickListener(view -> toggleWelcome(view));
-        mDialog.findViewById(R.id.PrimaryTextHeader).setOnClickListener(view -> toggleWelcome(view));
-        mDialog.findViewById(R.id.OptionalTextHeader).setOnClickListener(view -> toggleWelcome(view));
-        mDialog.findViewById(R.id.AboutTextHeader).setOnClickListener(view -> toggleWelcome(view));
-        mDialog.findViewById(R.id.UUIDTextHeader).setOnClickListener(view -> toggleWelcome(view));
+        for (int i : new int[]{R.id.WelcomeTextHeader, R.id.ProjectTextHeader,
+                R.id.InstructionsTextHeader, R.id.PrimaryTextHeader,
+                R.id.OptionalTextHeader, R.id.AboutTextHeader, R.id.UUIDTextHeader})
+            mDialog.findViewById(i).setOnClickListener(view -> toggleWelcome(view));
 
         mDialog.findViewById(R.id.info_dialog_close).setOnClickListener(view -> dismissDialog());
     }
@@ -73,29 +69,29 @@ public class DialogInfo {
         return uniqueID;
     }
 
-    public void dismissDialog(){
+    public void dismissDialog() {
         mDialog.dismiss();
     }
 
     @SuppressLint("SetTextI18n")
-    private void setText(){
+    private void setText() {
         Resources res = mDialog.getContext().getResources();
         ((TextView) mDialog.findViewById(R.id.UUIDTextContent)).setText(id(mDialog.getContext()));
-        ((TextView) mDialog.findViewById(R.id.WelcomeTextHeader)).setText(res.getString(R.string.right_triangle)+res.getString(R.string.info_welcome_header));
+        ((TextView) mDialog.findViewById(R.id.WelcomeTextHeader)).setText(res.getString(R.string.right_triangle) + res.getString(R.string.info_welcome_header));
         ((TextView) mDialog.findViewById(R.id.ProjectTextHeader)).setText(res.getString(R.string.right_triangle) + res.getString(R.string.info_project_header));
-        ((TextView) mDialog.findViewById(R.id.InstructionsTextHeader)).setText(res.getString(R.string.right_triangle)+res.getString(R.string.info_instructions_header));
-        ((TextView) mDialog.findViewById(R.id.PrimaryTextHeader)).setText(res.getString(R.string.right_triangle)+res.getString(R.string.info_primary_header));
-        ((TextView) mDialog.findViewById(R.id.OptionalTextHeader)).setText(res.getString(R.string.right_triangle)+res.getString(R.string.info_optional_header));
-        ((TextView) mDialog.findViewById(R.id.AboutTextHeader)).setText(res.getString(R.string.right_triangle)+res.getString(R.string.info_about_header));
-        ((TextView) mDialog.findViewById(R.id.UUIDTextHeader)).setText(res.getString(R.string.right_triangle)+res.getString(R.string.info_uuid_header));
+        ((TextView) mDialog.findViewById(R.id.InstructionsTextHeader)).setText(res.getString(R.string.right_triangle) + res.getString(R.string.info_instructions_header));
+        ((TextView) mDialog.findViewById(R.id.PrimaryTextHeader)).setText(res.getString(R.string.right_triangle) + res.getString(R.string.info_primary_header));
+        ((TextView) mDialog.findViewById(R.id.OptionalTextHeader)).setText(res.getString(R.string.right_triangle) + res.getString(R.string.info_optional_header));
+        ((TextView) mDialog.findViewById(R.id.AboutTextHeader)).setText(res.getString(R.string.right_triangle) + res.getString(R.string.info_about_header));
+        ((TextView) mDialog.findViewById(R.id.UUIDTextHeader)).setText(res.getString(R.string.right_triangle) + res.getString(R.string.info_uuid_header));
     }
 
     @SuppressLint({"NonConstantResourceId", "SetTextI18n"})
-    public void toggleWelcome(View v){
+    public void toggleWelcome(View v) {
         View contentView;
         String headerText;
         Resources res = mDialog.getContext().getResources();
-        switch (v.getId()){
+        switch (v.getId()) {
             case R.id.WelcomeTextHeader:
                 contentView = mDialog.findViewById(R.id.WelcomeTextContent);
                 headerText = res.getString(R.string.info_welcome_header);
@@ -127,15 +123,15 @@ public class DialogInfo {
             default:
                 throw new IllegalStateException("Unexpected value: " + v.getId());
         }
-        ViewGroup.LayoutParams params =  contentView.getLayoutParams();
-        switch (params.height){
+        ViewGroup.LayoutParams params = contentView.getLayoutParams();
+        switch (params.height) {
             case ViewGroup.LayoutParams.WRAP_CONTENT:
                 contentView.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, 0));
-                ((TextView)v).setText(res.getString(R.string.right_triangle)+headerText);
+                ((TextView) v).setText(res.getString(R.string.right_triangle) + headerText);
                 break;
             case 0:
                 contentView.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT));
-                ((TextView)v).setText(res.getString(R.string.down_triangle)+headerText);
+                ((TextView) v).setText(res.getString(R.string.down_triangle) + headerText);
                 break;
             default:
                 break;

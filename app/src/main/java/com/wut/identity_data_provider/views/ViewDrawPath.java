@@ -32,36 +32,36 @@ public class ViewDrawPath extends View {
     }
 
     @Override
-    public void onDraw(Canvas canvas){
-        paint.setColor(Color.argb(168,128,128,255));
+    public void onDraw(Canvas canvas) {
+        paint.setColor(Color.argb(168, 128, 128, 255));
         paint.setStrokeWidth(50);
 
-        if (pointFS.size()>1) canvas.drawLines(getLines(),paint);
+        if (pointFS.size() > 1) canvas.drawLines(getLines(), paint);
 
         super.onDraw(canvas);
     }
 
-    public void resetPoints(List<PointF> pointFS){
+    public void resetPoints(List<PointF> pointFS) {
         this.pointFS.clear();
         this.pointFS.addAll(pointFS);
     }
 
-    public void clearPoints(){
+    public void clearPoints() {
         pointFS.clear();
     }
 
-    private float[] getLines(){
-        float[] pos = new float[(pointFS.size()-1)*4];
-        for (int i=0;i<pointFS.size()-1;i++){
-            pos[i*4]=pointFS.get(i).x;
-            pos[i*4+1]=pointFS.get(i).y;//-40;
-            pos[i*4+2]=pointFS.get(i+1).x;
-            pos[i*4+3]=pointFS.get(i+1).y;//-40;
+    private float[] getLines() {
+        float[] pos = new float[(pointFS.size() - 1) * 4];
+        for (int i = 0; i < pointFS.size() - 1; i++) {
+            pos[i * 4] = pointFS.get(i).x;
+            pos[i * 4 + 1] = pointFS.get(i).y;//-40;
+            pos[i * 4 + 2] = pointFS.get(i + 1).x;
+            pos[i * 4 + 3] = pointFS.get(i + 1).y;//-40;
         }
         return pos;
     }
 
-    public void draw(){
+    public void draw() {
         invalidate();
         requestLayout();
     }

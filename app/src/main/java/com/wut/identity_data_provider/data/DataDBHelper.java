@@ -14,13 +14,13 @@ public class DataDBHelper extends SQLiteOpenHelper {
     public final SQLiteDatabase db;
 
     public DataDBHelper(Context context) {
-        super(context, DB_NAME , null, 1);
+        super(context, DB_NAME, null, 1);
         db = getWritableDatabase();
 
         ContentValues values = new ContentValues();
         values.put(DataDBSchema.Config.COLUMN_NAME_PARAM_NAME, "UUID");
         values.put(DataDBSchema.Config.COLUMN_NAME_PARAM_VALUE, DialogInfo.id(context));
-        db.update(DataDBSchema.Config.TABLE_NAME, values,DataDBSchema.Config.COLUMN_NAME_PARAM_NAME+"=\"UUID\"",null);
+        db.update(DataDBSchema.Config.TABLE_NAME, values, DataDBSchema.Config.COLUMN_NAME_PARAM_NAME + "=\"UUID\"", null);
     }
 
     @Override
@@ -77,6 +77,7 @@ public class DataDBHelper extends SQLiteOpenHelper {
     }
 
     @Override
-    public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {}
+    public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+    }
 
 }
