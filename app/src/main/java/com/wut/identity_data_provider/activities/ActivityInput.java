@@ -39,6 +39,7 @@ import java.util.Objects;
 /**
  * Main and the only Activity class for Identity Data Provider.
  */
+@SuppressWarnings("unused")
 public class ActivityInput extends Activity implements SensorEventListener {
     private final static String MODE_INPUT = "INPUT";
     private final static String MODE_CALIBRATION = "CALIBRATION";

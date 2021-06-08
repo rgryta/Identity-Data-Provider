@@ -2,7 +2,7 @@
 <lint>
     <issue id="IconLocation">
         <ignore path="src/main/res/drawable/buttons.png" />
-        <ignore path="src/main/res/drawable/calib.png" />
+        <ignore path="src/main/res/drawable/calibration_info.png" />
         <ignore path="src/main/res/drawable/pattern.png" />
     </issue>
 </lint>
