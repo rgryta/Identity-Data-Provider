@@ -5,7 +5,7 @@ android {
     buildToolsVersion "30.0.2"
 
     defaultConfig {
-        applicationId "com.wut.identitycreator"
+        applicationId "com.wut.identity_data_provider"
         minSdkVersion 26
         targetSdkVersion 30
         versionCode 1

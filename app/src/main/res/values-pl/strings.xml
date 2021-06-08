@@ -50,7 +50,7 @@
     <string name="info_about_header">O mnie</string>
     <string name="info_about_content">
         Twórca: Radosław Gryta, Politechnika Warszawska
-        \nKod źródłowy: github.com/rgryta/IdentityCreator
+        \nKod źródłowy: github.com/rgryta/Identity-Data-Provider
     </string>
     <string name="info_uuid_header">Twoje unikalne ID</string>
     <plurals name="completed_tests">

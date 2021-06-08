@@ -55,7 +55,8 @@
     <string name="info_about_header">About</string>
     <string name="info_about_content">
         Creator: Radosław Gryta, Warsaw University of Technology
-        \nSource code: github.com/rgryta/IdentityCreator</string>
+        \nSource code: github.com/rgryta/Identity-Data-Provider
+	</string>
     <string name="info_uuid_header">Your unique ID</string>
     <string name="close_x" translatable="false">✗</string>
     <string name="right_triangle" translatable="false">▸\t</string>
