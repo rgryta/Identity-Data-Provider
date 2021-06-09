@@ -53,6 +53,13 @@
         \nKod źródłowy: github.com/rgryta/Identity-Data-Provider
     </string>
     <string name="info_uuid_header">Twoje unikalne ID</string>
+    <string name="pattern_completed">Ukończono! Możesz teraz przełączyć wzór albo dostarczyć więcej danych do aktualnie wybranego wzoru.</string>
+    <plurals name="pattern_progress">
+        <item quantity="one">Ukończono %d z 20 (minimum)</item>
+        <item quantity="few">Ukończono %d z 20 (minimum)</item>
+        <item quantity="many">Ukończono %d z 20 (minimum)</item>
+        <item quantity="other">Ukończono %d z 20 (minimum)</item>
+    </plurals>
     <plurals name="completed_tests">
         <item quantity="one">Ukończone testy: %d</item>
         <item quantity="few">Ukończone testy: %d</item>

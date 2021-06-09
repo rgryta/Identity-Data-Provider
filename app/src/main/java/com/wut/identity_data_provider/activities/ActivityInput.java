@@ -316,7 +316,8 @@ public class ActivityInput extends Activity implements SensorEventListener {
                 } else {
                     parseAndAddEntry();
                 }
-                updateActivityHeader();
+                int patternCount = updateActivityHeader();
+                if (patternCount==20) Toast.makeText(this, R.string.pattern_completed, Toast.LENGTH_LONG).show();
             } else {
                 if (Objects.equals(mDBHandler.mSettings.get(DataDBHandler.SETTING_PATTERN), "")) {
                     Toast.makeText(this, R.string.error_new_pattern_length, Toast.LENGTH_SHORT).show();
@@ -473,18 +474,21 @@ public class ActivityInput extends Activity implements SensorEventListener {
     }
 
 
-    public void updateActivityHeader() {
+    public int updateActivityHeader() {
         TextView v = findViewById(R.id.User);
         v.setText(mDBHandler.mSettings.get(DataDBHandler.SETTING_USER));
-        v = findViewById(R.id.Pattern);
+        v = findViewById(R.id.PatternProgress);
         String patternHeader = "";
+        int currentPatternCount = 0;
         if (!Objects.equals(mDBHandler.mSettings.get(DataDBHandler.SETTING_PATTERN), "")) {
-            patternHeader = mDBHandler.mSettings.get(DataDBHandler.SETTING_PATTERN) + " (" + mDBHandler.completedTests() + ")";
+            currentPatternCount = mDBHandler.completedTests();
+            patternHeader = getResources().getQuantityString(R.plurals.pattern_progress, currentPatternCount, currentPatternCount);
         }
         v.setText(patternHeader);
         v = findViewById(R.id.calibrationEntriesCount);
         int count = mDBHandler.completedTestsForCalibration(mDBHandler.mSettings.get(DataDBHandler.SETTING_CALIBRATION));
         v.setText(getResources().getQuantityString(R.plurals.completed_tests, count, count));
+        return currentPatternCount;
     }
 
     public void patternLeft(View view) {

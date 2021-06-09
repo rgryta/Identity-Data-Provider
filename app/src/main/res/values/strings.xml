@@ -61,6 +61,10 @@
     <string name="close_x" translatable="false">✗</string>
     <string name="right_triangle" translatable="false">▸\t</string>
     <string name="down_triangle" translatable="false">▾\t</string>
+    <string name="pattern_completed">Completed! You can now switch to a different pattern or continue on with the current one.</string>
+    <plurals name="pattern_progress">
+        <item quantity="other">Completed %d out of 20 minimum</item>
+    </plurals>
     <plurals name="completed_tests">
         <item quantity="other">Completed tests: %d</item>
     </plurals>
