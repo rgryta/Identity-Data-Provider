@@ -54,6 +54,8 @@
     </string>
     <string name="info_uuid_header">Twoje unikalne ID</string>
     <string name="pattern_completed">Ukończono! Możesz teraz przełączyć wzór albo dostarczyć więcej danych do aktualnie wybranego wzoru.</string>
+    <string name="err_pattern_too_long">Rysowanie zajęło za długo, spróbuj ponownie</string>
+    <string name="err_username_long">Nazwa użytkownika za długa!</string>
     <plurals name="pattern_progress">
         <item quantity="one">Ukończono %d z 20 (minimum)</item>
         <item quantity="few">Ukończono %d z 20 (minimum)</item>

@@ -62,6 +62,8 @@
     <string name="right_triangle" translatable="false">▸\t</string>
     <string name="down_triangle" translatable="false">▾\t</string>
     <string name="pattern_completed">Completed! You can now switch to a different pattern or continue on with the current one.</string>
+    <string name="err_pattern_too_long">Drawing took too long, please try again</string>
+    <string name="err_username_long">Username is too long!</string>
     <plurals name="pattern_progress">
         <item quantity="other">Completed %d out of 20 minimum</item>
     </plurals>

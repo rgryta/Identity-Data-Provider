@@ -194,34 +194,34 @@ public class ActivityInput extends Activity implements SensorEventListener {
         JSONObject sensorsData = new JSONObject();
 
         JSONObject sensor = new JSONObject();
-        sensor.put("X", mAccData[0]);
-        sensor.put("Y", mAccData[1]);
-        sensor.put("Z", mAccData[2]);
+        sensor.put("X", Math.round(mAccData[0]*10000.0)/100.0);
+        sensor.put("Y", Math.round(mAccData[1]*10000.0)/100.0);
+        sensor.put("Z", Math.round(mAccData[2]*10000.0)/100.0);
         sensorsData.put("acc", sensor);
 
         sensor = new JSONObject();
-        sensor.put("X", mGyroData[0]);
-        sensor.put("Y", mGyroData[1]);
-        sensor.put("Z", mGyroData[2]);
+        sensor.put("X", Math.round(mGyroData[0]*10000.0)/100.0);
+        sensor.put("Y", Math.round(mGyroData[1]*10000.0)/100.0);
+        sensor.put("Z", Math.round(mGyroData[2]*10000.0)/100.0);
         sensorsData.put("gyro", sensor);
 
         sensor = new JSONObject();
-        sensor.put("X", mRotVecData[0]);
-        sensor.put("Y", mRotVecData[1]);
-        sensor.put("Z", mRotVecData[2]);
-        sensor.put("scalar", mRotVecData[3]);
+        sensor.put("X", Math.round(mRotVecData[0]*10000.0)/100.0);
+        sensor.put("Y", Math.round(mRotVecData[1]*10000.0)/100.0);
+        sensor.put("Z", Math.round(mRotVecData[2]*10000.0)/100.0);
+        sensor.put("scalar", Math.round(mRotVecData[3]*10000.0)/100.0);
         sensorsData.put("rotV", sensor);
 
         sensor = new JSONObject();
-        sensor.put("X", mLinAccData[0]);
-        sensor.put("Y", mLinAccData[1]);
-        sensor.put("Z", mLinAccData[2]);
+        sensor.put("X", Math.round(mLinAccData[0]*10000.0)/100.0);
+        sensor.put("Y", Math.round(mLinAccData[1]*10000.0)/100.0);
+        sensor.put("Z", Math.round(mLinAccData[2]*10000.0)/100.0);
         sensorsData.put("linAcc", sensor);
 
         sensor = new JSONObject();
-        sensor.put("X", mGravData[0]);
-        sensor.put("Y", mGravData[1]);
-        sensor.put("Z", mGravData[2]);
+        sensor.put("X", Math.round(mGravData[0]*10000.0)/100.0);
+        sensor.put("Y", Math.round(mGravData[1]*10000.0)/100.0);
+        sensor.put("Z", Math.round(mGravData[2]*10000.0)/100.0);
         sensorsData.put("grav", sensor);
 
         return sensorsData;
@@ -287,8 +287,8 @@ public class ActivityInput extends Activity implements SensorEventListener {
                 event.put("time", System.nanoTime() - startTimeNano);
 
                 JSONObject touch = new JSONObject();
-                touch.put("x", ev.getRawX());
-                touch.put("y", ev.getRawY());
+                touch.put("x", Math.round(ev.getRawX()*100.0)/100.0);
+                touch.put("y", Math.round(ev.getRawY()*100.0)/100.0);
                 // touch.put("tM",ev.getTouchMajor());
                 // touch.put("tm",ev.getTouchMinor());
                 // touch.put("s",ev.getSize());
@@ -308,16 +308,18 @@ public class ActivityInput extends Activity implements SensorEventListener {
         else if (ev.getAction() == MotionEvent.ACTION_UP) {
             boolean res = mPatternGridAdapter.verifyResult();
             if (res) {
+                boolean isAdded = false;
                 if (Objects.equals(mDBHandler.mSettings.get(DataDBHandler.SETTING_PATTERN), "")) {
                     ArrayList<Integer> newPattern = new ArrayList<>(mPatternGridAdapter.getAndClearInPasswd());
                     mDBHandler.addAndSetNewPattern(newPattern);
 
                     mDBHandler = new DataDBHandler(this);
                 } else {
-                    parseAndAddEntry();
+                    isAdded = parseAndAddEntry();
                 }
                 int patternCount = updateActivityHeader();
-                if (patternCount==20) Toast.makeText(this, R.string.pattern_completed, Toast.LENGTH_LONG).show();
+                if (!isAdded) Toast.makeText(this, R.string.err_pattern_too_long, Toast.LENGTH_LONG).show();
+                else if (patternCount==20) Toast.makeText(this, R.string.pattern_completed, Toast.LENGTH_LONG).show();
             } else {
                 if (Objects.equals(mDBHandler.mSettings.get(DataDBHandler.SETTING_PATTERN), "")) {
                     Toast.makeText(this, R.string.error_new_pattern_length, Toast.LENGTH_SHORT).show();
@@ -325,7 +327,6 @@ public class ActivityInput extends Activity implements SensorEventListener {
                     Toast.makeText(this, R.string.error_wrong_pattern, Toast.LENGTH_SHORT).show();
                 }
             }
-
             resetPass();
         }
         return true;
@@ -527,9 +528,14 @@ public class ActivityInput extends Activity implements SensorEventListener {
     }
 
     public void addAndSetUser(String user) {
-        mDBHandler.addAndSetConfigUser(user);
-        updateActivityHeader();
-        resetPass();
+        if (user.length()<=40) {
+            mDBHandler.addAndSetConfigUser(user);
+            updateActivityHeader();
+            resetPass();
+        }
+        else {
+            Toast.makeText(this, R.string.err_username_long, Toast.LENGTH_LONG).show();
+        }
     }
 
     boolean doubleBackToExitPressedOnce = false;
@@ -547,7 +553,7 @@ public class ActivityInput extends Activity implements SensorEventListener {
         new Handler().postDelayed(() -> doubleBackToExitPressedOnce = false, 2000);
     }
 
-    private void parseAndAddEntry() {
+    private boolean parseAndAddEntry() {
         JSONObject msg = new JSONObject();
         JSONObject header = new JSONObject();
         try {
@@ -567,12 +573,17 @@ public class ActivityInput extends Activity implements SensorEventListener {
 
             msg.put("header", header);
             msg.put("data", mInputPatternData);
+            if (msg.toString().length()>=50000) {
+                mInputPatternData = null;
+                return false;
+            }
             mDBHandler.addDataEntry(msg.toString());
         } catch (JSONException e) {
             e.printStackTrace();
         } finally {
             mInputPatternData = null;
         }
+        return true;
     }
 
     boolean doublePatternTap = false;
