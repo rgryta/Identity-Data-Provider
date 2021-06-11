@@ -563,8 +563,8 @@ public class ActivityInput extends Activity implements SensorEventListener {
 
             JSONObject densityJSON = new JSONObject();
             DisplayMetrics metrics = getResources().getDisplayMetrics();
-            densityJSON.put("xdpi", metrics.xdpi);
-            densityJSON.put("ydpi", metrics.ydpi);
+            densityJSON.put("xdpi", Math.round(metrics.xdpi * 100.0) / 100.0);
+            densityJSON.put("ydpi", Math.round(metrics.ydpi * 100.0) / 100.0);
             header.put("dpi", densityJSON);
 
             header.put("c", mPatternGridAdapter.calibrationSetting());
