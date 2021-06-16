@@ -120,7 +120,6 @@ public class ActivityInput extends Activity implements SensorEventListener {
         mSensors.add(mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER));
         mSensors.add(mSensorManager.getDefaultSensor(Sensor.TYPE_GYROSCOPE));
         mSensors.add(mSensorManager.getDefaultSensor(Sensor.TYPE_ROTATION_VECTOR));
-        mSensors.add(mSensorManager.getDefaultSensor(Sensor.TYPE_LINEAR_ACCELERATION));
         mSensors.add(mSensorManager.getDefaultSensor(Sensor.TYPE_GRAVITY));
 
 
@@ -148,7 +147,6 @@ public class ActivityInput extends Activity implements SensorEventListener {
     private float[] mAccData = new float[3];
     private float[] mGyroData = new float[3];
     private float[] mRotVecData = new float[4];
-    private float[] mLinAccData = new float[3];
     private float[] mGravData = new float[3];
 
     /**
@@ -166,9 +164,6 @@ public class ActivityInput extends Activity implements SensorEventListener {
                 break;
             case Sensor.TYPE_ROTATION_VECTOR:
                 mRotVecData = event.values.clone();
-                break;
-            case Sensor.TYPE_LINEAR_ACCELERATION:
-                mLinAccData = event.values.clone();
                 break;
             case Sensor.TYPE_GRAVITY:
                 mGravData = event.values.clone();
@@ -211,12 +206,6 @@ public class ActivityInput extends Activity implements SensorEventListener {
         sensor.put("Z", Math.round(mRotVecData[2]*10000.0)/100.0);
         sensor.put("scalar", Math.round(mRotVecData[3]*10000.0)/100.0);
         sensorsData.put("rotV", sensor);
-
-        sensor = new JSONObject();
-        sensor.put("X", Math.round(mLinAccData[0]*10000.0)/100.0);
-        sensor.put("Y", Math.round(mLinAccData[1]*10000.0)/100.0);
-        sensor.put("Z", Math.round(mLinAccData[2]*10000.0)/100.0);
-        sensorsData.put("linAcc", sensor);
 
         sensor = new JSONObject();
         sensor.put("X", Math.round(mGravData[0]*10000.0)/100.0);
@@ -569,7 +558,7 @@ public class ActivityInput extends Activity implements SensorEventListener {
 
             header.put("c", mPatternGridAdapter.calibrationSetting());
 
-            header.put("tstamp", startTime);
+            header.put("tstamp", System.currentTimeMillis()-startTime);
 
             msg.put("header", header);
             msg.put("data", mInputPatternData);
