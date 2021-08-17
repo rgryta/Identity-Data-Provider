@@ -2,11 +2,20 @@ package com.wut.identity_data_provider.data;
 
 import android.provider.BaseColumns;
 
+
+/**
+ * Helper class used for storing DDLs for DB schema creation. Each inner class representing different table.
+ *
+ */
 public class DataDBSchema {
 
     private DataDBSchema() {
     }
 
+    /**
+     * Class containing data about CONFIG table.
+     *
+     */
     public static class Config implements BaseColumns {
         public static final String TABLE_NAME = "CONFIG";
 
@@ -19,6 +28,10 @@ public class DataDBSchema {
                 ");";
     }
 
+    /**
+     * Class containing data about CALIBRATION table.
+     *
+     */
     public static class Calibration implements BaseColumns {
         public static final String TABLE_NAME = "CALIBRATION";
 
@@ -29,6 +42,10 @@ public class DataDBSchema {
                 ");";
     }
 
+    /**
+     * Class containing data about USER table.
+     *
+     */
     public static class User implements BaseColumns {
         public static final String TABLE_NAME = "USER";
 
@@ -39,6 +56,10 @@ public class DataDBSchema {
                 ");";
     }
 
+    /**
+     * Class containing data about PATTERN table.
+     *
+     */
     public static class Pattern implements BaseColumns {
         public static final String TABLE_NAME = "PATTERN";
 
@@ -49,6 +70,10 @@ public class DataDBSchema {
                 ");";
     }
 
+    /**
+     * Class containing data about DATA_ENTRY table.
+     *
+     */
     public static class DataEntry implements BaseColumns {
         public static final String TABLE_NAME = "DATA_ENTRY";
 

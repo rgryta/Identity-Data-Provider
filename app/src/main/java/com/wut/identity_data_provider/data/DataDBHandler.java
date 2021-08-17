@@ -10,20 +10,29 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+/**
+ * Class used to handle connection with SQLite and store app settings and configuration.
+ *
+ */
 public class DataDBHandler implements Serializable {
 
     public final static String SETTING_CALIBRATION = "CALIBRATION";
     public final static String SETTING_UUID = "UUID";
     public final static String SETTING_USER = "USER";
     public final static String SETTING_PATTERN = "PATTERN";
+    private static DataDBHelper mDBHelper;
 
-    public final Map<String, String> mSettings; //CALIBRATION, USER, PATTERN, UUID
+    public final Map<String,String> mSettings; //CALIBRATION, USER, PATTERN, UUID
 
-    private final DataDBHelper mDBHelper;
 
     public ArrayList<String> mPatterns;
     public ArrayList<String> mUsers;
 
+    /**
+     * Constructor for DB Handler, setting up DB handler, settings and configuration.
+     *
+     * @param ctx    Context of the application.
+     */
     public DataDBHandler(Context ctx) {
         mDBHelper = new DataDBHelper(ctx);
         mSettings = new HashMap<>();
@@ -33,6 +42,10 @@ public class DataDBHandler implements Serializable {
         getPatterns();
     }
 
+    /**
+     * Set the last saved status of the application, stored in the SQLite DB.
+     *
+     */
     public void setApplicationStatus() {
 
         Cursor cursor = mDBHelper.db.query(
@@ -51,6 +64,11 @@ public class DataDBHandler implements Serializable {
         cursor.close();
     }
 
+    /**
+     * Set the calibration setting and add it to the DB.
+     *
+     * @param newCalibration String storing the calibration height.
+     */
     public void addAndSetCalibration(String newCalibration) {
         ContentValues values = new ContentValues();
         values.put(DataDBSchema.Calibration.COLUMN_NAME_OPTION, newCalibration);
@@ -65,6 +83,10 @@ public class DataDBHandler implements Serializable {
     }
 
 
+    /**
+     * Set the list of all users from DB.
+     *
+     */
     public void getUsers() {
         mUsers = new ArrayList<>();
         Cursor cursor = mDBHelper.db.query(
@@ -82,6 +104,10 @@ public class DataDBHandler implements Serializable {
         cursor.close();
     }
 
+    /**
+     * Add new user to DB and set it as the current one.
+     *
+     */
     public void addAndSetConfigUser(String user) {
         ContentValues values;
 
@@ -102,6 +128,11 @@ public class DataDBHandler implements Serializable {
         mDBHelper.db.update(DataDBSchema.Config.TABLE_NAME, values, DataDBSchema.Config.COLUMN_NAME_PARAM_NAME + "=\"" + SETTING_USER + "\"", null);
     }
 
+
+    /**
+     * Set the list of all available patterns from DB.
+     *
+     */
     public void getPatterns() {
         mPatterns = new ArrayList<>();
         Cursor cursor = mDBHelper.db.query(
@@ -119,6 +150,11 @@ public class DataDBHandler implements Serializable {
         cursor.close();
     }
 
+    /**
+     * Set the currently selected pattern and save it as the configuration setting.
+     *
+     * @param idx Index of the selected pattern within the configuration list.
+     */
     public void setConfigPattern(int idx) {
         mSettings.put(SETTING_PATTERN, mPatterns.get(idx));
 
@@ -128,6 +164,11 @@ public class DataDBHandler implements Serializable {
         mDBHelper.db.update(DataDBSchema.Config.TABLE_NAME, values, DataDBSchema.Config.COLUMN_NAME_PARAM_NAME + "=\"" + SETTING_PATTERN + "\"", null);
     }
 
+    /**
+     * Return the number of completed tests.
+     *
+     * @return Returns integer containing number of completed tests for the currently selected setting.
+     */
     public int completedTests() {
         Cursor cursor = mDBHelper.db.query(
                 DataDBSchema.DataEntry.TABLE_NAME,   // The table to query
@@ -145,6 +186,12 @@ public class DataDBHandler implements Serializable {
         return count;
     }
 
+
+    /**
+     * Method used for saving data entry to DB.
+     *
+     * @param dataEntry String containing compressed JSON with entry data.
+     */
     public void addDataEntry(String dataEntry) {
         ContentValues values = new ContentValues();
         values.put(DataDBSchema.DataEntry.COLUMN_NAME_CALIBRATION, mSettings.get(SETTING_CALIBRATION));
@@ -154,6 +201,12 @@ public class DataDBHandler implements Serializable {
         mDBHelper.db.insert(DataDBSchema.DataEntry.TABLE_NAME, null, values);
     }
 
+    /**
+     * Select the calibration method which has completed the basic tests and has the most of them.
+     *
+     * @param set Only set the calibration if the flag is set to true. Otherwise ignore it.
+     * @return Returns the calibration setting with the most data entries.
+     */
     public int checkProgressAndSetBestCalibration(boolean set) {
         Cursor cursor = mDBHelper.db.rawQuery(
                 "select calibration from data_entry\n" +
@@ -173,6 +226,12 @@ public class DataDBHandler implements Serializable {
         return selectedCalibration;
     }
 
+    /**
+     * Returns the number of given entries of data for given calibration.
+     *
+     * @param calibrationOption Given calibration option.
+     * @return Returns number of given entries for the option.
+     */
     public int completedTestsForCalibration(String calibrationOption) {
         Cursor cursor = mDBHelper.db.query(
                 DataDBSchema.DataEntry.TABLE_NAME,   // The table to query
@@ -188,6 +247,11 @@ public class DataDBHandler implements Serializable {
         return count;
     }
 
+    /**
+     * Adds new pattern to the DB for later availability and then sets it up as the currently selected option.
+     *
+     * @param pattern Array of integers describing pattern order.
+     */
     public void addAndSetNewPattern(ArrayList<Integer> pattern) {
         String stringPattern = pattern.stream().map(Object::toString)
                 .collect(Collectors.joining("-"));
@@ -201,5 +265,39 @@ public class DataDBHandler implements Serializable {
         mDBHelper.db.update(DataDBSchema.Config.TABLE_NAME, values, DataDBSchema.Config.COLUMN_NAME_PARAM_NAME + "=\"" + SETTING_PATTERN + "\"", null);
 
         mDBHelper.close();
+    }
+
+    /**
+     * Returns entries ready to be sent to Cloud DB.
+     *
+     * @return  Return a hashmap of IDs and their respective compressed data entries - only the ones
+     *          that have not been sent yet and were already completed.
+     */
+    public static HashMap<Integer,String> getReadyDataEntries() {
+        HashMap<Integer,String> entries = new HashMap<>();
+        Cursor cursor = mDBHelper.db.rawQuery(
+                new StringBuilder().append("select _id,data from data_entry\n")
+                        .append("where (user,calibration,pattern) in (select user,calibration,pattern from data_entry\n")
+                        .append("group by user,calibration,pattern\n")
+                        .append("having count(*)>=20)")
+                        .append("and status=0").toString(), null
+        );
+        while (cursor.moveToNext()) {
+            entries.put(cursor.getInt(cursor.getColumnIndex(DataDBSchema.DataEntry.COLUMN_NAME_ID)),
+                    cursor.getString(cursor.getColumnIndex(DataDBSchema.DataEntry.COLUMN_NAME_DATA)));
+        }
+        cursor.close();
+        return entries;
+    }
+
+    /**
+     * Updates the status of a single data entry.
+     *
+     * @param ID ID of data entry to update as successfully uploaded.
+     */
+    public static void updateUploadedStatuses(String ID) {
+        ContentValues values = new ContentValues();
+        values.put(DataDBSchema.DataEntry.COLUMN_NAME_STATUS, "1");
+        mDBHelper.db.update(DataDBSchema.DataEntry.TABLE_NAME, values, DataDBSchema.DataEntry.COLUMN_NAME_ID + "=\"" + ID + "\"", null);
     }
 }

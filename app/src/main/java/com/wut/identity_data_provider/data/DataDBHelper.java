@@ -7,12 +7,22 @@ import android.database.sqlite.SQLiteOpenHelper;
 
 import com.wut.identity_data_provider.dialogs.DialogInfo;
 
+
+/**
+ * Class used to manage the SQLite DB - set it up, upgrade etc.
+ *
+ */
 public class DataDBHelper extends SQLiteOpenHelper {
 
 
     public static final String DB_NAME = "identity_data.db";
     public final SQLiteDatabase db;
 
+    /**
+     * Constructor for DB Helper, setting up DB connection and update UUID - matters only once, but requires context.
+     *
+     * @param context    Context of the application.
+     */
     public DataDBHelper(Context context) {
         super(context, DB_NAME, null, 1);
         db = getWritableDatabase();
@@ -23,6 +33,11 @@ public class DataDBHelper extends SQLiteOpenHelper {
         db.update(DataDBSchema.Config.TABLE_NAME, values, DataDBSchema.Config.COLUMN_NAME_PARAM_NAME + "=\"UUID\"", null);
     }
 
+    /**
+     * Create method for the creation of DB after 1st launch.
+     *
+     * @param db    Handle to the DB.
+     */
     @Override
     public void onCreate(SQLiteDatabase db) {
         //parameters are for currently selected: calibration option, user and pattern
@@ -76,6 +91,13 @@ public class DataDBHelper extends SQLiteOpenHelper {
         db.insert(DataDBSchema.Pattern.TABLE_NAME, null, values);
     }
 
+    /**
+     * Create method for peforming upgrades to DB.
+     *
+     * @param db    Handle to the DB.
+     * @param oldVersion    Integer describing old version number.
+     * @param newVersion    Integer describing new version number.
+     */
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
     }

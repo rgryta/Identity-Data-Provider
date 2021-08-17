@@ -5,6 +5,7 @@
     android:versionName="1.0">
 
     <uses-permission android:name="android.permission.ACTIVITY_RECOGNITION"/>
+    <uses-permission android:name="android.permission.INTERNET"/>
     <uses-feature android:name="android.hardware.sensor.accelerometer"
         android:required="true" />
     <uses-feature android:name="android.hardware.sensor.gyroscope"
@@ -16,10 +17,12 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:fullBackupContent="@xml/backup_descriptor">
+        android:fullBackupContent="@xml/backup_descriptor"
+        android:usesCleartextTraffic="true">
         <activity
             android:name="com.wut.identity_data_provider.activities.ActivityInput"
-            android:theme="@style/Theme.AppCompat.DayNight">
+            android:theme="@style/Theme.AppCompat.DayNight"
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

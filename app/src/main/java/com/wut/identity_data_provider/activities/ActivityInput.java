@@ -22,6 +22,7 @@ import android.widget.Toast;
 
 import com.wut.identity_data_provider.R;
 import com.wut.identity_data_provider.data.DataDBHandler;
+import com.wut.identity_data_provider.data.DataProcessor;
 import com.wut.identity_data_provider.dialogs.DialogInfo;
 import com.wut.identity_data_provider.dialogs.DialogLoading;
 import com.wut.identity_data_provider.dialogs.DialogUsers;
@@ -32,6 +33,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -122,7 +124,6 @@ public class ActivityInput extends Activity implements SensorEventListener {
         mSensors.add(mSensorManager.getDefaultSensor(Sensor.TYPE_ROTATION_VECTOR));
         mSensors.add(mSensorManager.getDefaultSensor(Sensor.TYPE_GRAVITY));
 
-
         // Unblock screen after 2 seconds - internal android issues with screen X/Y initialization
         Handler handler = new Handler(Looper.getMainLooper());
         handler.postDelayed(() -> {
@@ -152,7 +153,7 @@ public class ActivityInput extends Activity implements SensorEventListener {
     /**
      * Updates internal float arrays with the most recent sensor data.
      *
-     * @param event  event that caused listener to execute this method
+     * @param event  Event that caused listener to execute this method.
      */
     public void onSensorChanged(SensorEvent event) {
         switch (event.sensor.getType()) {
@@ -183,7 +184,7 @@ public class ActivityInput extends Activity implements SensorEventListener {
     /**
      * This method arranges most recent sensor data into one JSON object that will be part of the main
      * data entry.
-     * @return      JSON with data from all the supported sensors
+     * @return      JSON with data from all the supported sensors.
      */
     private JSONObject getSensorsData() throws JSONException {
         JSONObject sensorsData = new JSONObject();
@@ -220,8 +221,8 @@ public class ActivityInput extends Activity implements SensorEventListener {
     /**
      * This method catches and handles all the touch events within the application.
      *
-     * @param ev  event that caused touchscreen listener to execute this method
-     * @return      Boolean describing whether the event was consumed properly
+     * @param ev  Event that caused touchscreen listener to execute this method.
+     * @return      Boolean describing whether the event was consumed properly.
      */
     @Override
     public boolean dispatchTouchEvent(MotionEvent ev) {
@@ -248,9 +249,9 @@ public class ActivityInput extends Activity implements SensorEventListener {
      * Method for handling events when user is in INPUT mode.
      * INPUT mode handles drawing patterns, including functionality to add new ones.
      *
-     * @param ev  event that caused touchscreen listener to execute main dispatch method
-     * @param top  height of the Android status bar together with application header
-     * @return      Boolean describing whether the event was consumed properly
+     * @param ev  Event that caused touchscreen listener to execute main dispatch method.
+     * @param top  Height of the Android status bar together with application header.
+     * @return      Boolean describing whether the event was consumed properly.
      */
     private boolean handleInput(MotionEvent ev, float top) {
         if (ev.getAction() == MotionEvent.ACTION_DOWN) {
@@ -309,6 +310,11 @@ public class ActivityInput extends Activity implements SensorEventListener {
                 int patternCount = updateActivityHeader();
                 if (!isAdded) Toast.makeText(this, R.string.err_pattern_too_long, Toast.LENGTH_LONG).show();
                 else if (patternCount==20) Toast.makeText(this, R.string.pattern_completed, Toast.LENGTH_LONG).show();
+                if (patternCount>=20){
+
+                    DataProcessor.uploadData(getApplicationContext());
+
+                }
             } else {
                 if (Objects.equals(mDBHandler.mSettings.get(DataDBHandler.SETTING_PATTERN), "")) {
                     Toast.makeText(this, R.string.error_new_pattern_length, Toast.LENGTH_SHORT).show();
@@ -328,7 +334,7 @@ public class ActivityInput extends Activity implements SensorEventListener {
      * Method for handling events when user is in CALIBRATION mode.
      * CALIBRATION mode allows user to move the pattern grid up and down to adjust the height.
      *
-     * @param ev  event that caused touchscreen listener to execute main dispatch method
+     * @param ev  Event that caused touchscreen listener to execute main dispatch method.
      */
     private void handleCalibration(MotionEvent ev) {
         View v = findViewById(R.id.patternDomain);
@@ -464,6 +470,11 @@ public class ActivityInput extends Activity implements SensorEventListener {
     }
 
 
+    /**
+     * Method for updating the application header based on currently selected settings.
+     *
+     * @return      Integer with currently completed pattern tests.
+     */
     public int updateActivityHeader() {
         TextView v = findViewById(R.id.User);
         v.setText(mDBHandler.mSettings.get(DataDBHandler.SETTING_USER));
@@ -481,6 +492,11 @@ public class ActivityInput extends Activity implements SensorEventListener {
         return currentPatternCount;
     }
 
+    /**
+     * Switch pattern to the previous one.
+     *
+     * @param view  View of the dispatched event.
+     */
     public void patternLeft(View view) {
         int idx = mDBHandler.mPatterns.indexOf(mDBHandler.mSettings.get(DataDBHandler.SETTING_PATTERN));
         if (idx > 0) idx--;
@@ -490,6 +506,11 @@ public class ActivityInput extends Activity implements SensorEventListener {
         resetPass();
     }
 
+    /**
+     * Switch pattern to the next one.
+     *
+     * @param view  View of the dispatched event.
+     */
     public void patternRight(View view) {
         int idx = mDBHandler.mPatterns.indexOf(mDBHandler.mSettings.get(DataDBHandler.SETTING_PATTERN));
         if (idx >= mDBHandler.mPatterns.size() - 1) idx = 0;
@@ -499,6 +520,11 @@ public class ActivityInput extends Activity implements SensorEventListener {
         resetPass();
     }
 
+    /**
+     * Method for opening a dialog for switching between/adding new user.
+     *
+     * @param view  View of the dispatched event.
+     */
     public void startUserDialog(View view) {
         int hasGoodPattern = mDBHandler.checkProgressAndSetBestCalibration(true);
         if (hasGoodPattern != -1) {
@@ -511,11 +537,22 @@ public class ActivityInput extends Activity implements SensorEventListener {
         }
     }
 
+    /**
+     * Method for opening an information dialog.
+     *
+     * @param view  View of the dispatched event.
+     */
     public void startInfoDialog(View view) {
         DialogInfo dialog = new DialogInfo(this);
         dialog.startDialog();
     }
 
+
+    /**
+     * Method used after adding new user.
+     *
+     * @param user  String with new user's name.
+     */
     public void addAndSetUser(String user) {
         if (user.length()<=40) {
             mDBHandler.addAndSetConfigUser(user);
@@ -529,6 +566,9 @@ public class ActivityInput extends Activity implements SensorEventListener {
 
     boolean doubleBackToExitPressedOnce = false;
 
+    /**
+     * Method used for exiting the app - doubletap.
+     */
     @Override
     public void onBackPressed() {
         if (doubleBackToExitPressedOnce) {
@@ -542,6 +582,11 @@ public class ActivityInput extends Activity implements SensorEventListener {
         new Handler().postDelayed(() -> doubleBackToExitPressedOnce = false, 2000);
     }
 
+    /**
+     * Method used for preparing a JSON data entry from a single test - validate if the length is not too long.
+     *
+     * @return      Boolean describing whether the data entry was saved successfully (wasn't too long).
+     */
     private boolean parseAndAddEntry() {
         JSONObject msg = new JSONObject();
         JSONObject header = new JSONObject();
@@ -566,8 +611,8 @@ public class ActivityInput extends Activity implements SensorEventListener {
                 mInputPatternData = null;
                 return false;
             }
-            mDBHandler.addDataEntry(msg.toString());
-        } catch (JSONException e) {
+            mDBHandler.addDataEntry(DataProcessor.compressString(msg.toString()));
+        } catch (JSONException | IOException e) {
             e.printStackTrace();
         } finally {
             mInputPatternData = null;
@@ -577,6 +622,11 @@ public class ActivityInput extends Activity implements SensorEventListener {
 
     boolean doublePatternTap = false;
 
+    /**
+     * Method used handling doubletaps on the pattern progress. Set up the screen for adding/switching patterns.
+     *
+     * @param vw    View that dispatched the event.
+     */
     public void createNewPattern(View vw) {
         if (doublePatternTap) {
             //second tap - begin new pattern setup
