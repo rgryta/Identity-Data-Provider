@@ -18,15 +18,28 @@ import com.wut.identity_data_provider.R;
 
 import java.util.UUID;
 
+/**
+ * Dialog class for displaying all the information about the application - usage, instructions etc.
+ *
+ */
 public class DialogInfo {
 
     private final Activity mActivity;
     private AlertDialog mDialog;
 
+    /**
+     * Dialog constructor.
+     *
+     * @param activity   Provides activity class for the main activity on which the dialog is being displayed.
+     */
     public DialogInfo(Activity activity) {
         this.mActivity = activity;
     }
 
+    /**
+     * Method for starting the dialog, setting up the submenu options.
+     *
+     */
     @SuppressLint("InflateParams")
     public void startDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(mActivity);
@@ -55,6 +68,11 @@ public class DialogInfo {
         mDialog.findViewById(R.id.info_dialog_close).setOnClickListener(view -> dismissDialog());
     }
 
+    /**
+     * Method used to extract the UUID of the user/application instance.
+     *
+     * @param context   Context used to get the shared preferences.
+     */
     public synchronized static String id(Context context) {
         String uniqueID;
         SharedPreferences sharedPrefs = context.getSharedPreferences(
@@ -69,10 +87,18 @@ public class DialogInfo {
         return uniqueID;
     }
 
+    /**
+     * Dialog dismissal method.
+     *
+     */
     public void dismissDialog() {
         mDialog.dismiss();
     }
 
+    /**
+     * Method used to set initial text values to the info dialog submenus.
+     *
+     */
     @SuppressLint("SetTextI18n")
     private void setText() {
         Resources res = mDialog.getContext().getResources();
@@ -86,6 +112,11 @@ public class DialogInfo {
         ((TextView) mDialog.findViewById(R.id.UUIDTextHeader)).setText(res.getString(R.string.right_triangle) + res.getString(R.string.info_uuid_header));
     }
 
+    /**
+     * Method used to toggle the submenus' header strings - arrows.
+     *
+     * @param v   View of the element that has to be toggled.
+     */
     @SuppressLint({"NonConstantResourceId", "SetTextI18n"})
     public void toggleWelcome(View v) {
         View contentView;

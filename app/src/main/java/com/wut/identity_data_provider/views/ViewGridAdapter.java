@@ -23,6 +23,10 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
 
+
+/**
+ * Class responsible for managing the grid of points that user selects to perform the pattern tests.
+ */
 @RequiresApi(api = Build.VERSION_CODES.O)
 public class ViewGridAdapter extends BaseAdapter {
 
@@ -36,6 +40,13 @@ public class ViewGridAdapter extends BaseAdapter {
     final ArrayList<Integer> inPasswd = new ArrayList<>(); //input
 
 
+    /**
+     * Grid adapter constructor.
+     *
+     * @param applicationContext Context of the application.
+     * @param pattern Currently selected pattern - in a String format.
+     * @param width  Calculated width of a single cell in a grid.
+     */
     public ViewGridAdapter(Context applicationContext, int width, String pattern) {
         sWidth = width;
         inflater = (LayoutInflater.from(applicationContext));
@@ -43,21 +54,39 @@ public class ViewGridAdapter extends BaseAdapter {
         passwd.addAll(parsePattern(pattern));
     }
 
+
+    /**
+     * Mandatory method - grid is always 3x3.
+     */
     @Override
     public int getCount() {
         return 9;
     }
 
+    /**
+     * Mandatory method - returns a radiobutton located in a grid under selected position.
+     */
     @Override
     public Object getItem(int position) {
         return rbs[position];
     }
 
+    /**
+     * Mandatory method - not used, always returns 0.
+     */
     @Override
     public long getItemId(int i) {
         return 0;
     }
 
+
+    /**
+     * Method used for parsing pattern saved in String format to an array of ID integers.
+     *
+     * @param pattern String describing a selected pattern.
+     *
+     * @return Returns array of integers of radiobutton IDs making a pattern.
+     */
     public ArrayList<Integer> parsePattern(String pattern) {
         ArrayList<Integer> password = new ArrayList<>();
         String[] splitPattern = pattern.split("-");
@@ -65,6 +94,11 @@ public class ViewGridAdapter extends BaseAdapter {
         return password;
     }
 
+    /**
+     * Method for getting a JSON object for button positions.
+     *
+     * @return Returns a JSON object with button border positions.
+     */
     public JSONObject calibrationSetting() throws JSONException {
         JSONObject calibration = new JSONObject();
         for (int i = 0; i < rbs.length; i++) {
@@ -81,8 +115,14 @@ public class ViewGridAdapter extends BaseAdapter {
     }
 
 
+    /**
+     * Check if the provided pattern is correct.
+     *
+     * @return Returns true if the drawn pattern was correct and clears it.
+     *          Also handles drawing new patterns. New pattern has to be at least 4 points long.
+     */
     public boolean verifyResult() {
-        //check input passwd correctness
+        //First if is for drawing a new pattern.
         if (passwd.size() == 0) {
             if (inPasswd.size() < 4) {
                 getAndClearInPasswd();
@@ -96,12 +136,23 @@ public class ViewGridAdapter extends BaseAdapter {
         return true;
     }
 
+    /**
+     * Copies the currently provided pattern and clears it.
+     *
+     * @return Returns an array of integers describing the provided pattern.
+     */
     public ArrayList<Integer> getAndClearInPasswd() {
         ArrayList<Integer> passwd = new ArrayList<>(inPasswd);
         inPasswd.clear();
         return passwd;
     }
 
+
+    /**
+     * Returns a list of points located on the screen for the drawn pattern.
+     *
+     * @return Returns an array of points located at drawn pattern points.
+     */
     public List<PointF> getSelected(float top) {
         List<PointF> points = new ArrayList<>();
         for (int i : inPasswd) {
@@ -113,6 +164,15 @@ public class ViewGridAdapter extends BaseAdapter {
         return points;
     }
 
+    /**
+     * Sets up the grid in correct position/calibration with square sizes.
+     *
+     * @param pointer Id of the cell to set up.
+     * @param view    View of the singular cell within the grid.
+     * @param viewGroup Not used.
+     *
+     * @return Returns a singular cell in the grid.
+     */
     @SuppressLint({"ViewHolder", "InflateParams"})
     @Override
     public View getView(final int pointer, View view, ViewGroup viewGroup) {
@@ -140,6 +200,13 @@ public class ViewGridAdapter extends BaseAdapter {
         return view;
     }
 
+
+    /**
+     * Method to set up intermediate toggles. Whenever a user draws a pattern and a line goes over a
+     * point that has not yet been selected, then that point has to be selected first.
+     *
+     * @param pointer Id of the cell that has just been selected.
+     */
     private void intermediateToggles(int pointer) {
         switch (pointer) {
             case 0:

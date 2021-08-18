@@ -19,15 +19,28 @@ import com.wut.identity_data_provider.activities.ActivityInput;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Class used for displaying a dialog of available users, and allowing to add new ones.
+ *
+ */
 public class DialogUsers {
 
     private final ActivityInput mActivity;
     private AlertDialog mDialog;
 
+    /**
+     * Dialog constructor.
+     *
+     * @param activity   Provides activity class for the main activity on which the dialog is being displayed.
+     */
     public DialogUsers(ActivityInput activity) {
         this.mActivity = activity;
     }
 
+    /**
+     * Method for starting the dialog amd setting its contents.
+     *
+     */
     @SuppressLint("InflateParams")
     public void startDialog(ArrayList<String> users) {
         AlertDialog.Builder builder = new AlertDialog.Builder(mActivity);
@@ -60,15 +73,27 @@ public class DialogUsers {
         });
     }
 
+    /**
+     * Dialog dismissal method.
+     *
+     */
     public void dismissDialog() {
         mDialog.dismiss();
     }
 
 
+    /**
+     * List adapter class for organising the list of available users in a dialog.
+     *
+     */
     private class ListArrayAdapter extends ArrayAdapter<String> {
 
         final ArrayList<String> mUsers = new ArrayList<>();
 
+        /**
+         * User list class constructor.
+         *
+         */
         public ListArrayAdapter(Context context, int textViewResourceId,
                                 List<String> objects) {
             super(context, textViewResourceId, objects);
@@ -76,6 +101,10 @@ public class DialogUsers {
         }
 
 
+        /**
+         * User list setup.
+         *
+         */
         @Override
         public View getView(int position, View convertView, ViewGroup parent) {
             LayoutInflater inflater = (LayoutInflater) mDialog.getContext()

@@ -13,12 +13,20 @@ import androidx.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Class used for displaying the pattern lines while user is drawing.
+ *
+ */
 public class ViewDrawPath extends View {
 
     private final Paint paint = new Paint();
 
     private final List<PointF> pointFS = new ArrayList<>();
 
+    /**
+     * Mandatory constructors for View.
+     *
+     */
     public ViewDrawPath(Context context) {
         super(context);
     }
@@ -31,6 +39,11 @@ public class ViewDrawPath extends View {
         super(context, attrs, defStyleAttr);
     }
 
+    /**
+     * If more than one point is currently available then draw all lines between the points.
+     *
+     * @param canvas Canvas for drawing the lines.
+     */
     @Override
     public void onDraw(Canvas canvas) {
         paint.setColor(Color.argb(168, 128, 128, 255));
@@ -41,15 +54,26 @@ public class ViewDrawPath extends View {
         super.onDraw(canvas);
     }
 
+    /**
+     * Reset the point array with a new one.
+     *
+     * @param pointFS Array of all selected points + additional point of current fingertip position.
+     */
     public void resetPoints(List<PointF> pointFS) {
         this.pointFS.clear();
         this.pointFS.addAll(pointFS);
     }
 
+    /**
+     * Method used for clearing the array with points to draw.
+     */
     public void clearPoints() {
         pointFS.clear();
     }
 
+    /**
+     * Method used to calculate all the point positions to draw the lines.
+     */
     private float[] getLines() {
         float[] pos = new float[(pointFS.size() - 1) * 4];
         for (int i = 0; i < pointFS.size() - 1; i++) {
@@ -61,6 +85,9 @@ public class ViewDrawPath extends View {
         return pos;
     }
 
+    /**
+     * Method used to invoke drawing.
+     */
     public void draw() {
         invalidate();
         requestLayout();
