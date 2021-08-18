@@ -15,3 +15,4 @@
 /app/release/
 /app/build/
 /app/debug/
+/app/src/main/res/values/secrets.xml
