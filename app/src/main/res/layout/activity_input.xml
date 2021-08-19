@@ -14,8 +14,7 @@
         android:id="@+id/header"
         android:layout_width="match_parent"
         android:layout_height="75dp"
-        android:layout_margin="5dp"
-        >
+        android:layout_margin="5dp">
 
         <TextView
             android:id="@+id/PW"
@@ -33,19 +32,19 @@
 
             android:onClick="startInfoDialog"
 
-            app:layout_constraintStart_toStartOf="parent"/>
+            app:layout_constraintStart_toStartOf="parent" />
 
         <Space
             android:id="@+id/spacer"
             android:layout_width="10dp"
             android:layout_height="match_parent"
-            android:layout_toEndOf="@+id/PW"/>
+            android:layout_toEndOf="@+id/PW" />
 
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_toEndOf="@+id/spacer"
-            >
+            android:layout_toEndOf="@+id/spacer">
+
             <LinearLayout
                 android:id="@+id/calibrationModeHeader"
                 android:layout_width="match_parent"
@@ -55,40 +54,41 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="50dp">
+
                     <TextView
                         android:layout_width="0dp"
-                            android:layout_height="match_parent"
+                        android:layout_height="match_parent"
 
-                            android:layout_weight="0.5"
-                            android:gravity="center"
+                        android:layout_weight="0.5"
+                        android:gravity="center"
 
-                            android:onClick="backFromCalibration"
-                            android:text="@string/go_back"
-                            android:background="?attr/selectableItemBackground"
-                            android:textAlignment="center"
+                        android:onClick="backFromCalibration"
+                        android:text="@string/go_back"
+                        android:background="?attr/selectableItemBackground"
+                        android:textAlignment="center"
 
-                            android:textSize="30sp"
+                        android:textSize="30sp"
 
-                            android:textStyle="bold"
-                            />
+                        android:textStyle="bold" />
 
 
-                        <TextView
-                            android:layout_width="0dp"
-                            android:layout_height="match_parent"
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
 
-                            android:layout_weight="0.5"
-                            android:gravity="center"
+                        android:layout_weight="0.5"
+                        android:gravity="center"
 
-                            android:onClick="saveCalibration"
-                            android:text="@string/checkbox"
-                            android:background="?attr/selectableItemBackground"
-                            android:textAlignment="center"
+                        android:onClick="saveCalibration"
+                        android:text="@string/checkbox"
+                        android:background="?attr/selectableItemBackground"
+                        android:textAlignment="center"
 
-                            android:textSize="30sp"
+                        android:textSize="30sp"
 
-                            />
+                        />
                 </LinearLayout>
+
                 <TextView
                     android:id="@+id/calibrationEntriesCount"
                     android:layout_width="match_parent"
@@ -98,25 +98,24 @@
 
                     android:textAlignment="center"
 
-                    android:textSize="14sp"
-                    />
+                    android:textSize="14sp" />
             </LinearLayout>
 
             <RelativeLayout
-            android:id="@+id/INPUT_MODE"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"> <!-- width=0 or match_parent -->
+                android:id="@+id/INPUT_MODE"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"> <!-- width=0 or match_parent -->
 
                 <LinearLayout
                     android:id="@+id/UpperINPUT"
                     android:layout_width="match_parent"
-                    android:layout_height="40dp"
-                    >
+                    android:layout_height="40dp">
+
                     <RelativeLayout
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
-                        android:layout_weight="0.5"
-                        >
+                        android:layout_weight="0.5">
+
                         <TextView
                             android:id="@+id/UserBox"
                             android:layout_width="wrap_content"
@@ -125,8 +124,8 @@
                             android:gravity="center"
                             android:text="@string/profile"
 
-                            android:textSize="20sp"
-                            />
+                            android:textSize="20sp" />
+
                         <TextView
                             android:id="@+id/User"
                             android:layout_width="match_parent"
@@ -145,8 +144,7 @@
 
                             android:background="?attr/selectableItemBackground"
 
-                            android:textSize="20sp"
-                            />
+                            android:textSize="20sp" />
                     </RelativeLayout>
 
 
@@ -163,15 +161,14 @@
                         android:textAlignment="center"
                         android:background="?attr/selectableItemBackground"
 
-                        android:textSize="20sp"
-                        />
+                        android:textSize="20sp" />
                 </LinearLayout>
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="35dp"
-                    android:layout_below="@id/UpperINPUT"
-                    >
+                    android:layout_below="@id/UpperINPUT">
+
                     <TextView
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
@@ -184,8 +181,8 @@
                         android:text="@string/previous"
                         android:background="?attr/selectableItemBackground"
                         android:textAlignment="center"
-                        android:textSize="14sp"
-                        />
+                        android:textSize="14sp" />
+
                     <TextView
                         android:id="@+id/PatternProgress"
                         android:layout_width="0dp"
@@ -199,8 +196,8 @@
                         android:background="?attr/selectableItemBackground"
 
                         android:textAlignment="center"
-                        android:textSize="14sp"
-                        />
+                        android:textSize="14sp" />
+
                     <TextView
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
@@ -213,8 +210,7 @@
                         android:text="@string/next"
                         android:background="?attr/selectableItemBackground"
                         android:textAlignment="center"
-                        android:textSize="14sp"
-                        />
+                        android:textSize="14sp" />
 
                 </LinearLayout>
             </RelativeLayout>
@@ -231,15 +227,15 @@
             android:id="@+id/radioGrid"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:numColumns="3">
-        </GridView>
+            android:numColumns="3"/>
     </RelativeLayout>
 
+    <!--suppress AndroidUnresolvableTag -->
     <com.wut.identity_data_provider.views.ViewDrawPath
         android:id="@+id/passPath"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_below="@id/header"
-        />
+        tools:ignore="MissingClass" />
 
 </RelativeLayout>

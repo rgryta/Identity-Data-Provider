@@ -21,13 +21,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.wut.identity_data_provider.R;
-import com.wut.identity_data_provider.data.DataDBHandler;
-import com.wut.identity_data_provider.data.DataProcessor;
-import com.wut.identity_data_provider.dialogs.DialogInfo;
-import com.wut.identity_data_provider.dialogs.DialogLoading;
-import com.wut.identity_data_provider.dialogs.DialogUsers;
-import com.wut.identity_data_provider.views.ViewDrawPath;
-import com.wut.identity_data_provider.views.ViewGridAdapter;
+import com.wut.identity_data_provider.data.*;
+import com.wut.identity_data_provider.views.*;
+import com.wut.identity_data_provider.dialogs.*;
 
 import org.json.JSONArray;
 import org.json.JSONException;
