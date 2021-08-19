@@ -21,7 +21,6 @@ import java.util.List;
 
 /**
  * Class used for displaying a dialog of available users, and allowing to add new ones.
- *
  */
 public class DialogUsers {
 
@@ -31,7 +30,7 @@ public class DialogUsers {
     /**
      * Dialog constructor.
      *
-     * @param activity   Provides activity class for the main activity on which the dialog is being displayed.
+     * @param activity Provides activity class for the main activity on which the dialog is being displayed.
      */
     public DialogUsers(ActivityInput activity) {
         this.mActivity = activity;
@@ -40,6 +39,7 @@ public class DialogUsers {
     /**
      * Method for starting the dialog amd setting its contents.
      *
+     * @param users the users
      */
     @SuppressLint("InflateParams")
     public void startDialog(ArrayList<String> users) {
@@ -75,7 +75,6 @@ public class DialogUsers {
 
     /**
      * Dialog dismissal method.
-     *
      */
     public void dismissDialog() {
         mDialog.dismiss();
@@ -88,11 +87,17 @@ public class DialogUsers {
      */
     private class ListArrayAdapter extends ArrayAdapter<String> {
 
+        /**
+         * The M users.
+         */
         final ArrayList<String> mUsers = new ArrayList<>();
 
         /**
          * User list class constructor.
          *
+         * @param context            the context
+         * @param textViewResourceId the text view resource id
+         * @param objects            the objects
          */
         public ListArrayAdapter(Context context, int textViewResourceId,
                                 List<String> objects) {

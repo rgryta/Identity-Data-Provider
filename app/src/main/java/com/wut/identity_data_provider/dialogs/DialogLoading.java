@@ -10,7 +10,6 @@ import com.wut.identity_data_provider.R;
 
 /**
  * Class used as a loading dialog so the application has some time to initialize.
- *
  */
 public class DialogLoading {
 
@@ -20,7 +19,7 @@ public class DialogLoading {
     /**
      * Dialog constructor.
      *
-     * @param activity   Provides activity class for the main activity on which the dialog is being displayed.
+     * @param activity Provides activity class for the main activity on which the dialog is being displayed.
      */
     public DialogLoading(Activity activity) {
         this.mActivity = activity;
@@ -28,7 +27,6 @@ public class DialogLoading {
 
     /**
      * Method for starting the dialog.
-     *
      */
     @SuppressLint("InflateParams")
     public void startDialog() {
@@ -44,7 +42,6 @@ public class DialogLoading {
 
     /**
      * Dialog dismissal method.
-     *
      */
     public void dismissDialog() {
         mDialog.dismiss();

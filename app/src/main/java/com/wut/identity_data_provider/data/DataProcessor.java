@@ -22,16 +22,19 @@ import javax.net.ssl.HttpsURLConnection;
 /**
  * Class used for data processing - compressing the data and sending it to webhook in Azure.
  */
-
 public class DataProcessor {
 
+    /**
+     * Semaphore for not selecting the same entries more than once.
+     */
     static Semaphore busy = new Semaphore(1);
 
     /**
      * Method used to compress String data.
      *
-     * @param dataToCompress    String that needs to be compressed.
-     * @return                  String compressed data in form of an encoded string.
+     * @param dataToCompress String that needs to be compressed.
+     * @return String compressed data in form of an encoded string.
+     * @throws IOException the io exception
      */
     public static String compressString(String dataToCompress) throws IOException {
         byte[] bytes = dataToCompress.getBytes(StandardCharsets.UTF_8);
@@ -46,7 +49,7 @@ public class DataProcessor {
     /**
      * Method used to send the data entries in an HTTP POST request message.
      *
-     * @param context   Context provided to the method to get secret API key and to get the API URL.
+     * @param context Context provided to the method to get secret API key and to get the API URL.
      */
     public static void uploadData(Context context){
         Thread thread = new Thread(() -> {

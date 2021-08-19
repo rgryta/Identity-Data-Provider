@@ -15,7 +15,6 @@ import java.util.List;
 
 /**
  * Class used for displaying the pattern lines while user is drawing.
- *
  */
 public class ViewDrawPath extends View {
 
@@ -26,15 +25,29 @@ public class ViewDrawPath extends View {
     /**
      * Mandatory constructors for View.
      *
+     * @param context the context
      */
     public ViewDrawPath(Context context) {
         super(context);
     }
 
+    /**
+     * Instantiates a new View draw path.
+     *
+     * @param context the context
+     * @param attrs   the attrs
+     */
     public ViewDrawPath(Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
     }
 
+    /**
+     * Instantiates a new View draw path.
+     *
+     * @param context      the context
+     * @param attrs        the attrs
+     * @param defStyleAttr the def style attr
+     */
     public ViewDrawPath(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
     }

@@ -20,7 +20,6 @@ import java.util.UUID;
 
 /**
  * Dialog class for displaying all the information about the application - usage, instructions etc.
- *
  */
 public class DialogInfo {
 
@@ -30,7 +29,7 @@ public class DialogInfo {
     /**
      * Dialog constructor.
      *
-     * @param activity   Provides activity class for the main activity on which the dialog is being displayed.
+     * @param activity Provides activity class for the main activity on which the dialog is being displayed.
      */
     public DialogInfo(Activity activity) {
         this.mActivity = activity;
@@ -38,7 +37,6 @@ public class DialogInfo {
 
     /**
      * Method for starting the dialog, setting up the submenu options.
-     *
      */
     @SuppressLint("InflateParams")
     public void startDialog() {
@@ -71,7 +69,8 @@ public class DialogInfo {
     /**
      * Method used to extract the UUID of the user/application instance.
      *
-     * @param context   Context used to get the shared preferences.
+     * @param context Context used to get the shared preferences.
+     * @return the string
      */
     public synchronized static String id(Context context) {
         String uniqueID;
@@ -89,7 +88,6 @@ public class DialogInfo {
 
     /**
      * Dialog dismissal method.
-     *
      */
     public void dismissDialog() {
         mDialog.dismiss();
@@ -115,7 +113,7 @@ public class DialogInfo {
     /**
      * Method used to toggle the submenus' header strings - arrows.
      *
-     * @param v   View of the element that has to be toggled.
+     * @param v View of the element that has to be toggled.
      */
     @SuppressLint({"NonConstantResourceId", "SetTextI18n"})
     public void toggleWelcome(View v) {

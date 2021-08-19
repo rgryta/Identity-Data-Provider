@@ -12,26 +12,46 @@ import java.util.stream.Collectors;
 
 /**
  * Class used to handle connection with SQLite and store app settings and configuration.
- *
  */
 public class DataDBHandler implements Serializable {
 
+    /**
+     * The constant SETTING_CALIBRATION.
+     */
     public final static String SETTING_CALIBRATION = "CALIBRATION";
+    /**
+     * The constant SETTING_UUID.
+     */
     public final static String SETTING_UUID = "UUID";
+    /**
+     * The constant SETTING_USER.
+     */
     public final static String SETTING_USER = "USER";
+    /**
+     * The constant SETTING_PATTERN.
+     */
     public final static String SETTING_PATTERN = "PATTERN";
     private static DataDBHelper mDBHelper;
 
+    /**
+     * The M settings.
+     */
     public final Map<String,String> mSettings; //CALIBRATION, USER, PATTERN, UUID
 
 
+    /**
+     * The M patterns.
+     */
     public ArrayList<String> mPatterns;
+    /**
+     * The M users.
+     */
     public ArrayList<String> mUsers;
 
     /**
      * Constructor for DB Handler, setting up DB handler, settings and configuration.
      *
-     * @param ctx    Context of the application.
+     * @param ctx Context of the application.
      */
     public DataDBHandler(Context ctx) {
         mDBHelper = new DataDBHelper(ctx);
@@ -44,7 +64,6 @@ public class DataDBHandler implements Serializable {
 
     /**
      * Set the last saved status of the application, stored in the SQLite DB.
-     *
      */
     public void setApplicationStatus() {
 
@@ -85,7 +104,6 @@ public class DataDBHandler implements Serializable {
 
     /**
      * Set the list of all users from DB.
-     *
      */
     public void getUsers() {
         mUsers = new ArrayList<>();
@@ -107,6 +125,7 @@ public class DataDBHandler implements Serializable {
     /**
      * Add new user to DB and set it as the current one.
      *
+     * @param user the user
      */
     public void addAndSetConfigUser(String user) {
         ContentValues values;
@@ -131,7 +150,6 @@ public class DataDBHandler implements Serializable {
 
     /**
      * Set the list of all available patterns from DB.
-     *
      */
     public void getPatterns() {
         mPatterns = new ArrayList<>();
@@ -270,8 +288,7 @@ public class DataDBHandler implements Serializable {
     /**
      * Returns entries ready to be sent to Cloud DB.
      *
-     * @return  Return a hashmap of IDs and their respective compressed data entries - only the ones
-     *          that have not been sent yet and were already completed.
+     * @return Return a hashmap of IDs and their respective compressed data entries - only the ones          that have not been sent yet and were already completed.
      */
     public static HashMap<Integer,String> getReadyDataEntries() {
         HashMap<Integer,String> entries = new HashMap<>();

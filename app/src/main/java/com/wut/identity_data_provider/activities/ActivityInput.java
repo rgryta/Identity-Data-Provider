@@ -427,7 +427,7 @@ public class ActivityInput extends Activity implements SensorEventListener {
     /**
      * Short method for executing switch as onClick method.
      *
-     * @param view  View that executes the method as an onClick method.
+     * @param view View that executes the method as an onClick method.
      */
     public void switchMode(View view) {
         switchMode();
@@ -437,7 +437,7 @@ public class ActivityInput extends Activity implements SensorEventListener {
     /**
      * Handle pressing built-in "back" button when in CALIBRATION mode.
      *
-     * @param view  View that executes the method as an onClick method.
+     * @param view View that executes the method as an onClick method.
      */
     public void backFromCalibration(View view) {
         if (Objects.equals(mDBHandler.mSettings.get(DataDBHandler.SETTING_CALIBRATION), "-1")) {
@@ -456,7 +456,7 @@ public class ActivityInput extends Activity implements SensorEventListener {
     /**
      * Handle pressing built-in "back" button when in CALIBRATION mode.
      *
-     * @param view  View that executes the method as an onClick method.
+     * @param view View that executes the method as an onClick method.
      */
     public void saveCalibration(View view) {
         View v = findViewById(R.id.patternDomain);
@@ -473,7 +473,7 @@ public class ActivityInput extends Activity implements SensorEventListener {
     /**
      * Method for updating the application header based on currently selected settings.
      *
-     * @return      Integer with currently completed pattern tests.
+     * @return Integer with currently completed pattern tests.
      */
     public int updateActivityHeader() {
         TextView v = findViewById(R.id.User);
@@ -495,7 +495,7 @@ public class ActivityInput extends Activity implements SensorEventListener {
     /**
      * Switch pattern to the previous one.
      *
-     * @param view  View of the dispatched event.
+     * @param view View of the dispatched event.
      */
     public void patternLeft(View view) {
         int idx = mDBHandler.mPatterns.indexOf(mDBHandler.mSettings.get(DataDBHandler.SETTING_PATTERN));
@@ -509,7 +509,7 @@ public class ActivityInput extends Activity implements SensorEventListener {
     /**
      * Switch pattern to the next one.
      *
-     * @param view  View of the dispatched event.
+     * @param view View of the dispatched event.
      */
     public void patternRight(View view) {
         int idx = mDBHandler.mPatterns.indexOf(mDBHandler.mSettings.get(DataDBHandler.SETTING_PATTERN));
@@ -523,7 +523,7 @@ public class ActivityInput extends Activity implements SensorEventListener {
     /**
      * Method for opening a dialog for switching between/adding new user.
      *
-     * @param view  View of the dispatched event.
+     * @param view View of the dispatched event.
      */
     public void startUserDialog(View view) {
         int hasGoodPattern = mDBHandler.checkProgressAndSetBestCalibration(true);
@@ -540,7 +540,7 @@ public class ActivityInput extends Activity implements SensorEventListener {
     /**
      * Method for opening an information dialog.
      *
-     * @param view  View of the dispatched event.
+     * @param view View of the dispatched event.
      */
     public void startInfoDialog(View view) {
         DialogInfo dialog = new DialogInfo(this);
@@ -551,7 +551,7 @@ public class ActivityInput extends Activity implements SensorEventListener {
     /**
      * Method used after adding new user.
      *
-     * @param user  String with new user's name.
+     * @param user String with new user's name.
      */
     public void addAndSetUser(String user) {
         if (user.length()<=40) {
@@ -564,6 +564,9 @@ public class ActivityInput extends Activity implements SensorEventListener {
         }
     }
 
+    /**
+     * The Double back to exit pressed once.
+     */
     boolean doubleBackToExitPressedOnce = false;
 
     /**
@@ -620,12 +623,15 @@ public class ActivityInput extends Activity implements SensorEventListener {
         return true;
     }
 
+    /**
+     * The Double pattern tap.
+     */
     boolean doublePatternTap = false;
 
     /**
      * Method used handling doubletaps on the pattern progress. Set up the screen for adding/switching patterns.
      *
-     * @param vw    View that dispatched the event.
+     * @param vw View that dispatched the event.
      */
     public void createNewPattern(View vw) {
         if (doublePatternTap) {

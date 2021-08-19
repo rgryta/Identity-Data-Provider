@@ -30,13 +30,31 @@ import java.util.List;
 @RequiresApi(api = Build.VERSION_CODES.O)
 public class ViewGridAdapter extends BaseAdapter {
 
+    /**
+     * The Inflater.
+     */
     final LayoutInflater inflater;
+    /**
+     * The S width.
+     */
     final int sWidth;
 
+    /**
+     * The Rbs.
+     */
     final RadioButton[] rbs = new RadioButton[9];
+    /**
+     * The Text id.
+     */
     final TextView[] textId = new TextView[9];
 
+    /**
+     * The Passwd.
+     */
     final ArrayList<Integer> passwd = new ArrayList<>(); //correct
+    /**
+     * The In passwd.
+     */
     final ArrayList<Integer> inPasswd = new ArrayList<>(); //input
 
 
@@ -44,8 +62,8 @@ public class ViewGridAdapter extends BaseAdapter {
      * Grid adapter constructor.
      *
      * @param applicationContext Context of the application.
-     * @param pattern Currently selected pattern - in a String format.
-     * @param width  Calculated width of a single cell in a grid.
+     * @param width              Calculated width of a single cell in a grid.
+     * @param pattern            Currently selected pattern - in a String format.
      */
     public ViewGridAdapter(Context applicationContext, int width, String pattern) {
         sWidth = width;
@@ -84,7 +102,6 @@ public class ViewGridAdapter extends BaseAdapter {
      * Method used for parsing pattern saved in String format to an array of ID integers.
      *
      * @param pattern String describing a selected pattern.
-     *
      * @return Returns array of integers of radiobutton IDs making a pattern.
      */
     public ArrayList<Integer> parsePattern(String pattern) {
@@ -98,6 +115,7 @@ public class ViewGridAdapter extends BaseAdapter {
      * Method for getting a JSON object for button positions.
      *
      * @return Returns a JSON object with button border positions.
+     * @throws JSONException the json exception
      */
     public JSONObject calibrationSetting() throws JSONException {
         JSONObject calibration = new JSONObject();
@@ -118,8 +136,7 @@ public class ViewGridAdapter extends BaseAdapter {
     /**
      * Check if the provided pattern is correct.
      *
-     * @return Returns true if the drawn pattern was correct and clears it.
-     *          Also handles drawing new patterns. New pattern has to be at least 4 points long.
+     * @return Returns true if the drawn pattern was correct and clears it.          Also handles drawing new patterns. New pattern has to be at least 4 points long.
      */
     public boolean verifyResult() {
         //First if is for drawing a new pattern.
@@ -151,6 +168,7 @@ public class ViewGridAdapter extends BaseAdapter {
     /**
      * Returns a list of points located on the screen for the drawn pattern.
      *
+     * @param top the top
      * @return Returns an array of points located at drawn pattern points.
      */
     public List<PointF> getSelected(float top) {

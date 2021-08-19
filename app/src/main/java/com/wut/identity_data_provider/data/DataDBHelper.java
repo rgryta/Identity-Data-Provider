@@ -10,18 +10,23 @@ import com.wut.identity_data_provider.dialogs.DialogInfo;
 
 /**
  * Class used to manage the SQLite DB - set it up, upgrade etc.
- *
  */
 public class DataDBHelper extends SQLiteOpenHelper {
 
 
+    /**
+     * The constant DB_NAME.
+     */
     public static final String DB_NAME = "identity_data.db";
+    /**
+     * The Db.
+     */
     public final SQLiteDatabase db;
 
     /**
      * Constructor for DB Helper, setting up DB connection and update UUID - matters only once, but requires context.
      *
-     * @param context    Context of the application.
+     * @param context Context of the application.
      */
     public DataDBHelper(Context context) {
         super(context, DB_NAME, null, 1);
