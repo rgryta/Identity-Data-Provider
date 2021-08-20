@@ -10,10 +10,12 @@
     <string name="error_custom_pattern_primary_tests">Aby dodać własny wzór należy ukończyć podstawowe testy dla przynajmniej jednego ustawienia kalibracji</string>
     <string name="custom_pattern_tap_twice">Kliknij ponownie aby ustawić własny wzór</string>
     <string name="error_new_pattern_length">Wzór musi mieć długość większą niż 4</string>
-    <string name="info_welcome_header">Powitanie</string>
+    <string name="info_welcome_header">Intro (przetwarzanie danych)</string>
     <string name="info_welcome_content">
-        Na początku chciałbym ci podziękować za twój wkład do pracy naukowej.
         W razie jakbyś przypadkiem zamknął to okno, zawsze możesz do niego powrócić naciskając PW🆔 w lewym górnym rogu.
+        Wszelkie dane zebrane podczas testów są całkowicie anonimowe, kompresowane i przesyłane w ten sposób do zabezpieczonej bazy danych w chmurze Microsoft Azure.
+        Będą one następnie przetwarzane na serwerze lokalnym w celach naukowych. Zbierane są jedynie dane na temat pozycji dotyku palca na ekranie w trakcie testów oraz sensorów ruchu.
+        Nie pobierane są dane na temat geolokalizacji, ani dane personalne.
     </string>
     <string name="info_project_header">Projekt</string>
     <string name="info_project_content">

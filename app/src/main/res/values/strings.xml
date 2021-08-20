@@ -16,10 +16,12 @@
     <string name="error_custom_pattern_primary_tests">To add custom pattern please complete all primary tests for at least one calibration setting</string>
     <string name="custom_pattern_tap_twice">Tap again to set up custom pattern</string>
     <string name="error_new_pattern_length">Patterns have to be longer than 4</string>
-    <string name="info_welcome_header">Welcome</string>
+    <string name="info_welcome_header">Intro (data processing)</string>
     <string name="info_welcome_content">
-        Hi! For starters I\'d like to thank you for your will to help me with my project.
-        Note that if you close this window, you can always reopen it by pressing PW🆔 button to the top left.
+    Note that if you close this window, you can always reopen it by pressing PW🆔 button to the top left.
+    Any data gathered during tests are completely anonymous, compressed and then sent to a secure DB in Microsoft Azure.
+    They\'re going to be processed on a local server for research purposes. The data gathered consists of data from touchscreen: finger position and position sensors.
+    The data about geolocation and personal data are not being gathered though.
     </string>
     <string name="info_project_header">Project</string>
     <string name="info_project_content">
