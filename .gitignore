@@ -3,4 +3,3 @@
 /.gradle
 /app/build
 local.properties
-/app/src/main/res/values/secrets.xml
