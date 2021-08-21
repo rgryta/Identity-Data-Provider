@@ -2,5 +2,6 @@
 /.idea
 /.gradle
 /app/build
+/app/release
 local.properties
 /app/src/main/res/values/secrets.xml
